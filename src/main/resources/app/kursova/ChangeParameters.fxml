@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="window_changeParams" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #BD871D;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.kursova.windows.ChangeParameters">
+    <children>
+        <Label text="new Name">
+            <font>
+                <Font name="System Bold Italic" size="16.0" />
+            </font>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </Label>
+        <TextField fx:id="setName_field" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="300.0" promptText="Warrior`s name">
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </TextField>
+        <Label layoutX="137.0" layoutY="10.0" text="new Health">
+            <font>
+                <Font name="System Bold Italic" size="16.0" />
+            </font>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </Label>
+        <TextField fx:id="setHealth_field" alignment="TOP_CENTER" promptText="Health">
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </TextField>
+        <Label layoutX="137.0" layoutY="10.0" text="new X">
+            <font>
+                <Font name="System Bold Italic" size="16.0" />
+            </font>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </Label>
+        <TextField fx:id="setX_field" alignment="TOP_CENTER" promptText="set X">
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </TextField>
+        <Label layoutX="137.0" layoutY="10.0" text="new Y">
+            <font>
+                <Font name="System Bold Italic" size="16.0" />
+            </font>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+        </Label>
+        <TextField fx:id="setY_field" alignment="TOP_CENTER" promptText="set Y">
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </TextField>
+        <Button fx:id="changeParameters_button" alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#changeParameters" prefHeight="28.0" prefWidth="101.0" text="Change">
+            <VBox.margin>
+                <Insets top="20.0" />
+            </VBox.margin>
+        </Button>
+    </children>
+</VBox>

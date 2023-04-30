@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="window_params" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #9FD317;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.kursova.windows.Parameters">
+   <children>
+      <Label text="Name">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="setName_field" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="300.0" promptText="Warrior`s name">
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </TextField>
+      <Label layoutX="137.0" layoutY="10.0" text="Health">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="setHealth_field" alignment="TOP_CENTER" promptText="Health">
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </TextField>
+      <Label layoutX="137.0" layoutY="10.0" text="X">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="setX_field" alignment="TOP_CENTER" promptText="set X">
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </TextField>
+      <Label layoutX="137.0" layoutY="10.0" text="Y">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </Label>
+      <TextField fx:id="setY_field" alignment="TOP_CENTER" promptText="set Y">
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </TextField>
+      <Button fx:id="createWarrior_button" alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#createNewWarrior" prefHeight="28.0" prefWidth="101.0" text="Create">
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+      </Button>
+   </children>
+</VBox>
