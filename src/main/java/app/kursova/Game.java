@@ -63,16 +63,16 @@ public class Game extends Application {
                 ForWarriors.deleteWarrior();
             }
             if (event.getCode().equals(KeyCode.NUMPAD8)) {
-                ForWarriors.moveIfElect(0, -1);
+                ForWarriors.moveIfElect(0, -10);
             }
             if (event.getCode().equals(KeyCode.NUMPAD4)) {
-                ForWarriors.moveIfElect(-1, 0);
+                ForWarriors.moveIfElect(-10, 0);
             }
             if (event.getCode().equals(KeyCode.NUMPAD6)) {
-                ForWarriors.moveIfElect(1, 0);
+                ForWarriors.moveIfElect(10, 0);
             }
             if (event.getCode().equals(KeyCode.NUMPAD2)) {
-                ForWarriors.moveIfElect(0, 1);
+                ForWarriors.moveIfElect(0, 10);
             }
             if (event.getCode().equals(KeyCode.C)) {
                 Parent root;

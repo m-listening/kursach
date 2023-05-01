@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
-public class Kamikaze {
+public class Kamikaze implements Warrior{
     private Label name;
     private int health;
     private double x, y;

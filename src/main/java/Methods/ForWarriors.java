@@ -25,10 +25,10 @@ public class ForWarriors {
     public static void moveIfElect(double x, double y) {
         for (Kamikaze item : warrior.keySet()) {
             if (item.isElect()) {
-                item.setX(x);
-                item.setY(y);
-                item.getGroup().setLayoutX(x);
-                item.getGroup().setLayoutY(y);
+                item.setX(item.getX()+x);
+                item.setY(item.getY()+y);
+                item.getGroup().setLayoutX(item.getX());
+                item.getGroup().setLayoutY(item.getY());
 
             }
         }
