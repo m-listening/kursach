@@ -15,13 +15,14 @@ import javafx.stage.Stage;
 import micro_objects.Kamikaze;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
+import static Methods.Collections.warrior;
+import static Methods.Collections.warriorsElect;
 
 public class Game extends Application {
     public static Group mainGroup = new Group();
     //true - green team, false - red team
-    public static Map<Kamikaze, Boolean> warrior = new HashMap<>();
+
     public static Stage newStage;
     private static Timeline timeline;
 
@@ -45,6 +46,7 @@ public class Game extends Application {
                 newStage.setScene(secondScene);
                 newStage.show();
             }
+
             if (event.getButton().equals(MouseButton.SECONDARY)) {
                 for (Kamikaze item : warrior.keySet()) {
                     if (item.getGroup()
@@ -52,6 +54,9 @@ public class Game extends Application {
                             .get()
                             .contains(event.getX(), event.getY())) {
                         item.setElect();
+                        if (item.isElect() && !warriorsElect.contains(item))
+                            warriorsElect.add(item);
+                        else warriorsElect.remove(item);
                         item.setRectangle();
                         break;
                     }
@@ -89,14 +94,17 @@ public class Game extends Application {
                 newStage.setScene(secondScene);
                 newStage.show();
             }
+            if (event.getCode().equals(KeyCode.Q)) {
+
+            }
             if (event.getCode().equals(KeyCode.S)) {
                 TextArea textArea = new TextArea();
                 textArea.setEditable(false);
-                String str = "";
+                StringBuilder str = new StringBuilder();
                 for (Kamikaze item : warrior.keySet()) {
-                    str += item + "\n";
+                    str.append(item).append("\n");
                 }
-                textArea.setText(str);
+                textArea.setText(str.toString());
                 StackPane root = new StackPane();
                 root.getChildren().add(textArea);
                 newStage = new Stage();

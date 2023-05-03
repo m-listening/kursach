@@ -4,11 +4,12 @@ import micro_objects.Kamikaze;
 
 import java.util.HashMap;
 
+import static Methods.Collections.warrior;
+import static Methods.Collections.warriorsElect;
 import static app.kursova.Game.mainGroup;
-import static app.kursova.Game.warrior;
 
 public class ForWarriors {
-    private static HashMap<Kamikaze, Boolean> newListWarrior = new HashMap<>();
+    private static final HashMap<Kamikaze, Boolean> newListWarrior = new HashMap<>();
 
     public static void deleteWarrior() {
         for (Kamikaze item : warrior.keySet()) {
@@ -23,45 +24,27 @@ public class ForWarriors {
     }
 
     public static void moveIfElect(double x, double y) {
-        for (Kamikaze item : warrior.keySet()) {
-            if (item.isElect()) {
-                item.setX(item.getX()+x);
-                item.setY(item.getY()+y);
-                item.getGroup().setLayoutX(item.getX());
-                item.getGroup().setLayoutY(item.getY());
-
-            }
+        for (Kamikaze item : warriorsElect) {
+            item.setX(item.getX() + x);
+            item.setY(item.getY() + y);
+            item.getGroup().setLayoutX(item.getGroup().getLayoutX() + x);
+            item.getGroup().setLayoutY(item.getGroup().getLayoutY() + y);
         }
     }
 
     public static void changeParameters(String name, int health, double x, double y) {
-        for (Kamikaze item : warrior.keySet()) {
-            if (item.isElect()) {
-                item.setName(name);
-                item.setHealth(health);
-                item.setX(x);
-                item.setY(y);
+        for (Kamikaze item : warriorsElect) {
+            item.setName(name);
+            item.setHealth(health);
 
-                double _x = item.getGroup().getLayoutX();
-                double _y = item.getGroup().getLayoutY();
-                if (_x == 0) {
-                    item.getGroup().setLayoutX(x);
-                }
-                else if (_x > x) {
-                    item.getGroup().setLayoutX(x - _x);
-                }
-                else if (_y < y)
-                    item.getGroup().setLayoutX(y + _y);
-                if (_y == 0) {
-                    item.getGroup().setLayoutY(y);
-                }
-                else if (_y > y) {
-                    item.getGroup().setLayoutX(y - _y);
-                }
-                else if (_x < x) {
-                    item.getGroup().setLayoutX(x + _x);
-                }
-            }
+            double _x = item.getX();
+            double _y = item.getY();
+
+            item.setX(x);
+            item.setY(y);
+
+            item.getGroup().setLayoutX(item.getX() - _x);
+            item.getGroup().setLayoutY(item.getY() - _y);
         }
     }
 }

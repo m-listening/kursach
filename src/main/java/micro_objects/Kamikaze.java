@@ -1,5 +1,6 @@
 package micro_objects;
 
+import app.kursova.Coordinates;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,27 +14,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
-public class Kamikaze implements Warrior{
-    private Label name;
-    private int health;
-    private double x, y;
-    private boolean active;
-    private boolean elect;
-    private boolean team;
-    protected Group group;
-    protected Rectangle rectangle;
-    protected Line life;
-    protected Image image;
-    protected ImageView imageView;
-
-    public Group getGroup() {
-        return group;
-    }
+public class Kamikaze extends Warrior implements Cloneable {
 
     public Kamikaze(String name, int health, double x, double y) throws FileNotFoundException {
         group = new Group();
+        move = 3;
 
         this.health = health;
+
+        this.coordinates = new Coordinates(x,y);
+
         this.x = x;
         this.y = y;
 
@@ -84,16 +74,20 @@ public class Kamikaze implements Warrior{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Kamikaze kamikaze = (Kamikaze) o;
-        return health == kamikaze.health && team == kamikaze.team && Objects.equals(name, kamikaze.name) && Objects.equals(group, kamikaze.group) && Objects.equals(imageView, kamikaze.imageView);
+        return team == kamikaze.team && Objects.equals(name, kamikaze.name) && Objects.equals(group, kamikaze.group) && Objects.equals(imageView, kamikaze.imageView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, health, team, group, imageView);
+        return Objects.hash(name, team, group, imageView);
     }
 
     static {
         System.out.println("Статичний блок було викликано.");
+    }
+
+    public Group getGroup() {
+        return this.group;
     }
 
     public String getName() {
@@ -192,5 +186,14 @@ public class Kamikaze implements Warrior{
 
     {
         System.out.println("Динамічний блок було викликано.");
+    }
+
+    @Override
+    public Kamikaze clone() {
+        try {
+            return (Kamikaze) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

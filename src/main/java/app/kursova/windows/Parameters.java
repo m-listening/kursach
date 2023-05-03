@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import micro_objects.Kamikaze;
-
+import static Methods.Collections.warrior;
 import java.io.FileNotFoundException;
 
 public class Parameters {
@@ -36,7 +36,7 @@ public class Parameters {
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
         Kamikaze kamikaze = new Kamikaze(name, health, x, y);
-        Game.warrior.put(kamikaze, true);
+        warrior.put(kamikaze, true);
         Game.mainGroup.getChildren().add(kamikaze.getGroup());
         Game.newStage.close();
     }
