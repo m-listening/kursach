@@ -12,9 +12,6 @@ import micro_objects.Kamikaze;
 public class ChangeParameters {
 
     @FXML
-    private Button changeParameters_button;
-
-    @FXML
     private TextField setHealth_field;
 
     @FXML
@@ -25,9 +22,6 @@ public class ChangeParameters {
 
     @FXML
     private TextField setY_field;
-
-    @FXML
-    private VBox window_changeParams;
 
     @FXML
     void changeParameters() {

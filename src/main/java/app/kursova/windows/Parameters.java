@@ -2,17 +2,14 @@ package app.kursova.windows;
 
 import app.kursova.Game;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import micro_objects.Kamikaze;
-import static Methods.Collections.warrior;
+
 import java.io.FileNotFoundException;
 
-public class Parameters {
+import static Methods.Collections.warrior;
 
-    @FXML
-    private Button createWarrior_button;
+public class Parameters {
 
     @FXML
     private TextField setHealth_field;
@@ -25,9 +22,6 @@ public class Parameters {
 
     @FXML
     private TextField setY_field;
-
-    @FXML
-    private VBox window_params;
 
     @FXML
     void createNewWarrior() throws FileNotFoundException {

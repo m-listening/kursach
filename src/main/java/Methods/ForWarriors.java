@@ -1,5 +1,6 @@
 package Methods;
 
+import javafx.scene.control.Label;
 import micro_objects.Kamikaze;
 
 import java.util.HashMap;
@@ -12,15 +13,14 @@ public class ForWarriors {
     private static final HashMap<Kamikaze, Boolean> newListWarrior = new HashMap<>();
 
     public static void deleteWarrior() {
-        for (Kamikaze item : warrior.keySet()) {
-            if (item.isElect()) {
-                newListWarrior.put(item, item.isTeam());
-            }
+        for (Kamikaze item : warriorsElect) {
+            newListWarrior.put(item, item.isTeam());
         }
         for (Kamikaze item : newListWarrior.keySet()) {
             warrior.remove(item);
             mainGroup.getChildren().remove(item.getGroup());
         }
+        warriorsElect.clear();
     }
 
     public static void moveIfElect(double x, double y) {

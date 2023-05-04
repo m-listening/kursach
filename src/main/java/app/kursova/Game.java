@@ -13,7 +13,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import micro_objects.Kamikaze;
-
 import java.io.IOException;
 
 import static Methods.Collections.warrior;
@@ -57,7 +56,7 @@ public class Game extends Application {
                         if (item.isElect() && !warriorsElect.contains(item))
                             warriorsElect.add(item);
                         else warriorsElect.remove(item);
-                        item.setRectangle();
+                        item.setRectangleColor();
                         break;
                     }
                 }
@@ -95,7 +94,15 @@ public class Game extends Application {
                 newStage.show();
             }
             if (event.getCode().equals(KeyCode.Q)) {
-
+                for(Kamikaze item : warriorsElect){
+                    try {
+                        Kamikaze kamikaze = item.clone();
+                        warrior.put(kamikaze,kamikaze.isTeam());
+                        mainGroup.getChildren().add(kamikaze.getGroup());
+                    } catch (CloneNotSupportedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
             if (event.getCode().equals(KeyCode.S)) {
                 TextArea textArea = new TextArea();
