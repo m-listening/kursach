@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
@@ -11,7 +12,8 @@ public abstract class Warrior {
     int health, move = 1;
     double x, y;
     Murder murders;
-    boolean elect, team, active;
+    boolean elect, active;
+    Boolean team;
     Image image;
     ImageView imageView;
     Label name;
@@ -19,15 +21,21 @@ public abstract class Warrior {
     Line life;
     Group group;
 
+    public void setRectangleColor() {
+        if (isElect()) {
+            rectangle.setStroke(Color.RED);
+        } else rectangle.setStroke(Color.TRANSPARENT);
+    }
+
     public Rectangle getRectangle() {
         return rectangle;
     }
 
-    public boolean isTeam() {
+    public Boolean isTeam() {
         return team;
     }
 
-    public void setTeam(boolean team) {
+    public void setTeam(Boolean team) {
         this.team = team;
     }
 
@@ -89,9 +97,12 @@ public abstract class Warrior {
 
     public void setElect(boolean elect) {
         this.elect = elect;
+        setRectangleColor();
     }
-    public void setElect(){
+
+    public void setElect() {
         this.elect = !this.elect;
+        setRectangleColor();
     }
 
     public boolean isActive() {
@@ -100,6 +111,14 @@ public abstract class Warrior {
 
     public void setActive(boolean active) {
         this.active = active;
+        if (isActive()) this.life.setStroke(Color.LIGHTGREEN);
+        else this.life.setStroke(Color.BLACK);
+    }
+
+    public void setActive() {
+        this.active = !this.active;
+        if (isActive()) this.life.setStroke(Color.LIGHTGREEN);
+        else this.life.setStroke(Color.BLACK);
     }
 
     public Image getImage() {

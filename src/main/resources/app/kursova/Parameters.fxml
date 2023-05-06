@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="window_params" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #9FD317;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.kursova.windows.Parameters">
+<VBox fx:id="window_params" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: #9FD317;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.kursova.windows.Parameters">
    <children>
       <Label text="Name">
          <font>
@@ -18,7 +22,7 @@
             <Insets top="10.0" />
          </VBox.margin>
       </Label>
-      <TextField fx:id="setName_field" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="300.0" promptText="Warrior`s name">
+      <TextField fx:id="setName_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="250.0" promptText="Warrior`s name">
          <padding>
             <Insets top="10.0" />
          </padding>
@@ -37,7 +41,7 @@
             <Insets />
          </VBox.margin>
       </Label>
-      <TextField fx:id="setHealth_field" alignment="TOP_CENTER" promptText="Health">
+      <TextField fx:id="setHealth_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="250.0" promptText="Health">
          <padding>
             <Insets top="10.0" />
          </padding>
@@ -56,7 +60,7 @@
             <Insets />
          </VBox.margin>
       </Label>
-      <TextField fx:id="setX_field" alignment="TOP_CENTER" promptText="set X">
+      <TextField fx:id="setX_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="250.0" promptText="set X">
          <padding>
             <Insets top="10.0" />
          </padding>
@@ -72,7 +76,7 @@
             <Insets top="10.0" />
          </padding>
       </Label>
-      <TextField fx:id="setY_field" alignment="TOP_CENTER" promptText="set Y">
+      <TextField fx:id="setY_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="250.0" promptText="set Y">
          <padding>
             <Insets top="10.0" />
          </padding>
@@ -80,10 +84,69 @@
             <Insets top="10.0" />
          </VBox.margin>
       </TextField>
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0">
+         <children>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="128.0">
+               <children>
+                  <Label contentDisplay="CENTER" text="Warrior type" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="RB_lvl1" mnemonicParsing="false" text="Kamikaze" textOverrun="CLIP">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="RB_lvl2" mnemonicParsing="false" text="Simple soldier">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="RB_lvl3" mnemonicParsing="false" text="SSO">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </RadioButton>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="105.0">
+               <children>
+                  <Label text="Team">
+                     <font>
+                        <Font name="System Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="RB_tmGreen" mnemonicParsing="false" text="Green">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="RB_tmRed" mnemonicParsing="false" text="Red">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin>
+                  </RadioButton>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </HBox>
       <Button fx:id="createWarrior_button" alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#createNewWarrior" prefHeight="28.0" prefWidth="101.0" text="Create">
          <VBox.margin>
-            <Insets top="20.0" />
+            <Insets top="10.0" />
          </VBox.margin>
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
       </Button>
    </children>
 </VBox>

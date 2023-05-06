@@ -33,12 +33,13 @@ public class Kamikaze extends Warrior implements Cloneable {
 
         active = false;
         elect = false;
+        team = null;
 
         image = new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
 
         life = new Line(this.x + 5, this.y + 15, this.x + 50, y + 15);
         life.setStrokeWidth(3);
-        life.setStroke(Color.GREEN);
+        life.setStroke(Color.BLACK);
 
         imageView = new ImageView(image);
         imageView.setLayoutX(this.x);
@@ -64,6 +65,7 @@ public class Kamikaze extends Warrior implements Cloneable {
                 ", health=" + health +
                 ", x=" + x +
                 ", y=" + y +
+                ", team=" + (isTeam() != null ? isTeam() ? "Green" : "Red" : "None") +
                 '}';
     }
 
@@ -72,12 +74,12 @@ public class Kamikaze extends Warrior implements Cloneable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Kamikaze kamikaze = (Kamikaze) o;
-        return team == kamikaze.team && Objects.equals(name, kamikaze.name) && Objects.equals(group, kamikaze.group) && Objects.equals(imageView, kamikaze.imageView);
+        return team == kamikaze.team && Objects.equals(group, kamikaze.group);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, team, group, imageView);
+        return Objects.hash(team, group);
     }
 
     static {
@@ -88,13 +90,6 @@ public class Kamikaze extends Warrior implements Cloneable {
         System.out.println("Динамічний блок було викликано.");
     }
 
-    public void setRectangleColor() {
-        if (isElect()) {
-            rectangle.setStroke(Color.RED);
-        } else rectangle.setStroke(Color.TRANSPARENT);
-    }
-
-
     @Override
     public Kamikaze clone() throws CloneNotSupportedException {
         Kamikaze kamikaze = (Kamikaze) super.clone();
@@ -103,9 +98,6 @@ public class Kamikaze extends Warrior implements Cloneable {
         double _y = kamikaze.getY() + 100;
 
         kamikaze.setGroup(new Group());
-        kamikaze.setMove(kamikaze.getMove());
-
-        kamikaze.setHealth(kamikaze.getHealth());
 
         kamikaze.setMurders(new Murder());
 
@@ -117,8 +109,8 @@ public class Kamikaze extends Warrior implements Cloneable {
         kamikaze.getName().setLayoutY(_y - 2);
         kamikaze.getName().setFont(Font.font("Impact", 14));
 
-        kamikaze.setActive(false);
-        kamikaze.setElect(false);
+        kamikaze.active = false;
+        kamikaze.elect = false;
 
         try {
             kamikaze.setImage(new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false));
@@ -128,7 +120,7 @@ public class Kamikaze extends Warrior implements Cloneable {
 
         kamikaze.setLife(new Line(_x + 5, _y + 15, _x + 50, _y + 15));
         kamikaze.getLife().setStrokeWidth(3);
-        kamikaze.getLife().setStroke(Color.GREEN);
+        kamikaze.getLife().setStroke(Color.BLACK);
 
         kamikaze.setImageView(new ImageView(kamikaze.getImage()));
         kamikaze.getImageView().setLayoutX(_x);

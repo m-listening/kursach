@@ -1,50 +1,63 @@
 package Methods;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import micro_objects.Kamikaze;
+import micro_objects.Warrior;
 
 import java.util.HashMap;
 
-import static Methods.Collections.warrior;
-import static Methods.Collections.warriorsElect;
+import static Methods.Collections.*;
 import static app.kursova.Game.mainGroup;
 
 public class ForWarriors {
     private static final HashMap<Kamikaze, Boolean> newListWarrior = new HashMap<>();
 
     public static void deleteWarrior() {
-        for (Kamikaze item : warriorsElect) {
+        for (Kamikaze item : warriorsActive) {
             newListWarrior.put(item, item.isTeam());
         }
         for (Kamikaze item : newListWarrior.keySet()) {
             warrior.remove(item);
             mainGroup.getChildren().remove(item.getGroup());
         }
-        warriorsElect.clear();
+        warriorsActive.clear();
+    }
+
+    public static void turnOf() {
+        for (Kamikaze item : warriorsActive) {
+            item.setActive(false);
+        }
+        warriorsActive.clear();
     }
 
     public static void moveIfElect(double x, double y) {
-        for (Kamikaze item : warriorsElect) {
-            item.setX(item.getX() + x);
-            item.setY(item.getY() + y);
-            item.getGroup().setLayoutX(item.getGroup().getLayoutX() + x);
-            item.getGroup().setLayoutY(item.getGroup().getLayoutY() + y);
+        if (warriorElect != null && warriorElect.isActive()) {
+            warriorElect.setX(warriorElect.getX() + x);
+            warriorElect.setY(warriorElect.getY() + y);
+            warriorElect.getGroup().setLayoutX(warriorElect.getGroup().getLayoutX() + x);
+            warriorElect.getGroup().setLayoutY(warriorElect.getGroup().getLayoutY() + y);
         }
     }
 
     public static void changeParameters(String name, int health, double x, double y) {
-        for (Kamikaze item : warriorsElect) {
-            item.setName(name);
-            item.setHealth(health);
+        warriorElect.setName(new Label(name));
+        warriorElect.setHealth(health);
 
-            double _x = item.getX();
-            double _y = item.getY();
+        double _x = warriorElect.getX();
+        double _y = warriorElect.getY();
 
-            item.setX(x);
-            item.setY(y);
+        warriorElect.setX(x);
+        warriorElect.setY(y);
 
-            item.getGroup().setLayoutX(item.getX() - _x);
-            item.getGroup().setLayoutY(item.getY() - _y);
-        }
+        warriorElect.getGroup().setLayoutX(warriorElect.getX() - _x);
+        warriorElect.getGroup().setLayoutY(warriorElect.getY() - _y);
+    }
+
+    public static ListView<Warrior> showWarriors() {
+        ObservableList<Warrior> listWarriors = FXCollections.observableArrayList(warrior.keySet());
+        return new ListView<>(listWarriors);
     }
 }
