@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class Kamikaze extends Warrior implements Cloneable {
 
-    public Kamikaze(String name, int health, double x, double y) throws FileNotFoundException {
+    public Kamikaze(String name, int health) throws FileNotFoundException {
         group = new Group();
         move = 3;
 
@@ -24,29 +24,27 @@ public class Kamikaze extends Warrior implements Cloneable {
 
         this.murders = new Murder();
 
-        this.x = x;
-        this.y = y;
-
         this.name = new Label(name);
-        this.name.setLayoutX(x + 5);
-        this.name.setLayoutY(y - 2);
+        this.name.setLayoutX(+5);
+        this.name.setLayoutY(-2);
         this.name.setFont(Font.font("Impact", 14));
 
         active = false;
         elect = false;
         team = null;
+        inMacro = false;
 
         image = new Image(new FileInputStream("src/images/zombie.png"), 50, 50, false, false);
 
-        life = new Line(this.x + 5, this.y + 15, this.x + 50, y + 15);
+        life = new Line(+5, +15, +50, +15);
         life.setStrokeWidth(3);
         life.setStroke(Color.BLACK);
 
         imageView = new ImageView(image);
-        imageView.setLayoutX(this.x);
-        imageView.setLayoutY(this.y + 15 + 5);
+        imageView.setLayoutX(0);
+        imageView.setLayoutY(20);
 
-        rectangle = new Rectangle(x - 5, y - 5, 65, 85);
+        rectangle = new Rectangle(-5, -5, 65, 85);
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStrokeWidth(3);
         rectangle.setStroke(Color.TRANSPARENT);
@@ -56,7 +54,7 @@ public class Kamikaze extends Warrior implements Cloneable {
     }
 
     public Kamikaze() throws FileNotFoundException {
-        this("", 0, 1, 1);
+        this("", 0);
     }
 
     @Override
@@ -95,19 +93,14 @@ public class Kamikaze extends Warrior implements Cloneable {
     public Kamikaze clone() throws CloneNotSupportedException {
         Kamikaze kamikaze = (Kamikaze) super.clone();
 
-        double _x = kamikaze.getX() + 100;
-        double _y = kamikaze.getY() + 100;
-
-        kamikaze.setGroup(new Group());
+        kamikaze.setX(kamikaze.getX() + 100);
+        kamikaze.setY(kamikaze.getY() + 100);
 
         kamikaze.setMurders(new Murder());
 
-        kamikaze.setX(_x);
-        kamikaze.setY(_y);
-
         kamikaze.setName(new Label(kamikaze.getName().getText() + " cloned"));
-        kamikaze.getName().setLayoutX(_x + 5);
-        kamikaze.getName().setLayoutY(_y - 2);
+        kamikaze.getName().setLayoutX(5);
+        kamikaze.getName().setLayoutY(-2);
         kamikaze.getName().setFont(Font.font("Impact", 14));
 
         kamikaze.active = false;
@@ -119,21 +112,24 @@ public class Kamikaze extends Warrior implements Cloneable {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        kamikaze.setLife(new Line(_x + 5, _y + 15, _x + 50, _y + 15));
+        kamikaze.setLife(new Line(5, +15, +50, +15));
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
         kamikaze.setImageView(new ImageView(kamikaze.getImage()));
-        kamikaze.getImageView().setLayoutX(_x);
-        kamikaze.getImageView().setLayoutY(_y + 15 + 5);
+        kamikaze.getImageView().setLayoutX(0);
+        kamikaze.getImageView().setLayoutY(20);
 
-        kamikaze.setRectangle(new Rectangle(_x - 5, _y - 5, 65, 85));
+        kamikaze.setRectangle(new Rectangle(-5, -5, 65, 85));
         kamikaze.getRectangle().setFill(Color.TRANSPARENT);
         kamikaze.getRectangle().setStrokeWidth(3);
         kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
 
+        kamikaze.setGroup(new Group());
         kamikaze.getGroup().getChildren().addAll(kamikaze.getImageView(), kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
+        kamikaze.getGroup().setLayoutX(kamikaze.getX());
+        kamikaze.getGroup().setLayoutY(kamikaze.getY());
+
         return kamikaze;
     }
 }

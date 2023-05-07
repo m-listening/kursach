@@ -1,100 +1,40 @@
 package app.kursova;
 
-import Methods.ForWarriors;
 import Methods.Utilities;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import macro_objects.Base;
 import micro_objects.Kamikaze;
 
 import java.io.IOException;
-
-import static Methods.Collections.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Game extends Application {
     public static Group mainGroup = new Group();
-    public static Stage newStage;
+    public static Stage globalStage;
+
     private static Timeline timeline;
+
+    public static Kamikaze warriorElect;
+    public final static Set<Base> bases = new HashSet<>();
+    public final static Set<Kamikaze> warriors = new HashSet<>();
+    public final static List<Kamikaze> warriorsActive = new ArrayList<>();
 
     @Override
     public void start(Stage stage) throws IOException {
         Scene scene = new Scene(mainGroup, 1280, 720);
-        Utilities.initializeStartGame();
-        stage.setTitle("Game!");
-        scene.setOnMouseClicked(event -> {
-            if (event.getButton().equals(MouseButton.PRIMARY)) {
-                for (Kamikaze item : warrior.keySet()) {
-                    if (item.getGroup().boundsInParentProperty().get().contains(event.getX(), event.getY())) {
-                        item.setActive();
-                        if (item.isActive()) warriorsActive.add(item);
-                        else warriorsActive.remove(item);
-                        return;
-                    }
-                }
-                Utilities.showWindow("Parameters", "Parameters");
-            }
 
-            if (event.getButton().equals(MouseButton.SECONDARY)) {
-                for (Kamikaze kamikaze : warrior.keySet()) {
-                    if (kamikaze.getGroup().boundsInParentProperty().get().contains(event.getX(), event.getY())) {
-                        if (warriorElect != null) {
-                            warriorElect.setElect();
-                            if (warriorElect == kamikaze) {
-                                warriorElect = null;
-                                return;
-                            }
-                        }
-                        warriorElect = kamikaze;
-                        warriorElect.setElect();
-                        return;
-                    }
-                }
-            }
-        });
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.DELETE)) {
-                ForWarriors.deleteWarrior();
-            }
-            if (event.getCode().equals(KeyCode.NUMPAD8)) {
-                ForWarriors.moveIfElect(0, -10);
-            }
-            if (event.getCode().equals(KeyCode.NUMPAD4)) {
-                ForWarriors.moveIfElect(-10, 0);
-            }
-            if (event.getCode().equals(KeyCode.NUMPAD6)) {
-                ForWarriors.moveIfElect(10, 0);
-            }
-            if (event.getCode().equals(KeyCode.NUMPAD2)) {
-                ForWarriors.moveIfElect(0, 10);
-            }
-            if (event.getCode().equals(KeyCode.C)) {
-                Utilities.showWindow("ChangeParameters", "New parameters");
-            }
-            if (event.getCode().equals(KeyCode.Q)) {
-                try {
-                    if (warriorElect != null) {
-                        Kamikaze kamikaze = warriorElect.clone();
-                        warrior.put(kamikaze, kamikaze.isTeam());
-                        mainGroup.getChildren().add(kamikaze.getGroup());
-                    }
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            if (event.getCode().equals(KeyCode.S)) {
-                newStage = new Stage();
-                Scene secondScene = new Scene(ForWarriors.showWarriors(), 400, 300);
-                newStage.setScene(secondScene);
-                newStage.show();
-            }
-            if (event.getCode().equals(KeyCode.ESCAPE)) {
-                ForWarriors.turnOf();
-            }
-        });
+        Utilities.initializeStartGame();
+        scene.setOnMouseClicked(Utilities::mousePressedHandler);
+        scene.setOnKeyPressed(Utilities::keyPressedHandler);
+
+        stage.setTitle("Game!");
         stage.setScene(scene);
         stage.show();
     }

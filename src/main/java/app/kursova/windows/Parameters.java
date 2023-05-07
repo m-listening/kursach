@@ -9,8 +9,8 @@ import micro_objects.Kamikaze;
 
 import java.io.FileNotFoundException;
 
-import static Methods.Collections.warrior;
 import static Methods.Utilities.lvlImage;
+import static app.kursova.Game.warriors;
 
 public class Parameters {
 
@@ -47,7 +47,12 @@ public class Parameters {
         int health = Integer.parseInt(setHealth_field.getText());
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
-        Kamikaze kamikaze = new Kamikaze(name, health, x, y);
+        Kamikaze kamikaze = new Kamikaze(name, health);
+
+        kamikaze.setX(x);
+        kamikaze.setY(y);
+        kamikaze.getGroup().setLayoutX(x);
+        kamikaze.getGroup().setLayoutY(y);
 
         kamikaze.setTeam(selectedTeam());
         Image image = lvlImage(selectedLvl());
@@ -56,9 +61,9 @@ public class Parameters {
             kamikaze.getImageView().setImage(kamikaze.getImage());
         }
 
-        warrior.put(kamikaze, kamikaze.isTeam());
+        warriors.add(kamikaze);
         Game.mainGroup.getChildren().add(kamikaze.getGroup());
-        Game.newStage.close();
+        Game.globalStage.close();
     }
 
     private int selectedLvl() {

@@ -5,34 +5,41 @@ import micro_objects.Warrior;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Bunker extends Base {
-    private final List<Warrior> redWarriors;
-    private final List<Warrior> greenWarriors;
-    private final List<Warrior> nobodyWarriors;
+    private final Set<Warrior> redWarriors;
+    private final Set<Warrior> greenWarriors;
+    private final Set<Warrior> nobodyWarriors;
 
     public Bunker(double x, double y) throws FileNotFoundException {
-        super(x, y);
-        redWarriors = new ArrayList<>();
-        greenWarriors = new ArrayList<>();
-        nobodyWarriors = new ArrayList<>();
+        super(0, 0);
+
+        this.x = x;
+        this.y = y;
+
+        redWarriors = new HashSet<>();
+        greenWarriors = new HashSet<>();
+        nobodyWarriors = new HashSet<>();
 
         name.setText("Bunker");
-        name.setLayoutX(x - 25);
-        name.setLayoutY(y - 100);
+        name.setLayoutX(-25);
+        name.setLayoutY(-100);
 
         within.setText("0");
-        within.setLayoutX(x - 5);
-        within.setLayoutY(y + 100);
+        within.setLayoutX(-5);
+        within.setLayoutY(+100);
 
         image = new Image(new FileInputStream("src/images/bunker.png"), 150, 150, false, false);
         imageView.setImage(image);
+
+        group.setLayoutX(x);
+        group.setLayoutY(y);
     }
 
     public Bunker() throws FileNotFoundException {
-        this(640, 360);
+        this(0, 0);
     }
 
     @Override
@@ -46,22 +53,22 @@ public class Bunker extends Base {
     }
 
     public void addWarrior(Warrior warrior) {
-        if (warrior.isTeam()) {
+        if (warrior.isTeam() == null) {
+            nobodyWarriors.add(warrior);
+        } else if (warrior.isTeam()) {
             greenWarriors.add(warrior);
-        } else if (!warrior.isTeam()) {
-            redWarriors.add(warrior);
-        } else nobodyWarriors.add(warrior);
+        } else redWarriors.add(warrior);
     }
 
-    public List<Warrior> getRedWarriors() {
+    public Set<Warrior> getRedWarriors() {
         return redWarriors;
     }
 
-    public List<Warrior> getGreenWarriors() {
+    public Set<Warrior> getGreenWarriors() {
         return greenWarriors;
     }
 
-    public List<Warrior> getNobodyWarriors() {
+    public Set<Warrior> getNobodyWarriors() {
         return nobodyWarriors;
     }
 }

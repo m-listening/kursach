@@ -1,13 +1,10 @@
 package app.kursova.windows;
 
-import Methods.ForWarriors;
 import app.kursova.Game;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import micro_objects.Kamikaze;
+
+import static app.kursova.Game.warriorElect;
 
 public class ChangeParameters {
 
@@ -29,8 +26,16 @@ public class ChangeParameters {
         int health = Integer.parseInt(setHealth_field.getText());
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
-        ForWarriors.changeParameters(name,health,x,y);
-        Game.newStage.close();
+
+        warriorElect.setName(name);
+        warriorElect.setHealth(health);
+
+        warriorElect.setX(x);
+        warriorElect.setY(y);
+
+        warriorElect.getGroup().setLayoutX(x);
+        warriorElect.getGroup().setLayoutY(y);
+        Game.globalStage.close();
     }
 
 }

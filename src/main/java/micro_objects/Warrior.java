@@ -13,7 +13,7 @@ public abstract class Warrior {
     int health, move = 1;
     double x, y;
     Murder murders;
-    boolean elect, active;
+    boolean elect, active, inMacro;
     Boolean team;
     Image image;
     ImageView imageView;
@@ -38,6 +38,18 @@ public abstract class Warrior {
 
     public void setTeam(Boolean team) {
         this.team = team;
+    }
+
+    public boolean isInMacro() {
+        return inMacro;
+    }
+
+    public void setInMacro(boolean inMacro) {
+        this.inMacro = inMacro;
+    }
+
+    public void setInMacro() {
+        inMacro = !inMacro;
     }
 
     public void setRectangle(Rectangle rectangle) {
