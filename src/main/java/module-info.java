@@ -9,4 +9,6 @@ module app.kursova {
     opens app.kursova.windows to javafx.fxml;
     exports micro_objects;
     opens micro_objects to javafx.fxml;
+    exports Methods;
+    opens Methods to javafx.fxml;
 }

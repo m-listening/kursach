@@ -93,17 +93,17 @@
                         <Font name="System Bold Italic" size="16.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="RB_lvl1" mnemonicParsing="false" text="Kamikaze" textOverrun="CLIP">
+                  <RadioButton fx:id="RB_lvl1" mnemonicParsing="false" onAction="#RB_kamikaze" text="Kamikaze" textOverrun="CLIP">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
                   </RadioButton>
-                  <RadioButton fx:id="RB_lvl2" mnemonicParsing="false" text="Simple soldier">
+                  <RadioButton fx:id="RB_lvl2" mnemonicParsing="false" onAction="#RB_simpleSoldier" text="Simple soldier">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
                   </RadioButton>
-                  <RadioButton fx:id="RB_lvl3" mnemonicParsing="false" text="SSO">
+                  <RadioButton fx:id="RB_lvl3" mnemonicParsing="false" onAction="#RB_SSO" text="SSO">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
@@ -123,12 +123,12 @@
                         <Font name="System Bold Italic" size="16.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="RB_tmGreen" mnemonicParsing="false" text="Green">
+                  <RadioButton fx:id="RB_tmGreen" mnemonicParsing="false" onAction="#RB_tmGreen" text="Green">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
                   </RadioButton>
-                  <RadioButton fx:id="RB_tmRed" mnemonicParsing="false" text="Red">
+                  <RadioButton fx:id="RB_tmRed" mnemonicParsing="false" onAction="#RB_tmRed" text="Red">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>

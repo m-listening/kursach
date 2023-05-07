@@ -23,6 +23,7 @@ public class Game extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Scene scene = new Scene(mainGroup, 1280, 720);
+        Utilities.initializeStartGame();
         stage.setTitle("Game!");
         scene.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
@@ -75,7 +76,7 @@ public class Game extends Application {
             }
             if (event.getCode().equals(KeyCode.Q)) {
                 try {
-                    if(warriorElect != null) {
+                    if (warriorElect != null) {
                         Kamikaze kamikaze = warriorElect.clone();
                         warrior.put(kamikaze, kamikaze.isTeam());
                         mainGroup.getChildren().add(kamikaze.getGroup());

@@ -1,5 +1,6 @@
 package micro_objects;
 
+import Methods.Murder;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;

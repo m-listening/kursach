@@ -1,5 +1,6 @@
 package micro_objects;
 
+import Methods.Murder;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -35,7 +36,7 @@ public class Kamikaze extends Warrior implements Cloneable {
         elect = false;
         team = null;
 
-        image = new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
+        image = new Image(new FileInputStream("src/images/zombie.png"), 50, 50, false, false);
 
         life = new Line(this.x + 5, this.y + 15, this.x + 50, y + 15);
         life.setStrokeWidth(3);
@@ -111,6 +112,7 @@ public class Kamikaze extends Warrior implements Cloneable {
 
         kamikaze.active = false;
         kamikaze.elect = false;
+        kamikaze.team = null;
 
         try {
             kamikaze.setImage(new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false));

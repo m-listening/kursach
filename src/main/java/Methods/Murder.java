@@ -1,4 +1,4 @@
-package micro_objects;
+package Methods;
 
 public class Murder {
     private int count;
