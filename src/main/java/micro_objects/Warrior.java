@@ -1,6 +1,5 @@
 package micro_objects;
 
-import Methods.Murder;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -9,10 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Objects;
+
 public abstract class Warrior {
     int health, move = 1;
     double x, y;
-    Murder murders;
     boolean elect, active, inMacro;
     Boolean team;
     Image image;
@@ -21,6 +21,36 @@ public abstract class Warrior {
     Rectangle rectangle;
     Line life;
     Group group;
+
+    @Override
+    public String toString() {
+        return "Warrior{" +
+                "name=" + name.getText() +
+                ", x=" + x +
+                ", y=" + y +
+                ", active=" + active +
+                ", health=" + health +
+                ", inMacro=" + inMacro +
+                ", team=" + (isTeam() != null ? isTeam() ? "Green" : "Red" : "None") +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Warrior warrior = (Warrior) o;
+        return health == warrior.health && Objects.equals(name, warrior.name) && Objects.equals(group, warrior.group);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(health, name, group);
+    }
+
+    public Boolean getTeam() {
+        return team;
+    }
 
     public void setRectangleColor() {
         if (isElect()) {
@@ -70,14 +100,6 @@ public abstract class Warrior {
 
     public void setGroup(Group group) {
         this.group = group;
-    }
-
-    public Murder getMurders() {
-        return murders;
-    }
-
-    public void setMurders(Murder murders) {
-        this.murders = murders;
     }
 
     public int getHealth() {

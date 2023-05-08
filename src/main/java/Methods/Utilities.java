@@ -1,12 +1,11 @@
 package Methods;
 
 import app.kursova.Game;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -21,9 +20,7 @@ import macro_objects.RedBase;
 import micro_objects.Kamikaze;
 import micro_objects.Warrior;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -85,7 +82,20 @@ public class Utilities {
 
     }
 
-    public static void mousePressedHandler(MouseEvent event) {
+    public static void json(String object, String action) throws IOException {
+        Writer file = new FileWriter("data.json",true);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonGenerator jsonGenerator = objectMapper.getFactory().createGenerator(file);
+
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeFieldName(object);
+        jsonGenerator.writeString(action);
+        jsonGenerator.writeEndObject();
+        file.write("\n");
+        jsonGenerator.close();
+    }
+
+    public static void mousePressedHandler(MouseEvent event) throws IOException {
         if (event.isAltDown()) {
             Base base = checkClickBase(bases.stream().toList(), event.getX(), event.getY());
             if (base == null) return;
@@ -94,10 +104,10 @@ public class Utilities {
                 if (warriorElect == null) return;
 
                 warriorElect.setElect(false);
+                json("warriorElect", "setElect(false)");
                 warriorElect.setActive(false);
-                /*warriorElect.getGroup().setVisible(false);*/
+                warriorsActive.remove(warriorElect);
                 mainGroup.getChildren().remove(warriorElect.getGroup());
-
                 if (base instanceof GreenBase) {
                     ((GreenBase) base).getPersonnel().add(warriorElect);
                     base.setWithin(((GreenBase) base).getPersonnel().size());
@@ -111,7 +121,6 @@ public class Utilities {
                             ((Bunker) base).getNobodyWarriors().size());
                 }
                 warriorElect.setInMacro(true);
-
                 warriorElect = null;
             }
 
@@ -144,7 +153,7 @@ public class Utilities {
 
                 newScene.setOnMouseClicked(e -> {
                     if (e.getButton().equals(MouseButton.PRIMARY)) {
-                        Kamikaze warrior = checkClickWarrior(warriors.stream().toList(), e.getX(), e.getY());
+                        Kamikaze warrior = checkClickWarrior(warriors.stream().toList(), e.getX(), e.getY(), true);
                         if (warrior == null) return;
                         if (flag == 1) {
                             ((GreenBase) base).getPersonnel().remove(warrior);
@@ -178,7 +187,7 @@ public class Utilities {
             return;
         }
         if (event.getButton().equals(MouseButton.PRIMARY)) {
-            Kamikaze objectWarrior = checkClickWarrior(warriors.stream().toList(), event.getX(), event.getY());
+            Kamikaze objectWarrior = checkClickWarrior(warriors.stream().toList(), event.getX(), event.getY(), false);
             if (objectWarrior != null) {
                 objectWarrior.setActive();
                 if (objectWarrior.isActive()) warriorsActive.add(objectWarrior);
@@ -225,23 +234,28 @@ public class Utilities {
             }
         }
         if (event.getCode().equals(KeyCode.S)) {
-            ObservableList<Warrior> listWarriors = FXCollections.observableArrayList(warriors);
-            ListView<Warrior> listView = new ListView<>(listWarriors);
-
-            globalStage = new Stage();
-            Scene secondScene = new Scene(listView, 400, 300);
-            globalStage.setScene(secondScene);
-            globalStage.show();
+            warriors.sort(new NameComparator());
+            showWindow("Search", "Search warrior");
         }
         if (event.getCode().equals(KeyCode.ESCAPE)) {
             turnOf();
         }
     }
 
-    private static Kamikaze checkClickWarrior(List<Kamikaze> list, double x, double y) {
+    /**
+     * @param x  -> event.getX()
+     * @param y  -> event.getY()
+     * @param in -> True = in macro, False = nowhere
+     * @return kamikaze or null
+     */
+    private static Kamikaze checkClickWarrior(List<Kamikaze> list, double x, double y, boolean in) {
         for (Kamikaze item : list) {
-            if (item.getGroup().boundsInParentProperty().get().contains(x, y))
-                return item;
+            if (item.getGroup().boundsInParentProperty().get().contains(x, y)) {
+                if (item.isInMacro() && in)
+                    return item;
+                if (!item.isInMacro() && !in)
+                    return item;
+            }
         }
         return null;
     }
@@ -255,7 +269,7 @@ public class Utilities {
     }
 
     private static void electWarrior(double x, double y) {
-        Kamikaze objectWarrior = checkClickWarrior(warriors.stream().toList(), x, y);
+        Kamikaze objectWarrior = checkClickWarrior(warriors.stream().toList(), x, y, false);
         if (objectWarrior == null) return;
 
         if (warriorElect != null) {
@@ -267,6 +281,15 @@ public class Utilities {
         }
         warriorElect = objectWarrior;
         warriorElect.setElect();
+    }
+
+    private static void moveIfElect(double x, double y) {
+        if (warriorElect != null && warriorElect.isActive()) {
+            warriorElect.setX(warriorElect.getX() + x);
+            warriorElect.setY(warriorElect.getY() + y);
+            warriorElect.getGroup().setLayoutX(warriorElect.getGroup().getLayoutX() + x);
+            warriorElect.getGroup().setLayoutY(warriorElect.getGroup().getLayoutY() + y);
+        }
     }
 
     private static void deleteWarrior() {
@@ -285,14 +308,5 @@ public class Utilities {
             item.setActive(false);
         }
         warriorsActive.clear();
-    }
-
-    private static void moveIfElect(double x, double y) {
-        if (warriorElect != null && warriorElect.isActive()) {
-            warriorElect.setX(warriorElect.getX() + x);
-            warriorElect.setY(warriorElect.getY() + y);
-            warriorElect.getGroup().setLayoutX(warriorElect.getGroup().getLayoutX() + x);
-            warriorElect.getGroup().setLayoutY(warriorElect.getGroup().getLayoutY() + y);
-        }
     }
 }

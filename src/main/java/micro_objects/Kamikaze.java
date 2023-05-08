@@ -1,6 +1,5 @@
 package micro_objects;
 
-import Methods.Murder;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,9 +11,9 @@ import javafx.scene.text.Font;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Objects;
 
-public class Kamikaze extends Warrior implements Cloneable {
+public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze> {
+    private Murder murders;
 
     public Kamikaze(String name, int health) throws FileNotFoundException {
         group = new Group();
@@ -22,7 +21,8 @@ public class Kamikaze extends Warrior implements Cloneable {
 
         this.health = health;
 
-        this.murders = new Murder();
+        murders = new Murder() {
+        };
 
         this.name = new Label(name);
         this.name.setLayoutX(+5);
@@ -61,24 +61,42 @@ public class Kamikaze extends Warrior implements Cloneable {
     public String toString() {
         return "Kamikaze{" +
                 "name=" + name.getText() +
-                ", health=" + health +
                 ", x=" + x +
                 ", y=" + y +
+                ", active=" + active +
+                ", health=" + health +
+                ", murders=" + murders.getCount() +
+                ", inMacro=" + inMacro +
                 ", team=" + (isTeam() != null ? isTeam() ? "Green" : "Red" : "None") +
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Kamikaze kamikaze = (Kamikaze) o;
-        return team == kamikaze.team && Objects.equals(group, kamikaze.group);
+    private static class Murder {
+        private int count;
+
+        public Murder() {
+            this.count = 0;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount() {
+            this.count++;
+        }
+
+        public void setCount(int v) {
+            this.count = v;
+        }
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(team, group);
+    public Murder getMurders() {
+        return murders;
+    }
+
+    public void setMurders(Murder murders) {
+        this.murders = murders;
     }
 
     static {
@@ -93,12 +111,12 @@ public class Kamikaze extends Warrior implements Cloneable {
     public Kamikaze clone() throws CloneNotSupportedException {
         Kamikaze kamikaze = (Kamikaze) super.clone();
 
-        kamikaze.setX(kamikaze.getX() + 100);
-        kamikaze.setY(kamikaze.getY() + 100);
+        kamikaze.x = kamikaze.getX() + 100;
+        kamikaze.y = kamikaze.getY() + 100;
 
-        kamikaze.setMurders(new Murder());
+        kamikaze.murders = new Murder();
 
-        kamikaze.setName(new Label(kamikaze.getName().getText() + " cloned"));
+        kamikaze.name = new Label(kamikaze.getName().getText() + " cloned");
         kamikaze.getName().setLayoutX(5);
         kamikaze.getName().setLayoutY(-2);
         kamikaze.getName().setFont(Font.font("Impact", 14));
@@ -108,28 +126,37 @@ public class Kamikaze extends Warrior implements Cloneable {
         kamikaze.team = null;
 
         try {
-            kamikaze.setImage(new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false));
+            kamikaze.image = new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        kamikaze.setLife(new Line(5, +15, +50, +15));
+        kamikaze.life = new Line(5, +15, +50, +15);
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
-        kamikaze.setImageView(new ImageView(kamikaze.getImage()));
+        kamikaze.imageView = new ImageView(kamikaze.getImage());
         kamikaze.getImageView().setLayoutX(0);
         kamikaze.getImageView().setLayoutY(20);
 
-        kamikaze.setRectangle(new Rectangle(-5, -5, 65, 85));
+        kamikaze.rectangle = new Rectangle(-5, -5, 65, 85);
         kamikaze.getRectangle().setFill(Color.TRANSPARENT);
         kamikaze.getRectangle().setStrokeWidth(3);
         kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
 
-        kamikaze.setGroup(new Group());
+        kamikaze.group = new Group();
         kamikaze.getGroup().getChildren().addAll(kamikaze.getImageView(), kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
         kamikaze.getGroup().setLayoutX(kamikaze.getX());
         kamikaze.getGroup().setLayoutY(kamikaze.getY());
 
         return kamikaze;
+    }
+
+    @Override
+    public int compareTo(Kamikaze o) {
+        int result = 0;
+        result += Integer.compare(this.getHealth(), o.getHealth());
+        result += Integer.compare(this.getMurders().getCount(), o.getMurders().getCount());
+        result += this.getName().getText().compareTo(o.getName().getText());
+        return result;
     }
 }

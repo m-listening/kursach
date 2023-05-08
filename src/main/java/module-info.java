@@ -1,8 +1,9 @@
 module app.kursova {
     requires javafx.controls;
     requires javafx.fxml;
-            
-                            
+    requires com.fasterxml.jackson.databind;
+
+
     opens app.kursova to javafx.fxml;
     exports app.kursova;
     exports app.kursova.windows;
