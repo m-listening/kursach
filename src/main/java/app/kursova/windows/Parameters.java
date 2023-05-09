@@ -15,31 +15,16 @@ import static app.kursova.Game.warriors;
 public class Parameters {
 
     @FXML
-    private RadioButton RB_lvl1;
+    private RadioButton RB_lvl1, RB_lvl2, RB_lvl3;
 
     @FXML
-    private RadioButton RB_lvl2;
+    private RadioButton RB_tmGreen, RB_tmRed;
 
     @FXML
-    private RadioButton RB_lvl3;
+    private TextField setHealth_field, setName_field;
 
     @FXML
-    private RadioButton RB_tmGreen;
-
-    @FXML
-    private RadioButton RB_tmRed;
-
-    @FXML
-    private TextField setHealth_field;
-
-    @FXML
-    private TextField setName_field;
-
-    @FXML
-    private TextField setX_field;
-
-    @FXML
-    private TextField setY_field;
+    private TextField setY_field, setX_field;
 
     @FXML
     void createNewWarrior() throws FileNotFoundException {
@@ -54,8 +39,8 @@ public class Parameters {
         kamikaze.getGroup().setLayoutX(x);
         kamikaze.getGroup().setLayoutY(y);
 
-        kamikaze.setTeam(selectedTeam());
-        Image image = lvlImage(selectedLvl());
+        kamikaze.setTeam(selectedTeam);
+        Image image = lvlImage(selectedLvl);
         if (image != null) {
             kamikaze.setImage(image);
             kamikaze.getImageView().setImage(kamikaze.getImage());
@@ -66,39 +51,26 @@ public class Parameters {
         Game.globalStage.close();
     }
 
-    private int selectedLvl() {
-        return RB_lvl1.isSelected() ? 1 : RB_lvl2.isSelected() ? 2 : RB_lvl3.isSelected() ? 3 : 0;
-    }
+    private static int selectedLvl = 0;
+    private static Boolean selectedTeam;
 
-    private Boolean selectedTeam() {
-        return RB_tmGreen.isSelected() ? Boolean.TRUE : RB_tmRed.isSelected() ? Boolean.FALSE : null;
+    @FXML
+    void selectLvl() {
+        if (RB_lvl1.isSelected()) {
+            selectedLvl = 1;
+        } else if (RB_lvl2.isSelected()) {
+            selectedLvl = 2;
+        } else if (RB_lvl3.isSelected()) {
+            selectedLvl = 3;
+        }
     }
 
     @FXML
-    void RB_tmRed() {
-        RB_tmGreen.setSelected(false);
-    }
-
-    @FXML
-    void RB_tmGreen() {
-        RB_tmRed.setSelected(false);
-    }
-
-    @FXML
-    void RB_kamikaze() {
-        RB_lvl2.setSelected(false);
-        RB_lvl3.setSelected(false);
-    }
-
-    @FXML
-    void RB_simpleSoldier() {
-        RB_lvl1.setSelected(false);
-        RB_lvl3.setSelected(false);
-    }
-
-    @FXML
-    void RB_SSO() {
-        RB_lvl1.setSelected(false);
-        RB_lvl2.setSelected(false);
+    void selectTeam() {
+        if (RB_tmGreen.isSelected()) {
+            selectedTeam = true;
+        } else if (RB_tmRed.isSelected()) {
+            selectedTeam = false;
+        } else selectedTeam = null;
     }
 }

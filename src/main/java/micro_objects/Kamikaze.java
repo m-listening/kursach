@@ -36,7 +36,7 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
 
         image = new Image(new FileInputStream("src/images/zombie.png"), 50, 50, false, false);
 
-        life = new Line(+5, +15, +50, +15);
+        life = new Line(0, +15, +50, +15);
         life.setStrokeWidth(3);
         life.setStroke(Color.BLACK);
 

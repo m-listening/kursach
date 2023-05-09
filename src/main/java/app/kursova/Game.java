@@ -12,6 +12,7 @@ import javafx.util.Duration;
 import macro_objects.Base;
 import micro_objects.Kamikaze;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,10 +31,18 @@ public class Game extends Application {
     public final static List<Kamikaze> warriorsActive = new ArrayList<>();
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws FileNotFoundException {
         Scene scene = new Scene(mainGroup, 1280, 720);
 
         Utilities.initializeStartGame();
+
+        scene.setOnMouseClicked(event -> {
+            try {
+                Utilities.mousePressedHandler(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         scene.setOnMouseClicked(event -> {
             try {
                 Utilities.mousePressedHandler(event);

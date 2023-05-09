@@ -206,16 +206,16 @@ public class Utilities {
             deleteWarrior();
         }
         if (event.getCode().equals(KeyCode.NUMPAD8)) {
-            moveIfElect(0, -10);
+            moveIfActive(0, -10);
         }
         if (event.getCode().equals(KeyCode.NUMPAD4)) {
-            moveIfElect(-10, 0);
+            moveIfActive(-10, 0);
         }
         if (event.getCode().equals(KeyCode.NUMPAD6)) {
-            moveIfElect(10, 0);
+            moveIfActive(10, 0);
         }
         if (event.getCode().equals(KeyCode.NUMPAD2)) {
-            moveIfElect(0, 10);
+            moveIfActive(0, 10);
         }
         if (event.getCode().equals(KeyCode.C)) {
             if (Game.warriorElect == null)
@@ -234,7 +234,7 @@ public class Utilities {
             }
         }
         if (event.getCode().equals(KeyCode.S)) {
-            warriors.sort(new NameComparator());
+            warriors.sort(new NameComparator()::compare);
             showWindow("Search", "Search warrior");
         }
         if (event.getCode().equals(KeyCode.ESCAPE)) {
@@ -283,12 +283,12 @@ public class Utilities {
         warriorElect.setElect();
     }
 
-    private static void moveIfElect(double x, double y) {
-        if (warriorElect != null && warriorElect.isActive()) {
-            warriorElect.setX(warriorElect.getX() + x);
-            warriorElect.setY(warriorElect.getY() + y);
-            warriorElect.getGroup().setLayoutX(warriorElect.getGroup().getLayoutX() + x);
-            warriorElect.getGroup().setLayoutY(warriorElect.getGroup().getLayoutY() + y);
+    private static void moveIfActive(double x, double y) {
+        for(Kamikaze item : warriorsActive){
+            item.setX(item.getX() + x);
+            item.setY(item.getY() + y);
+            item.getGroup().setLayoutX(item.getGroup().getLayoutX() + x);
+            item.getGroup().setLayoutY(item.getGroup().getLayoutY() + y);
         }
     }
 

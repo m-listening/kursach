@@ -9,16 +9,10 @@ import static app.kursova.Game.warriorElect;
 public class ChangeParameters {
 
     @FXML
-    private TextField setHealth_field;
+    private TextField setHealth_field, setName_field;
 
     @FXML
-    private TextField setName_field;
-
-    @FXML
-    private TextField setX_field;
-
-    @FXML
-    private TextField setY_field;
+    private TextField setX_field, setY_field;
 
     @FXML
     void changeParameters() {
@@ -37,5 +31,4 @@ public class ChangeParameters {
         warriorElect.getGroup().setLayoutY(y);
         Game.globalStage.close();
     }
-
 }
