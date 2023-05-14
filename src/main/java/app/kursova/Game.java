@@ -1,41 +1,23 @@
 package app.kursova;
 
 import Methods.Utilities;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import macro_objects.Base;
-import micro_objects.Kamikaze;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class Game extends Application {
-    public static Group mainGroup = new Group();
     public static Stage globalStage;
 
-    private static Timeline timeline;
-
-    public static Kamikaze warriorElect;
-    public final static Set<Base> bases = new HashSet<>();
-    public final static List<Kamikaze> warriors = new ArrayList<>();
-    public final static List<Kamikaze> warriorsActive = new ArrayList<>();
+    public static World world;
 
     @Override
     public void start(Stage stage) throws FileNotFoundException {
-        Scene scene = new Scene(mainGroup, 1280, 720);
+        world = new World();
 
-        Utilities.initializeStartGame();
-
+        Scene scene = new Scene(world.getMainGroup(), 1280, 720);
         scene.setOnMouseClicked(event -> {
             try {
                 Utilities.mousePressedHandler(event);
@@ -51,9 +33,6 @@ public class Game extends Application {
             }
         });
         scene.setOnKeyPressed(Utilities::keyPressedHandler);
-        timeline = new Timeline(new KeyFrame(Duration.millis(10)));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
 
         stage.setTitle("Game!");
         stage.setScene(scene);

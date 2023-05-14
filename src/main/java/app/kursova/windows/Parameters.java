@@ -4,13 +4,16 @@ import app.kursova.Game;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import micro_objects.Kamikaze;
+import micro_objects.SSO;
+import micro_objects.SimpleSoldier;
+import micro_objects.Warrior;
 
 import java.io.FileNotFoundException;
 
 import static Methods.Utilities.lvlImage;
-import static app.kursova.Game.warriors;
+import static app.kursova.Game.world;
+import static app.kursova.World.warriors;
 
 public class Parameters {
 
@@ -32,26 +35,31 @@ public class Parameters {
         int health = Integer.parseInt(setHealth_field.getText());
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
-        Kamikaze kamikaze = new Kamikaze(name, health);
+        Warrior warrior = null;
+        if (selectedLvl == 1) {
+            warrior = new Kamikaze(name, health);
+        } else if (selectedLvl == 2) {
+            warrior = new SimpleSoldier(name, health);
+        } else if (selectedLvl == 3) {
+            warrior = new SSO(name, health);
+        }
+        if(warrior != null){
+            warrior.setX(x);
+            warrior.setY(y);
 
-        kamikaze.setX(x);
-        kamikaze.setY(y);
-        kamikaze.getGroup().setLayoutX(x);
-        kamikaze.getGroup().setLayoutY(y);
+            warrior.setTeam(selectedTeam);
 
-        kamikaze.setTeam(selectedTeam);
-        Image image = lvlImage(selectedLvl);
-        if (image != null) {
-            kamikaze.setImage(image);
-            kamikaze.getImageView().setImage(kamikaze.getImage());
+            warrior.setImage(lvlImage(selectedLvl));
+            warrior.getImageView().setImage(warrior.getImage());
+
+            warriors.add((Kamikaze) warrior);
+            world.getMainGroup().getChildren().add(warrior.getGroup());
         }
 
-        warriors.add(kamikaze);
-        Game.mainGroup.getChildren().add(kamikaze.getGroup());
         Game.globalStage.close();
     }
 
-    private static int selectedLvl = 0;
+    private static int selectedLvl = 1;
     private static Boolean selectedTeam;
 
     @FXML

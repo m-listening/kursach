@@ -17,7 +17,6 @@ public abstract class Base {
     Circle circle;
     Label name, within;
     Group group;
-
     public Base(double x, double y) {
         this.x = x;
         this.y = y;

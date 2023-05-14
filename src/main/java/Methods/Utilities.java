@@ -3,7 +3,12 @@ package Methods;
 import app.kursova.Game;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -13,6 +18,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import macro_objects.Base;
 import macro_objects.Bunker;
 import macro_objects.GreenBase;
@@ -23,8 +29,11 @@ import micro_objects.Warrior;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
-import static app.kursova.Game.*;
+import static app.kursova.Game.globalStage;
+import static app.kursova.Game.world;
+import static app.kursova.World.*;
 
 public class Utilities {
     private static final HashMap<Kamikaze, Boolean> warriorsToRemove = new HashMap<>();
@@ -54,19 +63,14 @@ public class Utilities {
      * @return -> new Image, or null if lvl != 1,2,3
      */
     public static Image lvlImage(int lvl) throws FileNotFoundException {
-        if (lvl == 1) {
-            return new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
-        }
-        if (lvl == 2) {
+        if (lvl == 2)
             return new Image(new FileInputStream("src/images/simpleSoldier.png"), 50, 50, false, false);
-        }
-        if (lvl == 3) {
+        if (lvl == 3)
             return new Image(new FileInputStream("src/images/SSO.png"), 50, 50, false, false);
-        }
-        return null;
+        return new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
     }
 
-    public static void initializeStartGame() throws FileNotFoundException {
+    public static void initializeStartGame(Group group) throws FileNotFoundException {
         Bunker bunker = new Bunker(640, 360);
         GreenBase greenBase = new GreenBase(150, 360);
         RedBase redBase = new RedBase(1130, 360);
@@ -74,8 +78,7 @@ public class Utilities {
         bases.add(bunker);
         bases.add(greenBase);
         bases.add(redBase);
-
-        mainGroup.getChildren().addAll(
+        group.getChildren().addAll(
                 bunker.getGroup(),
                 greenBase.getGroup(),
                 redBase.getGroup());
@@ -83,7 +86,7 @@ public class Utilities {
     }
 
     public static void json(String object, String action) throws IOException {
-        Writer file = new FileWriter("data.json",true);
+        Writer file = new FileWriter("data.json", true);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonGenerator jsonGenerator = objectMapper.getFactory().createGenerator(file);
 
@@ -107,7 +110,7 @@ public class Utilities {
                 json("warriorElect", "setElect(false)");
                 warriorElect.setActive(false);
                 warriorsActive.remove(warriorElect);
-                mainGroup.getChildren().remove(warriorElect.getGroup());
+                world.getMainGroup().getChildren().remove(warriorElect.getGroup());
                 if (base instanceof GreenBase) {
                     ((GreenBase) base).getPersonnel().add(warriorElect);
                     base.setWithin(((GreenBase) base).getPersonnel().size());
@@ -173,7 +176,7 @@ public class Utilities {
 
                         warrior.setInMacro(false);
 
-                        mainGroup.getChildren().add(warrior.getGroup());
+                        world.getMainGroup().getChildren().add(warrior.getGroup());
                         warrior.getGroup().setLayoutX(warrior.getX());
                         warrior.getGroup().setLayoutY(warrior.getY());
                     }
@@ -202,23 +205,31 @@ public class Utilities {
     }
 
     public static void keyPressedHandler(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.K)) {
+            for (Warrior item : warriorsActive) {
+                double x = new Random().nextDouble() * item.getMove();
+                double y = new Random().nextDouble() * item.getMove();
+
+                moveIfActive(item, 100, 100);
+            }
+        }
         if (event.getCode().equals(KeyCode.DELETE)) {
             deleteWarrior();
         }
         if (event.getCode().equals(KeyCode.NUMPAD8)) {
-            moveIfActive(0, -10);
+            moveIfActiveAndElect(0, -10);
         }
         if (event.getCode().equals(KeyCode.NUMPAD4)) {
-            moveIfActive(-10, 0);
+            moveIfActiveAndElect(-10, 0);
         }
         if (event.getCode().equals(KeyCode.NUMPAD6)) {
-            moveIfActive(10, 0);
+            moveIfActiveAndElect(10, 0);
         }
         if (event.getCode().equals(KeyCode.NUMPAD2)) {
-            moveIfActive(0, 10);
+            moveIfActiveAndElect(0, 10);
         }
         if (event.getCode().equals(KeyCode.C)) {
-            if (Game.warriorElect == null)
+            if (warriorElect == null)
                 return;
             showWindow("ChangeParameters", "New parameters");
         }
@@ -227,14 +238,14 @@ public class Utilities {
                 if (warriorElect != null) {
                     Kamikaze kamikaze = warriorElect.clone();
                     warriors.add(kamikaze);
-                    mainGroup.getChildren().add(kamikaze.getGroup());
+                    world.getMainGroup().getChildren().add(kamikaze.getGroup());
                 }
             } catch (CloneNotSupportedException e) {
                 throw new RuntimeException(e);
             }
         }
         if (event.getCode().equals(KeyCode.S)) {
-            warriors.sort(new NameComparator()::compare);
+            warriors.sort(Kamikaze::compareTo);
             showWindow("Search", "Search warrior");
         }
         if (event.getCode().equals(KeyCode.ESCAPE)) {
@@ -250,7 +261,7 @@ public class Utilities {
      */
     private static Kamikaze checkClickWarrior(List<Kamikaze> list, double x, double y, boolean in) {
         for (Kamikaze item : list) {
-            if (item.getGroup().boundsInParentProperty().get().contains(x, y)) {
+            if (item.getGroup().getBoundsInParent().contains(x, y)) {
                 if (item.isInMacro() && in)
                     return item;
                 if (!item.isInMacro() && !in)
@@ -283,12 +294,10 @@ public class Utilities {
         warriorElect.setElect();
     }
 
-    private static void moveIfActive(double x, double y) {
-        for(Kamikaze item : warriorsActive){
+    public static void moveIfActiveAndElect(double x, double y) {
+        for (Kamikaze item : warriorsActive) {
             item.setX(item.getX() + x);
             item.setY(item.getY() + y);
-            item.getGroup().setLayoutX(item.getGroup().getLayoutX() + x);
-            item.getGroup().setLayoutY(item.getGroup().getLayoutY() + y);
         }
     }
 
@@ -298,7 +307,7 @@ public class Utilities {
         }
         for (Kamikaze item : warriorsToRemove.keySet()) {
             warriors.remove(item);
-            mainGroup.getChildren().remove(item.getGroup());
+            world.getMainGroup().getChildren().remove(item.getGroup());
         }
         warriorsActive.clear();
     }
@@ -308,5 +317,9 @@ public class Utilities {
             item.setActive(false);
         }
         warriorsActive.clear();
+    }
+
+    public static void moveIfActive(Warrior warrior, double x, double y) {
+
     }
 }

@@ -14,10 +14,8 @@ import macro_objects.RedBase;
 import micro_objects.Kamikaze;
 import micro_objects.Warrior;
 
-import java.util.Collections;
-
-import static app.kursova.Game.bases;
-import static app.kursova.Game.warriors;
+import static app.kursova.World.bases;
+import static app.kursova.World.warriors;
 
 public class Search {
     private int select = 0;

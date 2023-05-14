@@ -2,18 +2,17 @@ package micro_objects;
 
 import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze> {
-    private Murder murders;
+    protected Murder murders;
 
     public Kamikaze(String name, int health) throws FileNotFoundException {
         group = new Group();
@@ -34,13 +33,11 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
         team = null;
         inMacro = false;
 
-        image = new Image(new FileInputStream("src/images/zombie.png"), 50, 50, false, false);
-
         life = new Line(0, +15, +50, +15);
         life.setStrokeWidth(3);
         life.setStroke(Color.BLACK);
 
-        imageView = new ImageView(image);
+        imageView = new ImageView();
         imageView.setLayoutX(0);
         imageView.setLayoutY(20);
 
@@ -50,6 +47,7 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
         rectangle.setStroke(Color.TRANSPARENT);
 
         group.getChildren().addAll(imageView, life, this.name, rectangle);
+
         System.out.println("Конструктор викликаний.\n" + this);
     }
 
@@ -71,7 +69,7 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
                 '}';
     }
 
-    private static class Murder {
+    public static class Murder {
         private int count;
 
         public Murder() {
@@ -91,14 +89,6 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
         }
     }
 
-    public Murder getMurders() {
-        return murders;
-    }
-
-    public void setMurders(Murder murders) {
-        this.murders = murders;
-    }
-
     static {
         System.out.println("Статичний блок було викликано.");
     }
@@ -111,9 +101,6 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
     public Kamikaze clone() throws CloneNotSupportedException {
         Kamikaze kamikaze = (Kamikaze) super.clone();
 
-        kamikaze.x = kamikaze.getX() + 100;
-        kamikaze.y = kamikaze.getY() + 100;
-
         kamikaze.murders = new Murder();
 
         kamikaze.name = new Label(kamikaze.getName().getText() + " cloned");
@@ -125,16 +112,12 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
         kamikaze.elect = false;
         kamikaze.team = null;
 
-        try {
-            kamikaze.image = new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        kamikaze.image = kamikaze.getImage();
         kamikaze.life = new Line(5, +15, +50, +15);
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
-        kamikaze.imageView = new ImageView(kamikaze.getImage());
+        kamikaze.imageView = new ImageView(super.getImage());
         kamikaze.getImageView().setLayoutX(0);
         kamikaze.getImageView().setLayoutY(20);
 
@@ -145,8 +128,9 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
 
         kamikaze.group = new Group();
         kamikaze.getGroup().getChildren().addAll(kamikaze.getImageView(), kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
-        kamikaze.getGroup().setLayoutX(kamikaze.getX());
-        kamikaze.getGroup().setLayoutY(kamikaze.getY());
+
+        kamikaze.setX(kamikaze.getX() + 100);
+        kamikaze.setY(kamikaze.getY() + 100);
 
         return kamikaze;
     }
@@ -158,5 +142,13 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
         result += Integer.compare(this.getMurders().getCount(), o.getMurders().getCount());
         result += this.getName().getText().compareTo(o.getName().getText());
         return result;
+    }
+
+    public void setMurders(Murder murders) {
+        this.murders = murders;
+    }
+
+    public Murder getMurders() {
+        return murders;
     }
 }

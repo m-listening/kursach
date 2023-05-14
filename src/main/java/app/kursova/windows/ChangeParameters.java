@@ -1,10 +1,11 @@
 package app.kursova.windows;
 
 import app.kursova.Game;
+import app.kursova.World;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-import static app.kursova.Game.warriorElect;
+import static app.kursova.World.warriorElect;
 
 public class ChangeParameters {
 
@@ -27,8 +28,6 @@ public class ChangeParameters {
         warriorElect.setX(x);
         warriorElect.setY(y);
 
-        warriorElect.getGroup().setLayoutX(x);
-        warriorElect.getGroup().setLayoutY(y);
         Game.globalStage.close();
     }
 }

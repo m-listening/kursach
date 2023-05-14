@@ -116,6 +116,7 @@ public abstract class Warrior {
 
     public void setX(double x) {
         this.x = x;
+        this.getGroup().setLayoutX(x);
     }
 
     public double getY() {
@@ -124,6 +125,7 @@ public abstract class Warrior {
 
     public void setY(double y) {
         this.y = y;
+        this.getGroup().setLayoutY(y);
     }
 
     public boolean isElect() {
