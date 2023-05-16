@@ -1,10 +1,11 @@
 package micro_objects;
 
-import java.io.FileNotFoundException;
-
 public class SSO extends SimpleSoldier {
-    public SSO(String name, int health) throws FileNotFoundException {
+    public SSO(String name, double health) {
         super(name, health);
+        move = 7;
+        setArmor(100);
+        setDamage(75);
     }
 
     @Override

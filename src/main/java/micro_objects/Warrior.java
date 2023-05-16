@@ -5,19 +5,21 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Objects;
 
 public abstract class Warrior {
-    int health, move = 1;
-    double x, y;
+    int move = 1;
+    double x, y, health;
     boolean elect, active, inMacro;
     Boolean team;
     Image image;
     ImageView imageView;
     Label name;
+    Circle circle;
     Rectangle rectangle;
     Line life;
     Group group;
@@ -78,7 +80,7 @@ public abstract class Warrior {
         this.inMacro = inMacro;
     }
 
-    public void setInMacro() {
+    public void flipInMacro() {
         inMacro = !inMacro;
     }
 
@@ -94,6 +96,14 @@ public abstract class Warrior {
         this.move = move;
     }
 
+    public Circle getCircle() {
+        return circle;
+    }
+
+    public void setCircle(Circle circle) {
+        this.circle = circle;
+    }
+
     public Group getGroup() {
         return group;
     }
@@ -102,11 +112,11 @@ public abstract class Warrior {
         this.group = group;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
@@ -137,7 +147,7 @@ public abstract class Warrior {
         setRectangleColor();
     }
 
-    public void setElect() {
+    public void flipElect() {
         this.elect = !this.elect;
         setRectangleColor();
     }
@@ -152,7 +162,7 @@ public abstract class Warrior {
         else this.life.setStroke(Color.BLACK);
     }
 
-    public void setActive() {
+    public void flipActive() {
         this.active = !this.active;
         if (isActive()) this.life.setStroke(Color.LIGHTGREEN);
         else this.life.setStroke(Color.BLACK);

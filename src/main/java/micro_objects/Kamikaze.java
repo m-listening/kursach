@@ -9,15 +9,15 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.io.FileNotFoundException;
-
 public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze> {
     protected Murder murders;
+    private double armor, damage;
 
-    public Kamikaze(String name, int health) throws FileNotFoundException {
+    public Kamikaze(String name, double health) {
         group = new Group();
         move = 3;
-
+        armor = 50;
+        damage = 500;
         this.health = health;
 
         murders = new Murder() {
@@ -46,12 +46,32 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
         rectangle.setStrokeWidth(3);
         rectangle.setStroke(Color.TRANSPARENT);
 
-        group.getChildren().addAll(imageView, life, this.name, rectangle);
+
+        circle = new Circle();
+        circle.setLayoutX(20);
+        circle.setLayoutY(40);
+        circle.setRadius(50);
+        circle.setFill(Color.TRANSPARENT);
+        circle.setStroke(Color.GREY);
+
+        group.getChildren().addAll(imageView, life, this.name, rectangle, circle);
 
         System.out.println("Конструктор викликаний.\n" + this);
     }
 
-    public Kamikaze() throws FileNotFoundException {
+    public boolean inflictDamage(Kamikaze warrior) {
+        if (warrior.getArmor() > 0) warrior.setArmor(warrior.getArmor() - this.getDamage());
+        if (warrior.getArmor() == 0) {
+            warrior.setHealth(warrior.getHealth() - this.getDamage());
+            return warrior.getHealth() <= 0;
+        } else {
+            warrior.setHealth(warrior.getHealth() - warrior.getArmor());
+            warrior.setArmor(0);
+        }
+        return false;
+    }
+
+    public Kamikaze() {
         this("", 0);
     }
 
@@ -103,7 +123,7 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
 
         kamikaze.murders = new Murder();
 
-        kamikaze.name = new Label(kamikaze.getName().getText() + " cloned");
+        kamikaze.name = new Label(kamikaze.getName().getText() + ".cl");
         kamikaze.getName().setLayoutX(5);
         kamikaze.getName().setLayoutY(-2);
         kamikaze.getName().setFont(Font.font("Impact", 14));
@@ -112,22 +132,30 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
         kamikaze.elect = false;
         kamikaze.team = null;
 
-        kamikaze.image = kamikaze.getImage();
+
         kamikaze.life = new Line(5, +15, +50, +15);
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
-        kamikaze.imageView = new ImageView(super.getImage());
+        kamikaze.image = kamikaze.getImage();
+        kamikaze.imageView = new ImageView(kamikaze.getImage());
         kamikaze.getImageView().setLayoutX(0);
         kamikaze.getImageView().setLayoutY(20);
 
-        kamikaze.rectangle = new Rectangle(-5, -5, 65, 85);
+        kamikaze.setRectangle(new Rectangle(-5, -5, 65, 85));
         kamikaze.getRectangle().setFill(Color.TRANSPARENT);
         kamikaze.getRectangle().setStrokeWidth(3);
         kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
 
+        kamikaze.setCircle(new Circle());
+        kamikaze.getCircle().setLayoutX(20);
+        kamikaze.getCircle().setLayoutY(40);
+        kamikaze.getCircle().setRadius(50);
+        kamikaze.getCircle().setFill(Color.TRANSPARENT);
+        kamikaze.getCircle().setStroke(Color.GREY);
+
         kamikaze.group = new Group();
-        kamikaze.getGroup().getChildren().addAll(kamikaze.getImageView(), kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
+        kamikaze.getGroup().getChildren().addAll(kamikaze.getCircle(), kamikaze.getImageView(), kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
 
         kamikaze.setX(kamikaze.getX() + 100);
         kamikaze.setY(kamikaze.getY() + 100);
@@ -138,7 +166,7 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
     @Override
     public int compareTo(Kamikaze o) {
         int result = 0;
-        result += Integer.compare(this.getHealth(), o.getHealth());
+        result += Double.compare(this.getHealth(), o.getHealth());
         result += Integer.compare(this.getMurders().getCount(), o.getMurders().getCount());
         result += this.getName().getText().compareTo(o.getName().getText());
         return result;
@@ -150,5 +178,21 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
 
     public Murder getMurders() {
         return murders;
+    }
+
+    public double getArmor() {
+        return armor;
+    }
+
+    public void setArmor(double armor) {
+        this.armor = armor;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 }

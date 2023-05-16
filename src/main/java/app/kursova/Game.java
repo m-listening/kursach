@@ -14,7 +14,7 @@ public class Game extends Application {
     public static World world;
 
     @Override
-    public void start(Stage stage) throws FileNotFoundException {
+    public void start(Stage stage) throws FileNotFoundException, CloneNotSupportedException {
         world = new World();
 
         Scene scene = new Scene(world.getMainGroup(), 1280, 720);

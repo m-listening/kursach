@@ -4,8 +4,8 @@ import app.kursova.Game;
 import app.kursova.World;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import micro_objects.Warrior;
 
-import static app.kursova.World.warriorElect;
 
 public class ChangeParameters {
 
@@ -22,12 +22,13 @@ public class ChangeParameters {
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
 
-        warriorElect.setName(name);
-        warriorElect.setHealth(health);
+        for (Warrior item : World.warriorsElect) {
+            item.setName(name);
+            item.setHealth(health);
 
-        warriorElect.setX(x);
-        warriorElect.setY(y);
-
+            item.setX(x);
+            item.setY(y);
+        }
         Game.globalStage.close();
     }
 }

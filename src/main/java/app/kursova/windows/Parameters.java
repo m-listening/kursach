@@ -32,7 +32,7 @@ public class Parameters {
     @FXML
     void createNewWarrior() throws FileNotFoundException {
         String name = setName_field.getText();
-        int health = Integer.parseInt(setHealth_field.getText());
+        double health = Double.parseDouble(setHealth_field.getText());
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
         Warrior warrior = null;
@@ -43,7 +43,7 @@ public class Parameters {
         } else if (selectedLvl == 3) {
             warrior = new SSO(name, health);
         }
-        if(warrior != null){
+        if (warrior != null) {
             warrior.setX(x);
             warrior.setY(y);
 

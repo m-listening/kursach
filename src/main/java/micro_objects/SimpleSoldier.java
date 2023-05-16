@@ -1,10 +1,11 @@
 package micro_objects;
 
-import java.io.FileNotFoundException;
-
 public class SimpleSoldier extends Kamikaze {
-    public SimpleSoldier(String name, int health) throws FileNotFoundException {
+    public SimpleSoldier(String name, double health)  {
         super(name, health);
+        move = 5;
+        setArmor(75);
+        setDamage(50);
     }
 
     @Override
