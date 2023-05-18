@@ -16,6 +16,7 @@ public class Game extends Application {
     @Override
     public void start(Stage stage) throws FileNotFoundException, CloneNotSupportedException {
         world = new World();
+        world.initialize();
 
         Scene scene = new Scene(world.getMainGroup(), 1280, 720);
         scene.setOnMouseClicked(event -> {

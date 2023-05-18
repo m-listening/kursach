@@ -1,7 +1,7 @@
 package macro_objects;
 
 import javafx.scene.image.Image;
-import micro_objects.Warrior;
+import micro_objects.Kamikaze;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class RedBase extends Base {
-    private final Set<Warrior> personnel;
+    private final Set<Kamikaze> personnel;
 
     public RedBase(double x, double y) throws FileNotFoundException {
         super(0, 0);
@@ -47,7 +47,7 @@ public class RedBase extends Base {
                 '}';
     }
 
-    public Set<Warrior> getPersonnel() {
+    public Set<Kamikaze> getPersonnel() {
         return personnel;
     }
 

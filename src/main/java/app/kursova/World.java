@@ -5,11 +5,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import macro_objects.Base;
 import micro_objects.Kamikaze;
-import micro_objects.Warrior;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 public class World {
-    public final static Set<Warrior> warriorsElect = new HashSet<>();
+    public final static Set<Kamikaze> warriorsElect = new HashSet<>();
     public final static Set<Base> bases = new HashSet<>();
     public final static List<Kamikaze> warriors = new ArrayList<>();
     public final static List<Kamikaze> warriorsActive = new ArrayList<>();
@@ -26,35 +24,24 @@ public class World {
     private final Group mainGroup;
     private Timeline timeline;
 
-    public World() throws FileNotFoundException, CloneNotSupportedException {
+    public World() {
         mainGroup = new Group();
-        Utilities.initializeStartGame(mainGroup);
-        timeline = new Timeline(new KeyFrame(Duration.seconds(10), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
             List<Kamikaze> warriorsToRemove = new ArrayList<>();
             for (Kamikaze item : warriors) {
                 for (Kamikaze item2 : warriors) {
                     if (item.equals(item2) || item.isTeam() == item2.isTeam()) continue;
-                    if (item.getGroup().getBoundsInParent().intersects(item2.getGroup().getBoundsInParent())) {
-                        item.getRectangle().setStroke(Color.GOLD);
-                        item2.getRectangle().setStroke(Color.GOLD);
+                    if (item.getCircle().getBoundsInParent().intersects(item2.getImageView().getBoundsInParent()))
                         if (item.inflictDamage(item2))
                             warriorsToRemove.add(item2);
-                        if (item2.getGroup().getBoundsInParent().intersects(item.getGroup().getBoundsInParent()))
-                            if (item2.inflictDamage(item))
-                                warriorsToRemove.add(item2);
-                        break;
-                    }
+                    if (item2.getCircle().getBoundsInParent().intersects(item.getImageView().getBoundsInParent()))
+                        if (item2.inflictDamage(item))
+                            warriorsToRemove.add(item);
                     item.setRectangleColor();
-                    item.setRectangleColor();
+                    item2.setRectangleColor();
                 }
             }
-            for (Kamikaze item : warriorsToRemove) {
-                mainGroup.getChildren().remove(item.getGroup());
-                warriors.remove(item);
-                warriorsActive.remove(item);
-                warriorsElect.remove(item);
-            }
-            warriorsToRemove.clear();
+            Utilities.deleteWarrior(warriorsToRemove);
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -62,6 +49,10 @@ public class World {
 
     public Timeline getTimeline() {
         return timeline;
+    }
+
+    public void initialize() throws FileNotFoundException, CloneNotSupportedException {
+        Utilities.initializeStartGame(this.mainGroup);
     }
 
     public void setTimeline(Timeline timeline) {

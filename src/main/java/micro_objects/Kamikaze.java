@@ -1,7 +1,8 @@
 package micro_objects;
 
-import javafx.scene.Group;
+import app.kursova.Game;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -9,23 +10,31 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze> {
-    protected Murder murders;
+public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
+    private int move;
+    private double x, y, health;
+    private boolean elect, active, inMacro;
+    private Boolean team;
+    private Image image;
+    private ImageView imageView;
+    private Label name;
+    private Circle circle;
+    private Rectangle rectangle;
+    private Line life;
+    private Murder murders;
     private double armor, damage;
 
     public Kamikaze(String name, double health) {
-        group = new Group();
-        move = 3;
+        move = 20;
         armor = 50;
         damage = 500;
         this.health = health;
 
-        murders = new Murder() {
-        };
+        murders = new Murder();
 
         this.name = new Label(name);
-        this.name.setLayoutX(+5);
-        this.name.setLayoutY(-2);
+        this.name.setLayoutX(0);
+        this.name.setLayoutY(0);
         this.name.setFont(Font.font("Impact", 14));
 
         active = false;
@@ -39,36 +48,29 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
 
         imageView = new ImageView();
         imageView.setLayoutX(0);
-        imageView.setLayoutY(20);
+        imageView.setLayoutY(0);
 
-        rectangle = new Rectangle(-5, -5, 65, 85);
+        rectangle = new Rectangle(0, 0, 65, 85);
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStrokeWidth(3);
         rectangle.setStroke(Color.TRANSPARENT);
 
 
         circle = new Circle();
-        circle.setLayoutX(20);
-        circle.setLayoutY(40);
-        circle.setRadius(50);
+        circle.setLayoutX(0);
+        circle.setLayoutY(0);
+        circle.setRadius(40);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
-
-        group.getChildren().addAll(imageView, life, this.name, rectangle, circle);
+        Game.world.getMainGroup().getChildren().addAll(imageView, life, this.name, rectangle, circle);
 
         System.out.println("Конструктор викликаний.\n" + this);
     }
 
+    /*** @return true -> warrior died, false -> alive*/
     public boolean inflictDamage(Kamikaze warrior) {
-        if (warrior.getArmor() > 0) warrior.setArmor(warrior.getArmor() - this.getDamage());
-        if (warrior.getArmor() == 0) {
-            warrior.setHealth(warrior.getHealth() - this.getDamage());
-            return warrior.getHealth() <= 0;
-        } else {
-            warrior.setHealth(warrior.getHealth() - warrior.getArmor());
-            warrior.setArmor(0);
-        }
-        return false;
+        warrior.setHealth(warrior.getHealth() - this.getDamage());
+        return warrior.getHealth() <= 0;
     }
 
     public Kamikaze() {
@@ -121,41 +123,43 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
     public Kamikaze clone() throws CloneNotSupportedException {
         Kamikaze kamikaze = (Kamikaze) super.clone();
 
-        kamikaze.murders = new Murder();
+        kamikaze.setMurders(new Murder());
 
-        kamikaze.name = new Label(kamikaze.getName().getText() + ".cl");
-        kamikaze.getName().setLayoutX(5);
-        kamikaze.getName().setLayoutY(-2);
+        kamikaze.setName(new Label(kamikaze.getName().getText() + ".cl"));
+        kamikaze.getName().setLayoutX(0);
+        kamikaze.getName().setLayoutY(0);
         kamikaze.getName().setFont(Font.font("Impact", 14));
 
-        kamikaze.active = false;
-        kamikaze.elect = false;
-        kamikaze.team = null;
 
-
-        kamikaze.life = new Line(5, +15, +50, +15);
+        kamikaze.setLife(new Line(0, +15, +50, +15));
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
-        kamikaze.image = kamikaze.getImage();
-        kamikaze.imageView = new ImageView(kamikaze.getImage());
-        kamikaze.getImageView().setLayoutX(0);
-        kamikaze.getImageView().setLayoutY(20);
+        kamikaze.setElect(false);
+        kamikaze.setActive(kamikaze.isActive());
 
-        kamikaze.setRectangle(new Rectangle(-5, -5, 65, 85));
+        kamikaze.setImageView(new ImageView(kamikaze.getImage()));
+        kamikaze.getImageView().setLayoutX(0);
+        kamikaze.getImageView().setLayoutY(0);
+
+        kamikaze.setRectangle(new Rectangle(0, 0, 65, 85));
         kamikaze.getRectangle().setFill(Color.TRANSPARENT);
         kamikaze.getRectangle().setStrokeWidth(3);
         kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
 
+        double radius = kamikaze.getCircle().getRadius();
         kamikaze.setCircle(new Circle());
-        kamikaze.getCircle().setLayoutX(20);
-        kamikaze.getCircle().setLayoutY(40);
-        kamikaze.getCircle().setRadius(50);
+        kamikaze.getCircle().setLayoutX(0);
+        kamikaze.getCircle().setLayoutY(0);
+        kamikaze.getCircle().setRadius(radius);
         kamikaze.getCircle().setFill(Color.TRANSPARENT);
         kamikaze.getCircle().setStroke(Color.GREY);
 
-        kamikaze.group = new Group();
-        kamikaze.getGroup().getChildren().addAll(kamikaze.getCircle(), kamikaze.getImageView(), kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
+        Game.world.getMainGroup().getChildren().addAll(kamikaze.getCircle(),
+                kamikaze.getImageView(),
+                kamikaze.getLife(),
+                kamikaze.getName(),
+                kamikaze.getRectangle());
 
         kamikaze.setX(kamikaze.getX() + 100);
         kamikaze.setY(kamikaze.getY() + 100);
@@ -194,5 +198,159 @@ public class Kamikaze extends Warrior implements Cloneable, Comparable<Kamikaze>
 
     public void setDamage(double damage) {
         this.damage = damage;
+    }
+
+    public Boolean getTeam() {
+        return team;
+    }
+
+    public void setRectangleColor() {
+        if (isElect()) {
+            rectangle.setStroke(Color.RED);
+        } else rectangle.setStroke(Color.TRANSPARENT);
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public Boolean isTeam() {
+        return team;
+    }
+
+    public void setTeam(Boolean team) {
+        this.team = team;
+    }
+
+    public boolean isInMacro() {
+        return inMacro;
+    }
+
+    public void setInMacro(boolean inMacro) {
+        this.inMacro = inMacro;
+    }
+
+    public void flipInMacro() {
+        inMacro = !inMacro;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public int getMove() {
+        return move;
+    }
+
+    public void setMove(int move) {
+        this.move = move;
+    }
+
+    public Circle getCircle() {
+        return circle;
+    }
+
+    public void setCircle(Circle circle) {
+        this.circle = circle;
+    }
+
+    public double getHealth() {
+        return health;
+    }
+
+    public void setHealth(double health) {
+        this.health = health;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+        this.imageView.setLayoutX(x - 5);
+        this.rectangle.setLayoutX(x - 5);
+        this.circle.setLayoutX(x + 20);
+        this.name.setLayoutX(x + 5);
+        this.life.setLayoutX(x);
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        this.imageView.setLayoutY(y + 20);
+        this.rectangle.setLayoutY(y - 5);
+        this.circle.setLayoutY(y + 40);
+        this.name.setLayoutY(y - 2);
+        this.life.setLayoutY(y);
+    }
+
+    public boolean isElect() {
+        return elect;
+    }
+
+    public void setElect(boolean elect) {
+        this.elect = elect;
+        setRectangleColor();
+    }
+
+    public void flipElect() {
+        this.elect = !this.elect;
+        setRectangleColor();
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+        if (isActive()) this.life.setStroke(Color.LIGHTGREEN);
+        else this.life.setStroke(Color.BLACK);
+    }
+
+    public void flipActive() {
+        this.active = !this.active;
+        if (isActive()) this.life.setStroke(Color.LIGHTGREEN);
+        else this.life.setStroke(Color.BLACK);
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    public Label getName() {
+        return name;
+    }
+
+    public Line getLife() {
+        return life;
+    }
+
+    public void setLife(Line life) {
+        this.life = life;
+    }
+
+    public void setName(String name) {
+        this.name.setText(name);
+    }
+
+    public void setName(Label name) {
+        this.name = name;
     }
 }

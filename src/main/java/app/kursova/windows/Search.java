@@ -12,7 +12,6 @@ import macro_objects.Bunker;
 import macro_objects.GreenBase;
 import macro_objects.RedBase;
 import micro_objects.Kamikaze;
-import micro_objects.Warrior;
 
 import static app.kursova.World.bases;
 import static app.kursova.World.warriors;
@@ -43,22 +42,22 @@ public class Search {
         }
         for (Base base : bases) {
             if (select == 1 && base instanceof Bunker) {
-                for (Warrior item : ((Bunker) base).getGreenWarriors())
+                for (Kamikaze item : ((Bunker) base).getGreenWarriors())
                     items.add(item.toString());
 
-                for (Warrior item : ((Bunker) base).getRedWarriors())
+                for (Kamikaze item : ((Bunker) base).getRedWarriors())
                     items.add(item.toString());
 
-                for (Warrior item : ((Bunker) base).getNobodyWarriors())
+                for (Kamikaze item : ((Bunker) base).getNobodyWarriors())
                     items.add(item.toString());
             }
             if (select == 2 && base instanceof GreenBase) {
-                for (Warrior item : ((GreenBase) base).getPersonnel()) {
+                for (Kamikaze item : ((GreenBase) base).getPersonnel()) {
                     items.add(item.toString());
                 }
             }
             if (select == 3 && base instanceof RedBase) {
-                for (Warrior item : ((RedBase) base).getPersonnel()) {
+                for (Kamikaze item : ((RedBase) base).getPersonnel()) {
                     items.add(item.toString());
                 }
             }
@@ -81,13 +80,11 @@ public class Search {
     @FXML
     void searchByActivity() {
         ObservableList<String> items = FXCollections.observableArrayList();
-        for (Warrior item : warriors) {
-            if (select == 1 && item.isActive()) {
+        for (Kamikaze item : warriors) {
+            if (select == 1 && item.isActive())
                 items.add(item.toString());
-            }
-            if (select == 0 && !item.isActive()) {
+            if (select == 0 && !item.isActive())
                 items.add(item.toString());
-            }
         }
         listView.setItems(items);
     }

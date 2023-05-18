@@ -7,12 +7,10 @@ import javafx.scene.control.TextField;
 import micro_objects.Kamikaze;
 import micro_objects.SSO;
 import micro_objects.SimpleSoldier;
-import micro_objects.Warrior;
 
 import java.io.FileNotFoundException;
 
-import static Methods.Utilities.lvlImage;
-import static app.kursova.Game.world;
+import static Methods.Utilities.updateWarrior;
 import static app.kursova.World.warriors;
 
 public class Parameters {
@@ -35,7 +33,7 @@ public class Parameters {
         double health = Double.parseDouble(setHealth_field.getText());
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
-        Warrior warrior = null;
+        Kamikaze warrior = null;
         if (selectedLvl == 1) {
             warrior = new Kamikaze(name, health);
         } else if (selectedLvl == 2) {
@@ -43,18 +41,9 @@ public class Parameters {
         } else if (selectedLvl == 3) {
             warrior = new SSO(name, health);
         }
-        if (warrior != null) {
-            warrior.setX(x);
-            warrior.setY(y);
 
-            warrior.setTeam(selectedTeam);
-
-            warrior.setImage(lvlImage(selectedLvl));
-            warrior.getImageView().setImage(warrior.getImage());
-
-            warriors.add((Kamikaze) warrior);
-            world.getMainGroup().getChildren().add(warrior.getGroup());
-        }
+        updateWarrior(warrior, x, y, selectedLvl, selectedTeam);
+        warriors.add(warrior);
 
         Game.globalStage.close();
     }

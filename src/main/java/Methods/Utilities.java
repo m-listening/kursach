@@ -24,7 +24,6 @@ import macro_objects.RedBase;
 import micro_objects.Kamikaze;
 import micro_objects.SSO;
 import micro_objects.SimpleSoldier;
-import micro_objects.Warrior;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -36,8 +35,6 @@ import static app.kursova.Game.world;
 import static app.kursova.World.*;
 
 public class Utilities {
-    private static final List<Warrior> warriorsToRemove = new ArrayList<>();
-
     /**
      * @Url -> Name of the .fxml file. Transfer without .fxml.
      * @title -> the name of the window
@@ -70,37 +67,39 @@ public class Utilities {
         return new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
     }
 
-    public static void initializeStartGame(Group group) throws FileNotFoundException, CloneNotSupportedException {
+    public static void initializeStartGame(Group group) throws FileNotFoundException {
         Bunker bunker = new Bunker(640, 360);
         GreenBase greenBase = new GreenBase(150, 360);
         RedBase redBase = new RedBase(1130, 360);
 
-        List<Warrior> warriorList = new ArrayList<>();
-        warriorList.add(new Kamikaze("wee", 50));
-        warriorList.add(new SimpleSoldier("wee", 75));
-        warriorList.add(new SSO("wee", 100));
-        warriorList.add(((Kamikaze) (warriorList.get(0))).clone());
-        warriorList.add(((Kamikaze) (warriorList.get(1))).clone());
-        warriorList.add(((Kamikaze) (warriorList.get(2))).clone());
+        List<Kamikaze> warriorList = new ArrayList<>();
 
-        int flag = 1;
-        for (Warrior item : warriorList) {
-            if (item instanceof SSO) item.setImage(lvlImage(3));
-            else if (item instanceof SimpleSoldier) item.setImage(lvlImage(2));
-            else if (item instanceof Kamikaze) item.setImage(lvlImage(1));
-            if (flag < 4) {
-                item.setX(300);
-                item.setTeam(true);
+        int number = 8, flag = 0;
+        for (int i = 0; i < number; i++) {
+            int rand = new Random().nextInt(3);
+            if (rand == 0) {
+                warriorList.add(new Kamikaze("", 100));
+            } else if (rand == 1) {
+                warriorList.add(new SimpleSoldier("", 100));
             } else {
-                item.setX(950);
-                item.setTeam(false);
+                warriorList.add(new SSO("", 100));
             }
-            item.getImageView().setImage(item.getImage());
-            item.setActive(true);
-            item.setY(110 * flag);
-            group.getChildren().add(item.getGroup());
-            warriorsActive.add((Kamikaze) item);
-            warriors.add((Kamikaze) item);
+        }
+        for (Kamikaze item : warriorList) {
+            int lvl = 1, x, y = flag * 30;
+            boolean team;
+            if (item instanceof SSO) lvl = 3;
+            else if (item instanceof SimpleSoldier) lvl = 2;
+            if (flag < number / 2) {
+                x = 300;
+                team = true;
+            } else {
+                x = 950;
+                team = false;
+            }
+            updateWarrior(item, x, y, lvl, team);
+            warriorsActive.add(item);
+            warriors.add(item);
             flag++;
         }
 
@@ -134,11 +133,11 @@ public class Utilities {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 if (warriorsElect.isEmpty()) return;
 
-                for (Warrior item : warriorsElect) {
+                for (Kamikaze item : warriorsElect) {
                     item.setElect(false);
                     item.setActive(false);
-                    warriorsActive.remove((Kamikaze) item);
-                    world.getMainGroup().getChildren().remove(item.getGroup());
+                    warriorsActive.remove(item);
+                    world.getMainGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
                     if (base instanceof GreenBase) {
                         ((GreenBase) base).getPersonnel().add(item);
                         base.setWithin(((GreenBase) base).getPersonnel().size());
@@ -162,20 +161,20 @@ public class Utilities {
 
                 if (base instanceof GreenBase) {
                     flag = 1;
-                    for (Warrior item : ((GreenBase) base).getPersonnel())
-                        hBox.getChildren().add(item.getGroup());
+                    for (Kamikaze item : ((GreenBase) base).getPersonnel())
+                        hBox.getChildren().addAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
                 } else if (base instanceof RedBase) {
                     flag = 2;
-                    for (Warrior item : ((RedBase) base).getPersonnel())
-                        hBox.getChildren().add(item.getGroup());
+                    for (Kamikaze item : ((RedBase) base).getPersonnel())
+                        hBox.getChildren().addAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
                 } else if (base instanceof Bunker) {
                     flag = 3;
-                    for (Warrior item : ((Bunker) base).getGreenWarriors())
-                        hBox.getChildren().add(item.getGroup());
-                    for (Warrior item : ((Bunker) base).getRedWarriors())
-                        hBox.getChildren().add(item.getGroup());
-                    for (Warrior item : ((Bunker) base).getNobodyWarriors())
-                        hBox.getChildren().add(item.getGroup());
+                    for (Kamikaze item : ((Bunker) base).getGreenWarriors())
+                        hBox.getChildren().addAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
+                    for (Kamikaze item : ((Bunker) base).getRedWarriors())
+                        hBox.getChildren().addAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
+                    for (Kamikaze item : ((Bunker) base).getNobodyWarriors())
+                        hBox.getChildren().addAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
                 } else {
                     flag = 0;
                 }
@@ -201,13 +200,13 @@ public class Utilities {
                                     ((Bunker) base).getRedWarriors().size() +
                                     ((Bunker) base).getNobodyWarriors().size());
                         }
-                        hBox.getChildren().remove(warrior.getGroup());
+                        hBox.getChildren().removeAll(warrior.getCircle(), warrior.getImageView(), warrior.getLife(), warrior.getName(), warrior.getRectangle());
 
                         warrior.setInMacro(false);
 
-                        world.getMainGroup().getChildren().add(warrior.getGroup());
-                        warrior.getGroup().setLayoutX(warrior.getX());
-                        warrior.getGroup().setLayoutY(warrior.getY());
+                        world.getMainGroup().getChildren().addAll(warrior.getCircle(), warrior.getImageView(), warrior.getLife(), warrior.getName(), warrior.getRectangle());
+                        warrior.setX(warrior.getX());
+                        warrior.setY(warrior.getY());
                     }
                 });
 
@@ -235,7 +234,7 @@ public class Utilities {
 
     public static void keyPressedHandler(KeyEvent event) {
         if (event.getCode().equals(KeyCode.K)) {
-            for (Warrior item : warriorsActive) {
+            for (Kamikaze item : warriorsActive) {
                 double x = new Random().nextDouble() * item.getMove();
                 double y = new Random().nextDouble() * item.getMove();
 
@@ -243,7 +242,7 @@ public class Utilities {
             }
         }
         if (event.getCode().equals(KeyCode.DELETE)) {
-            deleteWarrior();
+            deleteWarrior(warriorsElect.stream().toList());
         }
         if (event.getCode().equals(KeyCode.NUMPAD8)) {
             moveIfActiveAndElect(0, -1);
@@ -264,10 +263,9 @@ public class Utilities {
         }
         if (event.getCode().equals(KeyCode.Q)) {
             try {
-                for (Warrior item : warriorsElect) {
-                    Kamikaze kamikaze = ((Kamikaze) item).clone();
+                for (Kamikaze item : warriorsElect) {
+                    Kamikaze kamikaze = (item).clone();
                     warriors.add(kamikaze);
-                    world.getMainGroup().getChildren().add(kamikaze.getGroup());
                 }
             } catch (CloneNotSupportedException e) {
                 throw new RuntimeException(e);
@@ -290,7 +288,7 @@ public class Utilities {
      */
     private static Kamikaze checkClickWarrior(List<Kamikaze> list, double x, double y, boolean in) {
         for (Kamikaze item : list) {
-            if (item.getGroup()
+            if (item.getImageView()
                     .getBoundsInParent().contains(x, y)) {
                 if (item.isInMacro() && in)
                     return item;
@@ -323,7 +321,7 @@ public class Utilities {
     }
 
     public static void moveIfActiveAndElect(double x, double y) {
-        for (Warrior item : warriorsElect) {
+        for (Kamikaze item : warriorsElect) {
             if (item.isActive()) {
                 item.setX(item.getX() + x * item.getMove());
                 item.setY(item.getY() + y * item.getMove());
@@ -331,27 +329,34 @@ public class Utilities {
         }
     }
 
-    private static void deleteWarrior() {
-        for (Warrior item : warriorsElect) {
-            world.getMainGroup().getChildren().remove(item.getGroup());
-        }
-        warriors.removeAll(warriorsElect);
-        warriorsActive.removeAll(warriorsElect);
-        warriorsElect.clear();
+    public static void deleteWarrior(List<Kamikaze> list) {
+        for (Kamikaze item : list)
+            world.getMainGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
+        list.forEach(warriors::remove);
+        list.forEach(warriorsActive::remove);
+        list.forEach(warriorsElect::remove);
     }
 
     private static void turnOf() {
-        for (Kamikaze item : warriorsActive) {
-            item.setActive(false);
-        }
+        for (Kamikaze item : warriorsActive) item.setActive(false);
         warriorsActive.clear();
     }
 
-    public static void moveIfActive(Warrior warrior, double x, double y) {
+    public static void moveIfActive(Kamikaze warrior, double x, double y) {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), event -> {
             warrior.setX(warrior.getX() + x);
         }));
         timeline.setCycleCount(100);
         timeline.play();
+    }
+
+    public static void updateWarrior(Kamikaze object, double x, double y, int lvl, boolean team) throws FileNotFoundException {
+        if (object == null) return;
+        object.setTeam(team);
+        object.setImage(lvlImage(lvl));
+        object.getImageView().setImage(object.getImage());
+        object.setX(x);
+        object.setY(y);
+        object.setActive(true);
     }
 }
