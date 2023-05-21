@@ -21,7 +21,7 @@ public class SimpleSoldier extends Kamikaze {
                 ", health=" + getHealth() +
                 ", murders=" + getMurders().getCount() +
                 ", inMacro=" + isInMacro() +
-                ", team=" + (isTeam() != null ? isTeam() ? "Green" : "Red" : "None") +
+                ", team=" + (getTeam() != null ? getTeam() ? "Green" : "Red" : "None") +
                 '}';
     }
 

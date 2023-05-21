@@ -11,7 +11,6 @@ import micro_objects.SimpleSoldier;
 import java.io.FileNotFoundException;
 
 import static Methods.Utilities.updateWarrior;
-import static app.kursova.World.warriors;
 
 public class Parameters {
 
@@ -33,41 +32,26 @@ public class Parameters {
         double health = Double.parseDouble(setHealth_field.getText());
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
-        Kamikaze warrior = null;
-        if (selectedLvl == 1) {
-            warrior = new Kamikaze(name, health);
-        } else if (selectedLvl == 2) {
+
+        Kamikaze warrior;
+        int selectedLvl = 1;
+        if (RB_lvl2.isSelected()) {
             warrior = new SimpleSoldier(name, health);
-        } else if (selectedLvl == 3) {
-            warrior = new SSO(name, health);
-        }
-
-        updateWarrior(warrior, x, y, selectedLvl, selectedTeam);
-        warriors.add(warrior);
-
-        Game.globalStage.close();
-    }
-
-    private static int selectedLvl = 1;
-    private static Boolean selectedTeam;
-
-    @FXML
-    void selectLvl() {
-        if (RB_lvl1.isSelected()) {
-            selectedLvl = 1;
-        } else if (RB_lvl2.isSelected()) {
             selectedLvl = 2;
         } else if (RB_lvl3.isSelected()) {
+            warrior = new SSO(name, health);
             selectedLvl = 3;
-        }
-    }
+        } else warrior = new Kamikaze(name, health);
 
-    @FXML
-    void selectTeam() {
+        Boolean selectedTeam;
         if (RB_tmGreen.isSelected()) {
             selectedTeam = true;
         } else if (RB_tmRed.isSelected()) {
             selectedTeam = false;
         } else selectedTeam = null;
+        updateWarrior(warrior, x, y, selectedLvl, selectedTeam);
+        Game.world.getWarriors().add(warrior);
+
+        Game.globalStage.close();
     }
 }

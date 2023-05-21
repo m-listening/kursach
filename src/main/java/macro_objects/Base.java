@@ -11,8 +11,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import micro_objects.Kamikaze;
 
 import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Base {
     private double x, y;
@@ -21,14 +24,17 @@ public abstract class Base {
     private final Circle circle;
     private final Label name, within;
     private final Group group;
+    private final Set<Kamikaze> state;
 
     public Base(int typeLvl) throws FileNotFoundException {
-        name = new Label(null);
+        state = new HashSet<>();
+
+        name = new Label();
         name.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 16.0));
         name.setLayoutX(-45);
         name.setLayoutY(-100);
 
-        within = new Label(null);
+        within = new Label();
         within.setFont(Font.font("Arial", FontWeight.BOLD, 16.0));
         within.setLayoutX(-5);
         within.setLayoutY(100);
@@ -97,5 +103,9 @@ public abstract class Base {
 
     public Group getGroup() {
         return group;
+    }
+
+    public Set<Kamikaze> getState() {
+        return state;
     }
 }

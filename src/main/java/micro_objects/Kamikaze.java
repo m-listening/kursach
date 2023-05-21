@@ -10,6 +10,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import java.util.Objects;
+
 public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     private int move;
     private double x, y, health;
@@ -33,8 +35,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         murders = new Murder();
 
         this.name = new Label(name);
-        this.name.setLayoutX(0);
-        this.name.setLayoutY(0);
         this.name.setFont(Font.font("Impact", 14));
 
         active = false;
@@ -47,24 +47,23 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         life.setStroke(Color.BLACK);
 
         imageView = new ImageView();
-        imageView.setLayoutX(0);
-        imageView.setLayoutY(0);
-
         rectangle = new Rectangle(0, 0, 65, 85);
         rectangle.setFill(Color.TRANSPARENT);
-        rectangle.setStrokeWidth(3);
+        rectangle.setStrokeWidth(2);
         rectangle.setStroke(Color.TRANSPARENT);
 
-
-        circle = new Circle();
-        circle.setLayoutX(0);
-        circle.setLayoutY(0);
+        circle = new Circle(40);
         circle.setRadius(40);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
+
         Game.world.getWorldGroup().getChildren().addAll(imageView, life, this.name, rectangle, circle);
 
         System.out.println("Конструктор викликаний.\n" + this);
+    }
+
+    public Kamikaze() {
+        this("", 0);
     }
 
     /*** @return true -> warrior died, false -> alive*/
@@ -73,21 +72,19 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         return warrior.getHealth() <= 0;
     }
 
-    public Kamikaze() {
-        this("", 0);
-    }
-
     @Override
     public String toString() {
         return "Kamikaze{" +
                 "name=" + name.getText() +
                 ", x=" + x +
                 ", y=" + y +
-                ", active=" + active +
                 ", health=" + health +
+                ", armor=" + armor +
                 ", murders=" + murders.getCount() +
+                ", elect=" + elect +
+                ", active=" + active +
                 ", inMacro=" + inMacro +
-                ", team=" + (isTeam() != null ? isTeam() ? "Green" : "Red" : "None") +
+                ", team=" + team +
                 '}';
     }
 
@@ -102,13 +99,26 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
             return count;
         }
 
-        public void setCount() {
+        public void implementCount() {
             this.count++;
         }
 
         public void setCount(int v) {
             this.count = v;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Kamikaze kamikaze = (Kamikaze) o;
+        return Objects.equals(imageView, kamikaze.imageView) && Objects.equals(name, kamikaze.name) && Objects.equals(circle, kamikaze.circle) && Objects.equals(rectangle, kamikaze.rectangle) && Objects.equals(life, kamikaze.life) && Objects.equals(murders, kamikaze.murders);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(imageView, name, circle, rectangle, life, murders);
     }
 
     static {
@@ -125,39 +135,29 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         kamikaze.setMurders(new Murder());
 
         kamikaze.setName(new Label(kamikaze.getName().getText() + ".cl"));
-        kamikaze.getName().setLayoutX(0);
-        kamikaze.getName().setLayoutY(0);
         kamikaze.getName().setFont(Font.font("Impact", 14));
-
 
         kamikaze.setLife(new Line(0, +15, +50, +15));
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
-        kamikaze.setElect(false);
+        kamikaze.elect = false;
+        kamikaze.setActive(kamikaze.isActive());
+        kamikaze.setTeam(kamikaze.getTeam());
 
         kamikaze.setImageView(new ImageView(kamikaze.getImage()));
-        kamikaze.getImageView().setLayoutX(0);
-        kamikaze.getImageView().setLayoutY(0);
 
         kamikaze.setRectangle(new Rectangle(0, 0, 65, 85));
         kamikaze.getRectangle().setFill(Color.TRANSPARENT);
-        kamikaze.getRectangle().setStrokeWidth(3);
+        kamikaze.getRectangle().setStrokeWidth(2);
         kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
 
-        double radius = kamikaze.getCircle().getRadius();
-        kamikaze.setCircle(new Circle());
-        kamikaze.getCircle().setLayoutX(0);
-        kamikaze.getCircle().setLayoutY(0);
-        kamikaze.getCircle().setRadius(radius);
+        kamikaze.setCircle(new Circle(kamikaze.getCircle().getRadius()));
         kamikaze.getCircle().setFill(Color.TRANSPARENT);
         kamikaze.getCircle().setStroke(Color.GREY);
 
-        Game.world.getWorldGroup().getChildren().addAll(kamikaze.getCircle(),
-                kamikaze.getImageView(),
-                kamikaze.getLife(),
-                kamikaze.getName(),
-                kamikaze.getRectangle());
+        Game.world.getWorldGroup().getChildren().addAll(kamikaze.getCircle(), kamikaze.getImageView(),
+                kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
 
         kamikaze.setX(kamikaze.getX() + 100);
         kamikaze.setY(kamikaze.getY() + 100);
@@ -198,10 +198,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         this.damage = damage;
     }
 
-    public Boolean getTeam() {
-        return team;
-    }
-
     public void setRectangleColor() {
         if (isElect()) {
             rectangle.setStroke(Color.RED);
@@ -212,7 +208,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         return rectangle;
     }
 
-    public Boolean isTeam() {
+    public Boolean getTeam() {
         return team;
     }
 

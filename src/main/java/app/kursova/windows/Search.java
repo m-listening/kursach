@@ -6,19 +6,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import macro_objects.Base;
-import macro_objects.Bunker;
-import macro_objects.GreenBase;
-import macro_objects.RedBase;
 import micro_objects.Kamikaze;
 
-import static app.kursova.World.bases;
-import static app.kursova.World.warriors;
+import static app.kursova.Game.world;
 
 public class Search {
-    private int select = 0;
+    private static int select;
 
     @FXML
     private ListView<String> listView;
@@ -36,32 +31,20 @@ public class Search {
     void searchByBase(ActionEvent event) {
         ObservableList<String> items = FXCollections.observableArrayList();
         if (select == 0) {
-            for (Kamikaze item : warriors) {
-                if (item.isInMacro()) continue;
-                items.add(item.toString());
-            }
+            for (Kamikaze item : world.getWarriors())
+                if (!item.isInMacro())
+                    items.add(item.toString());
         }
-        for (Base base : bases) {
-            if (select == 1 && base instanceof Bunker) {
-                for (Kamikaze item : ((Bunker) base).getGreenWarriors())
+        for (Base base : world.getBases()) {
+            if (select == 1)
+                for (Kamikaze item : base.getState())
                     items.add(item.toString());
-
-                for (Kamikaze item : ((Bunker) base).getRedWarriors())
+            if (select == 2)
+                for (Kamikaze item : base.getState())
                     items.add(item.toString());
-
-                for (Kamikaze item : ((Bunker) base).getNobodyWarriors())
+            if (select == 3)
+                for (Kamikaze item : base.getState())
                     items.add(item.toString());
-            }
-            if (select == 2 && base instanceof GreenBase) {
-                for (Kamikaze item : ((GreenBase) base).getPersonnel()) {
-                    items.add(item.toString());
-                }
-            }
-            if (select == 3 && base instanceof RedBase) {
-                for (Kamikaze item : ((RedBase) base).getPersonnel()) {
-                    items.add(item.toString());
-                }
-            }
         }
         listView.setItems(items);
     }
@@ -70,18 +53,16 @@ public class Search {
     void searchByName() {
         String name = tF_name.getText();
         ObservableList<String> items = FXCollections.observableArrayList();
-        for (Kamikaze item : warriors) {
-            if (item.getName().getText().contains(name)) {
+        for (Kamikaze item : world.getWarriors())
+            if (item.getName().getText().contains(name))
                 items.add(item.toString());
-            }
-        }
         listView.setItems(items);
     }
 
     @FXML
     void searchByActivity() {
         ObservableList<String> items = FXCollections.observableArrayList();
-        for (Kamikaze item : warriors) {
+        for (Kamikaze item : world.getWarriors()) {
             if (select == 1 && item.isActive())
                 items.add(item.toString());
             if (select == 0 && !item.isActive())
@@ -104,7 +85,6 @@ public class Search {
 
     @FXML
     void selectBunker() {
-
         name_BMO.setText("Bunker");
         select = 1;
     }

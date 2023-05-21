@@ -94,7 +94,7 @@
                         <Font name="System Bold Italic" size="16.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="RB_lvl1" mnemonicParsing="false" onAction="#selectLvl" text="Kamikaze" textOverrun="CLIP">
+                  <RadioButton fx:id="RB_lvl1" mnemonicParsing="false" selected="true" text="Kamikaze" textOverrun="CLIP">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
@@ -102,12 +102,12 @@
                         <ToggleGroup fx:id="lvl" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="RB_lvl2" mnemonicParsing="false" onAction="#selectLvl" text="Simple soldier" toggleGroup="$lvl">
+                  <RadioButton fx:id="RB_lvl2" mnemonicParsing="false" text="Simple soldier" toggleGroup="$lvl">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
                   </RadioButton>
-                  <RadioButton fx:id="RB_lvl3" mnemonicParsing="false" onAction="#selectLvl" text="SSO" toggleGroup="$lvl">
+                  <RadioButton fx:id="RB_lvl3" mnemonicParsing="false" text="SSO" toggleGroup="$lvl">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
@@ -127,7 +127,7 @@
                         <Font name="System Bold Italic" size="16.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="RB_tmGreen" mnemonicParsing="false" onAction="#selectTeam" text="Green">
+                  <RadioButton fx:id="RB_tmGreen" mnemonicParsing="false" text="Green">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
@@ -135,7 +135,7 @@
                         <ToggleGroup fx:id="team" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="RB_tmRed" mnemonicParsing="false" onAction="#selectTeam" text="Red" toggleGroup="$team">
+                  <RadioButton fx:id="RB_tmRed" mnemonicParsing="false" text="Red" toggleGroup="$team">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
