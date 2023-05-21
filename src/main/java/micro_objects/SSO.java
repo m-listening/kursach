@@ -10,25 +10,10 @@ public class SSO extends SimpleSoldier {
     }
 
     @Override
-    public String toString() {
-        return "SSO{" +
-                "name=" + getName().getText() +
-                ", x=" + getX() +
-                ", y=" + getY() +
-                ", active=" + isActive() +
-                ", health=" + getHealth() +
-                ", murders=" + getMurders().getCount() +
-                ", inMacro=" + isInMacro() +
-                ", team=" + (getTeam() != null ? getTeam() ? "Green" : "Red" : "None") +
-                '}';
-    }
-
-    @Override
     public boolean inflictDamage(Kamikaze warrior) {
         warrior.setArmor(warrior.getArmor() - warrior.getDamage());
         if (warrior.getArmor() > 0) return false;
         warrior.setHealth(warrior.getHealth() - Math.abs(warrior.getArmor()));
         return warrior.getHealth() <= 0;
     }
-
 }

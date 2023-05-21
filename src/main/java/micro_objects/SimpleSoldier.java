@@ -12,20 +12,6 @@ public class SimpleSoldier extends Kamikaze {
     }
 
     @Override
-    public String toString() {
-        return "Simple Soldier{" +
-                "name=" + getName().getText() +
-                ", x=" + getX() +
-                ", y=" + getX() +
-                ", active=" + isActive() +
-                ", health=" + getHealth() +
-                ", murders=" + getMurders().getCount() +
-                ", inMacro=" + isInMacro() +
-                ", team=" + (getTeam() != null ? getTeam() ? "Green" : "Red" : "None") +
-                '}';
-    }
-
-    @Override
     public boolean inflictDamage(Kamikaze warrior) {
         if (new Random().nextInt() * 3 == 2) return false;
         warrior.setArmor(warrior.getArmor() - warrior.getDamage());

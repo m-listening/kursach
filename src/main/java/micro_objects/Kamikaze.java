@@ -74,7 +74,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
 
     @Override
     public String toString() {
-        return "Kamikaze{" +
+        return getClass().getSimpleName() + " {" +
                 "name=" + name.getText() +
                 ", x=" + x +
                 ", y=" + y +
@@ -84,7 +84,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
                 ", elect=" + elect +
                 ", active=" + active +
                 ", inMacro=" + inMacro +
-                ", team=" + team +
+                ", team=" + (team != null ? team ? "Green" : "Red" : null) +
                 '}';
     }
 
