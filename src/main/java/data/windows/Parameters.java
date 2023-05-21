@@ -1,16 +1,16 @@
-package app.kursova.windows;
+package data.windows;
 
-import app.kursova.Game;
+import app.Play;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import micro_objects.Kamikaze;
-import micro_objects.SSO;
-import micro_objects.SimpleSoldier;
+import data.micro_objects.Kamikaze;
+import data.micro_objects.SSO;
+import data.micro_objects.SimpleSoldier;
 
 import java.io.FileNotFoundException;
 
-import static Methods.Utilities.updateWarrior;
+import static data.Methods.Utilities.updateWarrior;
 
 public class Parameters {
 
@@ -50,8 +50,8 @@ public class Parameters {
             selectedTeam = false;
         } else selectedTeam = null;
         updateWarrior(warrior, x, y, selectedLvl, selectedTeam);
-        Game.world.getWarriors().add(warrior);
+        Play.world.getWarriors().add(warrior);
 
-        Game.globalStage.close();
+        Play.globalStage.close();
     }
 }

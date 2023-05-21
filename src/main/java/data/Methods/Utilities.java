@@ -1,6 +1,6 @@
-package Methods;
+package data.Methods;
 
-import app.kursova.Game;
+import app.Play;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.KeyFrame;
@@ -16,13 +16,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import macro_objects.Base;
-import macro_objects.Bunker;
-import macro_objects.GreenBase;
-import macro_objects.RedBase;
-import micro_objects.Kamikaze;
-import micro_objects.SSO;
-import micro_objects.SimpleSoldier;
+import data.macro_objects.Base;
+import data.macro_objects.Bunker;
+import data.macro_objects.GreenBase;
+import data.macro_objects.RedBase;
+import data.micro_objects.Kamikaze;
+import data.micro_objects.SSO;
+import data.micro_objects.SimpleSoldier;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import static app.kursova.Game.globalStage;
-import static app.kursova.Game.world;
+import static app.Play.globalStage;
+import static app.Play.world;
 
 public class Utilities {
     /**
@@ -40,7 +40,7 @@ public class Utilities {
      */
     public static void showWindow(String url, String title) {
         try {
-            FXMLLoader loader = new FXMLLoader(Game.class.getResource(url + ".fxml"));
+            FXMLLoader loader = new FXMLLoader(Play.class.getResource(url + ".fxml"));
             Scene secondScene = new Scene(loader.load());
 
             globalStage = new Stage();

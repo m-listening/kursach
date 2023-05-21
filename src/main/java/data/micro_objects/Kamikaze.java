@@ -1,6 +1,6 @@
-package micro_objects;
+package data.micro_objects;
 
-import app.kursova.Game;
+import app.Play;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -57,7 +57,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
 
-        Game.world.getWorldGroup().getChildren().addAll(imageView, life, this.name, rectangle, circle);
+        Play.world.getWorldGroup().getChildren().addAll(imageView, life, this.name, rectangle, circle);
 
         System.out.println("Конструктор викликаний.\n" + this);
     }
@@ -156,7 +156,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         kamikaze.getCircle().setFill(Color.TRANSPARENT);
         kamikaze.getCircle().setStroke(Color.GREY);
 
-        Game.world.getWorldGroup().getChildren().addAll(kamikaze.getCircle(), kamikaze.getImageView(),
+        Play.world.getWorldGroup().getChildren().addAll(kamikaze.getCircle(), kamikaze.getImageView(),
                 kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
 
         kamikaze.setX(kamikaze.getX() + 100);

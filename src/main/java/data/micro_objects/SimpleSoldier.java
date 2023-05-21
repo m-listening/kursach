@@ -1,4 +1,4 @@
-package micro_objects;
+package data.micro_objects;
 
 import java.util.Random;
 

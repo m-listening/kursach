@@ -1,6 +1,7 @@
-package app.kursova;
+package app;
 
-import Methods.Utilities;
+import data.Methods.Utilities;
+import data.Methods.World;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -8,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Game extends Application {
+public class Play extends Application {
     public static Stage globalStage;
 
     public static World world;

@@ -1,13 +1,13 @@
-package macro_objects;
+package data.macro_objects;
 
 import java.io.FileNotFoundException;
 
-public class RedBase extends Base {
+public class GreenBase extends Base {
 
-    public RedBase(double x, double y) throws FileNotFoundException {
-        super(1);
+    public GreenBase(double x, double y) throws FileNotFoundException {
+        super(2);
 
-        getName().setText("Red Base");
+        getName().setText("GreenBase");
         getWithin().setText("0");
 
         setX(x);
@@ -16,13 +16,13 @@ public class RedBase extends Base {
         getGroup().setLayoutY(y);
     }
 
-    public RedBase() throws FileNotFoundException {
-        this(1130, 360);
+    public GreenBase() throws FileNotFoundException {
+        this(150, 360);
     }
 
     @Override
     public String toString() {
-        return "RedBase{ " +
+        return "GreenBase{ " +
                 "x=" + getX() +
                 ", y=" + getY() +
                 ", name=" + getName().getText() +

@@ -1,4 +1,4 @@
-package app.kursova.windows;
+package data.windows;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,10 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
-import macro_objects.Base;
-import micro_objects.Kamikaze;
+import data.macro_objects.Base;
+import data.micro_objects.Kamikaze;
 
-import static app.kursova.Game.world;
+import static app.Play.world;
 
 public class Search {
     private static int select;

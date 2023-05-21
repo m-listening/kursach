@@ -1,6 +1,6 @@
-package Methods;
+package data.Methods;
 
-import micro_objects.Kamikaze;
+import data.micro_objects.Kamikaze;
 
 import java.util.Comparator;
 

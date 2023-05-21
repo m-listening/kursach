@@ -1,13 +1,13 @@
-package app.kursova;
+package data.Methods;
 
-import Methods.Utilities;
+import data.Methods.Utilities;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.util.Duration;
-import macro_objects.Base;
-import micro_objects.Kamikaze;
+import data.macro_objects.Base;
+import data.micro_objects.Kamikaze;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

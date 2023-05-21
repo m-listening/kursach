@@ -1,7 +1,7 @@
-package macro_objects;
+package data.macro_objects;
 
-import Methods.Utilities;
-import app.kursova.Game;
+import data.Methods.Utilities;
+import app.Play;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import micro_objects.Kamikaze;
+import data.micro_objects.Kamikaze;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -49,7 +49,7 @@ public abstract class Base {
         imageView.setLayoutY(-75);
 
         group = new Group(imageView, circle, name, within);
-        Game.world.getWorldGroup().getChildren().add(group);
+        Play.world.getWorldGroup().getChildren().add(group);
     }
 
 

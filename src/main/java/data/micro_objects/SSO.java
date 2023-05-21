@@ -1,4 +1,4 @@
-package micro_objects;
+package data.micro_objects;
 
 public class SSO extends SimpleSoldier {
     public SSO(String name, double health) {
