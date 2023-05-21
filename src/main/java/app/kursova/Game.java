@@ -18,7 +18,7 @@ public class Game extends Application {
         world = new World();
         world.initialize();
 
-        Scene scene = new Scene(world.getMainGroup(), 1280, 720);
+        Scene scene = new Scene(world.getWorldGroup(), 1280, 720);
         scene.setOnMouseClicked(event -> {
             try {
                 Utilities.mousePressedHandler(event);

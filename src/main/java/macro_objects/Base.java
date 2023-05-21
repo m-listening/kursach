@@ -1,5 +1,7 @@
 package macro_objects;
 
+import Methods.Utilities;
+import app.kursova.Game;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -10,39 +12,40 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
-public abstract class Base {
-    double x, y;
-    Image image;
-    ImageView imageView;
-    Circle circle;
-    Label name, within;
-    Group group;
-    public Base(double x, double y) {
-        this.x = x;
-        this.y = y;
+import java.io.FileNotFoundException;
 
+public abstract class Base {
+    private double x, y;
+    private final Image image;
+    private final ImageView imageView;
+    private final Circle circle;
+    private final Label name, within;
+    private final Group group;
+
+    public Base(int typeLvl) throws FileNotFoundException {
         name = new Label(null);
         name.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 16.0));
-        name.setLayoutX(x);
-        name.setLayoutY(y);
+        name.setLayoutX(-45);
+        name.setLayoutY(-100);
 
         within = new Label(null);
         within.setFont(Font.font("Arial", FontWeight.BOLD, 16.0));
-        within.setLayoutX(x);
-        within.setLayoutY(y);
+        within.setLayoutX(-5);
+        within.setLayoutY(100);
 
         circle = new Circle(150);
-        circle.setLayoutX(x);
-        circle.setLayoutY(y);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
 
-        imageView = new ImageView();
-        imageView.setLayoutX(x - 75);
-        imageView.setLayoutY(y - 75);
+        image = Utilities.lvlImage(typeLvl, true);
+        imageView = new ImageView(image);
+        imageView.setLayoutX(-75);
+        imageView.setLayoutY(-75);
 
         group = new Group(imageView, circle, name, within);
+        Game.world.getWorldGroup().getChildren().add(group);
     }
+
 
     public double getX() {
         return x;
@@ -64,24 +67,12 @@ public abstract class Base {
         return image;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
     public ImageView getImageView() {
         return imageView;
     }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
-    }
-
     public Circle getCircle() {
         return circle;
-    }
-
-    public void setCircle(Circle circle) {
-        this.circle = circle;
     }
 
     public Label getName() {
@@ -106,9 +97,5 @@ public abstract class Base {
 
     public Group getGroup() {
         return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 }

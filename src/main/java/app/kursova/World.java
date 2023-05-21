@@ -51,15 +51,15 @@ public class World {
         return timeline;
     }
 
-    public void initialize() throws FileNotFoundException, CloneNotSupportedException {
-        Utilities.initializeStartGame(this.mainGroup);
+    public void initialize() throws FileNotFoundException {
+        Utilities.initializeStartGame();
     }
 
     public void setTimeline(Timeline timeline) {
         this.timeline = timeline;
     }
 
-    public Group getMainGroup() {
+    public Group getWorldGroup() {
         return mainGroup;
 
     }

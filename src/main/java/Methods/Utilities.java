@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -57,17 +56,21 @@ public class Utilities {
 
     /**
      * @param lvl -> 1 -> kamikaze, 2 -> simple soldier, 3-> SSO
-     * @return -> new Image, or null if lvl != 1,2,3
+     * @return -> new Image, if lvl != 1,2,3, return Image lvl 1
      */
-    public static Image lvlImage(int lvl) throws FileNotFoundException {
-        if (lvl == 2)
-            return new Image(new FileInputStream("src/images/simpleSoldier.png"), 50, 50, false, false);
-        if (lvl == 3)
-            return new Image(new FileInputStream("src/images/SSO.png"), 50, 50, false, false);
-        return new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
+    public static Image lvlImage(int lvl, boolean isMacro) throws FileNotFoundException {
+        if (isMacro) {
+            if (lvl == 2) return new Image(new FileInputStream("src/images/greenB.png"), 150, 150, false, false);
+            else if (lvl == 3) return new Image(new FileInputStream("src/images/bunker.png"), 150, 150, false, false);
+            return new Image(new FileInputStream("src/images/redB.png"), 150, 150, false, false);
+        } else {
+            if (lvl == 2) return new Image(new FileInputStream("src/images/sS.png"), 50, 50, false, false);
+            if (lvl == 3) return new Image(new FileInputStream("src/images/SSO.png"), 50, 50, false, false);
+            return new Image(new FileInputStream("src/images/kamikaze.png"), 50, 50, false, false);
+        }
     }
 
-    public static void initializeStartGame(Group group) throws FileNotFoundException {
+    public static void initializeStartGame() throws FileNotFoundException {
         Bunker bunker = new Bunker(640, 360);
         GreenBase greenBase = new GreenBase(150, 360);
         RedBase redBase = new RedBase(1130, 360);
@@ -106,10 +109,6 @@ public class Utilities {
         bases.add(bunker);
         bases.add(greenBase);
         bases.add(redBase);
-        group.getChildren().addAll(
-                bunker.getGroup(),
-                greenBase.getGroup(),
-                redBase.getGroup());
     }
 
     public static void json(String object, String action) throws IOException {
@@ -137,7 +136,7 @@ public class Utilities {
                     item.setElect(false);
                     item.setActive(false);
                     warriorsActive.remove(item);
-                    world.getMainGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
+                    world.getWorldGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
                     if (base instanceof GreenBase) {
                         ((GreenBase) base).getPersonnel().add(item);
                         base.setWithin(((GreenBase) base).getPersonnel().size());
@@ -204,7 +203,7 @@ public class Utilities {
 
                         warrior.setInMacro(false);
 
-                        world.getMainGroup().getChildren().addAll(warrior.getCircle(), warrior.getImageView(), warrior.getLife(), warrior.getName(), warrior.getRectangle());
+                        world.getWorldGroup().getChildren().addAll(warrior.getCircle(), warrior.getImageView(), warrior.getLife(), warrior.getName(), warrior.getRectangle());
                         warrior.setX(warrior.getX());
                         warrior.setY(warrior.getY());
                     }
@@ -273,6 +272,7 @@ public class Utilities {
         }
         if (event.getCode().equals(KeyCode.S)) {
             warriors.sort(Kamikaze::compareTo);
+            warriorsActive.sort(Kamikaze::compareTo);
             showWindow("Search", "Search warrior");
         }
         if (event.getCode().equals(KeyCode.ESCAPE)) {
@@ -331,7 +331,7 @@ public class Utilities {
 
     public static void deleteWarrior(List<Kamikaze> list) {
         for (Kamikaze item : list)
-            world.getMainGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
+            world.getWorldGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
         list.forEach(warriors::remove);
         list.forEach(warriorsActive::remove);
         list.forEach(warriorsElect::remove);
@@ -353,7 +353,7 @@ public class Utilities {
     public static void updateWarrior(Kamikaze object, double x, double y, int lvl, boolean team) throws FileNotFoundException {
         if (object == null) return;
         object.setTeam(team);
-        object.setImage(lvlImage(lvl));
+        object.setImage(lvlImage(lvl, false));
         object.getImageView().setImage(object.getImage());
         object.setX(x);
         object.setY(y);

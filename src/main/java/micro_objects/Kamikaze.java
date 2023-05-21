@@ -62,7 +62,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         circle.setRadius(40);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
-        Game.world.getMainGroup().getChildren().addAll(imageView, life, this.name, rectangle, circle);
+        Game.world.getWorldGroup().getChildren().addAll(imageView, life, this.name, rectangle, circle);
 
         System.out.println("Конструктор викликаний.\n" + this);
     }
@@ -122,7 +122,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     @Override
     public Kamikaze clone() throws CloneNotSupportedException {
         Kamikaze kamikaze = (Kamikaze) super.clone();
-
         kamikaze.setMurders(new Murder());
 
         kamikaze.setName(new Label(kamikaze.getName().getText() + ".cl"));
@@ -136,7 +135,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         kamikaze.getLife().setStroke(Color.BLACK);
 
         kamikaze.setElect(false);
-        kamikaze.setActive(kamikaze.isActive());
 
         kamikaze.setImageView(new ImageView(kamikaze.getImage()));
         kamikaze.getImageView().setLayoutX(0);
@@ -155,7 +153,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         kamikaze.getCircle().setFill(Color.TRANSPARENT);
         kamikaze.getCircle().setStroke(Color.GREY);
 
-        Game.world.getMainGroup().getChildren().addAll(kamikaze.getCircle(),
+        Game.world.getWorldGroup().getChildren().addAll(kamikaze.getCircle(),
                 kamikaze.getImageView(),
                 kamikaze.getLife(),
                 kamikaze.getName(),

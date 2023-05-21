@@ -1,9 +1,7 @@
 package macro_objects;
 
-import javafx.scene.image.Image;
 import micro_objects.Kamikaze;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,26 +10,16 @@ public class GreenBase extends Base {
     private final Set<Kamikaze> personnel;
 
     public GreenBase(double x, double y) throws FileNotFoundException {
-        super(0, 0);
-
-        this.x = x;
-        this.y = y;
-
+        super(2);
         personnel = new HashSet<>();
 
-        name.setText("GreenBase");
-        name.setLayoutX(-45);
-        name.setLayoutY(-100);
+        getName().setText("GreenBase");
+        getWithin().setText("0");
 
-        within.setText("0");
-        within.setLayoutX(-5);
-        within.setLayoutY(+100);
-
-        image = new Image(new FileInputStream("src/images/GreenBase.png"), 150, 150, false, false);
-        imageView.setImage(image);
-
-        group.setLayoutX(x);
-        group.setLayoutY(y);
+        setX(x);
+        setY(y);
+        getGroup().setLayoutX(x);
+        getGroup().setLayoutY(y);
     }
 
     public GreenBase() throws FileNotFoundException {
@@ -41,10 +29,10 @@ public class GreenBase extends Base {
     @Override
     public String toString() {
         return "GreenBase{ " +
-                "x=" + x +
-                ", y=" + y +
-                ", name=" + name.getText() +
-                ", within=" + within.getText() +
+                "x=" + getX() +
+                ", y=" + getY() +
+                ", name=" + getName().getText() +
+                ", within=" + getWithin().getText() +
                 '}';
     }
 
