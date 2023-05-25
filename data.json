@@ -1,11 +1,25 @@
 
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
-{"warriorElect":"setElect(false)"}
+{"SSO":"SSO {name=, x=950.0, y=210.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"SSO":"SSO {name=, x=950.0, y=210.0, health=100.0, armor=100.0, murders=0, elect=false, active=false, inMacro=false, team=Red}"}
+{"SSO":"SSO {name=, x=950.0, y=210.0, health=100.0, armor=100.0, murders=0, elect=true, active=false, inMacro=false, team=Red}"}
+{"Kamikaze":"Kamikaze {name=, x=300.0, y=90.0, health=100.0, armor=50.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SSO":"SSO {name=, x=300.0, y=0.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SSO":"SSO {name=, x=300.0, y=0.0, health=100.0, armor=100.0, murders=0, elect=true, active=true, inMacro=false, team=Green}"}
+{"SSO":"SSO {name=, x=300.0, y=60.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SimpleSoldier":"SimpleSoldier {name=, x=300.0, y=30.0, health=100.0, armor=75.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SSO":"SSO {name=, x=300.0, y=0.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SimpleSoldier":"SimpleSoldier {name=, x=950.0, y=180.0, health=100.0, armor=75.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"SSO":"SSO {name=, x=950.0, y=150.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"Kamikaze":"Kamikaze {name=, x=950.0, y=120.0, health=100.0, armor=50.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"Kamikaze":"Kamikaze {name=, x=950.0, y=120.0, health=100.0, armor=50.0, murders=0, elect=true, active=true, inMacro=false, team=Red}"}
+{"Kamikaze":"Kamikaze {name=, x=950.0, y=120.0, health=100.0, armor=50.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"SSO":"SSO {name=, x=300.0, y=30.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SimpleSoldier":"SimpleSoldier {name=, x=300.0, y=0.0, health=100.0, armor=75.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"Kamikaze":"Kamikaze {name=, x=300.0, y=60.0, health=100.0, armor=50.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SimpleSoldier":"SimpleSoldier {name=, x=300.0, y=60.0, health=100.0, armor=75.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SSO":"SSO {name=, x=300.0, y=30.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"Kamikaze":"Kamikaze {name=, x=300.0, y=90.0, health=100.0, armor=50.0, murders=0, elect=false, active=true, inMacro=false, team=Green}"}
+{"SSO":"SSO {name=, x=950.0, y=210.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"SimpleSoldier":"SimpleSoldier {name=, x=950.0, y=180.0, health=100.0, armor=75.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"SSO":"SSO {name=, x=950.0, y=150.0, health=100.0, armor=100.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}
+{"SimpleSoldier":"SimpleSoldier {name=, x=950.0, y=120.0, health=100.0, armor=75.0, murders=0, elect=false, active=true, inMacro=false, team=Red}"}

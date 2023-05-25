@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="window_changeParams" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #BD871D;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="data.windows.ChangeParameters">
+<VBox fx:id="window_changeParams" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="300.0" style="-fx-background-color: #74CB3A;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="data.windows.ChangeParameters">
     <children>
         <Label text="new Name">
             <font>
@@ -20,7 +20,7 @@
                 <Insets top="10.0" />
             </VBox.margin>
         </Label>
-        <TextField fx:id="setName_field" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="300.0" promptText="Warrior`s name">
+        <TextField fx:id="setName_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="Warrior`s name">
             <padding>
                 <Insets top="10.0" />
             </padding>
@@ -39,7 +39,7 @@
                 <Insets />
             </VBox.margin>
         </Label>
-        <TextField fx:id="setHealth_field" alignment="TOP_CENTER" promptText="Health">
+        <TextField fx:id="setHealth_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="Health">
             <padding>
                 <Insets top="10.0" />
             </padding>
@@ -58,7 +58,7 @@
                 <Insets />
             </VBox.margin>
         </Label>
-        <TextField fx:id="setX_field" alignment="TOP_CENTER" promptText="set X">
+        <TextField fx:id="setX_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="set X">
             <padding>
                 <Insets top="10.0" />
             </padding>
@@ -74,7 +74,7 @@
                 <Insets top="10.0" />
             </padding>
         </Label>
-        <TextField fx:id="setY_field" alignment="TOP_CENTER" promptText="set Y">
+        <TextField fx:id="setY_field" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="set Y">
             <padding>
                 <Insets top="10.0" />
             </padding>

@@ -9,6 +9,7 @@ module app {
     exports data.windows;
     opens data.windows to javafx.fxml;
     exports data.micro_objects;
+    exports data.macro_objects;
     opens data.micro_objects to javafx.fxml;
     exports data.Methods;
     opens data.Methods to javafx.fxml;

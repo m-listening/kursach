@@ -36,7 +36,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
 
         this.name = new Label(name);
         this.name.setFont(Font.font("Impact", 14));
-
         active = false;
         elect = false;
         team = null;
@@ -53,9 +52,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         rectangle.setStroke(Color.TRANSPARENT);
 
         circle = new Circle(40);
-        circle.setRadius(40);
         circle.setFill(Color.TRANSPARENT);
-        circle.setStroke(Color.GREY);
 
         Play.world.getWorldGroup().getChildren().addAll(imageView, life, this.name, rectangle, circle);
 
@@ -154,7 +151,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
 
         kamikaze.setCircle(new Circle(kamikaze.getCircle().getRadius()));
         kamikaze.getCircle().setFill(Color.TRANSPARENT);
-        kamikaze.getCircle().setStroke(Color.GREY);
 
         Play.world.getWorldGroup().getChildren().addAll(kamikaze.getCircle(), kamikaze.getImageView(),
                 kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
@@ -220,10 +216,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         return inMacro;
     }
 
-    public void setInMacro(boolean inMacro) {
-        this.inMacro = inMacro;
-    }
-
     public void flipInMacro() {
         inMacro = !inMacro;
     }
@@ -284,11 +276,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
 
     public boolean isElect() {
         return elect;
-    }
-
-    public void setElect(boolean elect) {
-        this.elect = elect;
-        setRectangleColor();
     }
 
     public void flipElect() {

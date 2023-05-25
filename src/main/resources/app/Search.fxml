@@ -15,7 +15,7 @@
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #A4AA89;">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
                <children>
                   <Label text="Word in the name">
                      <font>
@@ -40,7 +40,7 @@
                   </Button>
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #A4AA89;">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
                <children>
                   <Label text="By macro object">
                      <font>
@@ -68,7 +68,7 @@
                   </Button>
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #A4AA89;">
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
                <children>
                   <Label text="Show all who">
                      <font>

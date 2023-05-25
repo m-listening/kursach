@@ -31,11 +31,11 @@ public class Search {
     void searchByBase(ActionEvent event) {
         ObservableList<String> items = FXCollections.observableArrayList();
         if (select == 0) {
-            for (Kamikaze item : world.getWarriors())
+            for (Kamikaze item : world.getAllWarriors())
                 if (!item.isInMacro())
                     items.add(item.toString());
         }
-        for (Base base : world.getBases()) {
+        for (Base base : world.getBaseSet()) {
             if (select == 1)
                 for (Kamikaze item : base.getState())
                     items.add(item.toString());
@@ -53,7 +53,7 @@ public class Search {
     void searchByName() {
         String name = tF_name.getText();
         ObservableList<String> items = FXCollections.observableArrayList();
-        for (Kamikaze item : world.getWarriors())
+        for (Kamikaze item : world.getAllWarriors())
             if (item.getName().getText().contains(name))
                 items.add(item.toString());
         listView.setItems(items);
@@ -62,7 +62,7 @@ public class Search {
     @FXML
     void searchByActivity() {
         ObservableList<String> items = FXCollections.observableArrayList();
-        for (Kamikaze item : world.getWarriors()) {
+        for (Kamikaze item : world.getAllWarriors()) {
             if (select == 1 && item.isActive())
                 items.add(item.toString());
             if (select == 0 && !item.isActive())

@@ -21,7 +21,7 @@ public class ChangeParameters {
         double x = Double.parseDouble(setX_field.getText());
         double y = Double.parseDouble(setY_field.getText());
 
-        for (Kamikaze item : Play.world.getWarriorsElect()) {
+        for (Kamikaze item : Play.world.getElectedWarriors()) {
             item.setName(name);
             item.setHealth(health);
             item.setX(x);

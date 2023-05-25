@@ -4,8 +4,10 @@ import data.Methods.Utilities;
 import data.Methods.World;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -35,7 +37,7 @@ public class Play extends Application {
             }
         });
         scene.setOnKeyPressed(Utilities::keyPressedHandler);
-
+        stage.getIcons().add(new Image(new FileInputStream("src/images/icon.jpg")));
         stage.setTitle("Game!");
         stage.setScene(scene);
         stage.show();

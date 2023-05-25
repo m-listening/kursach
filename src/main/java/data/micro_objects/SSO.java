@@ -11,9 +11,14 @@ public class SSO extends SimpleSoldier {
 
     @Override
     public boolean inflictDamage(Kamikaze warrior) {
-        warrior.setArmor(warrior.getArmor() - warrior.getDamage());
-        if (warrior.getArmor() > 0) return false;
-        warrior.setHealth(warrior.getHealth() - Math.abs(warrior.getArmor()));
+        if (warrior.getArmor() > 0)
+            warrior.setArmor(warrior.getArmor() - this.getDamage());
+        else if (warrior.getArmor() < 0) {
+            warrior.setHealth(warrior.getHealth() - Math.abs(warrior.getArmor()));
+            warrior.setArmor(0);
+            return warrior.getHealth() <= 0;
+        } else if (warrior.getArmor() == 0)
+            warrior.setHealth(warrior.getHealth() - this.getDamage());
         return warrior.getHealth() <= 0;
     }
 }
