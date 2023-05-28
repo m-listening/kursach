@@ -5,20 +5,18 @@ public class SSO extends SimpleSoldier {
         super(name, health);
         setMove(7);
         setArmor(100);
-        setDamage(75);
+        setDamage(15);
         getCircle().setRadius(200);
     }
 
     @Override
-    public boolean inflictDamage(Kamikaze warrior) {
+    public void inflictDamage(Kamikaze warrior) {
         if (warrior.getArmor() > 0)
             warrior.setArmor(warrior.getArmor() - this.getDamage());
         else if (warrior.getArmor() < 0) {
             warrior.setHealth(warrior.getHealth() - Math.abs(warrior.getArmor()));
             warrior.setArmor(0);
-            return warrior.getHealth() <= 0;
         } else if (warrior.getArmor() == 0)
             warrior.setHealth(warrior.getHealth() - this.getDamage());
-        return warrior.getHealth() <= 0;
     }
 }

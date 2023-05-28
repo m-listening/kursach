@@ -7,16 +7,19 @@ public class SimpleSoldier extends Kamikaze {
         super(name, health);
         setMove(5);
         setArmor(75);
-        setDamage(50);
+        setDamage(10);
         getCircle().setRadius(100);
     }
 
     @Override
-    public boolean inflictDamage(Kamikaze warrior) {
-        if (new Random().nextInt() * 3 == 2) return false;
-        warrior.setArmor(warrior.getArmor() - warrior.getDamage());
-        if (warrior.getArmor() > 0) return false;
-        warrior.setHealth(warrior.getHealth() - Math.abs(warrior.getArmor()));
-        return warrior.getHealth() <= 0;
+    public void inflictDamage(Kamikaze warrior) {
+        if (new Random().nextInt() * 3 == 2) return;
+        if (warrior.getArmor() > 0)
+            warrior.setArmor(warrior.getArmor() - this.getDamage());
+        else if (warrior.getArmor() < 0) {
+            warrior.setHealth(warrior.getHealth() - Math.abs(warrior.getArmor()));
+            warrior.setArmor(0);
+        } else if (warrior.getArmor() == 0)
+            warrior.setHealth(warrior.getHealth() - this.getDamage());
     }
 }

@@ -34,24 +34,6 @@ import static app.Play.globalStage;
 import static app.Play.world;
 
 public class Utilities {
-    /**
-     * @return null if both survive or Kamikaze to remove
-     */
-    public static Kamikaze fightBetweenTwo(Kamikaze o1, Kamikaze o2) {
-        if (o1.equals(o2) || o1.getTeam() == o2.getTeam()
-                || o1.getHealth() <= 0 || o2.getHealth() <= 0) return null;
-        if (o1.getCircle().getBoundsInParent().intersects(o2.getImageView().getBoundsInParent()))
-            if (o1.inflictDamage(o2)) {
-                o1.getMurders().implementCount();
-                return o2;
-            }
-        if (o2.getCircle().getBoundsInParent().intersects(o1.getImageView().getBoundsInParent()))
-            if (o2.inflictDamage(o1)) {
-                o2.getMurders().implementCount();
-                return o1;
-            }
-        return null;
-    }
 
     public static void json(Object object) throws IOException {
         Writer file = new FileWriter("data.json", true);
@@ -148,12 +130,7 @@ public class Utilities {
             if (base == null) return;
 
             if (event.getButton().equals(MouseButton.PRIMARY)) {
-                world.getElectedWarriors().forEach(e -> {
-                    e.flipInMacro();
-                    e.flipElect();
-                    world.getWorldGroup().getChildren().removeAll(e.getCircle(), e.getImageView(), e.getLife(), e.getName(), e.getRectangle());
-                    base.getState().add(e);
-                });
+                world.getElectedWarriors().forEach(e -> addToMacro(e, base));
                 world.getElectedWarriors().clear();
             }
 
@@ -237,6 +214,21 @@ public class Utilities {
         }
     }
 
+    public static void addToMacro(Kamikaze object, Base base) {
+        object.flipInMacro();
+        if (object.isElect()) object.flipElect();
+        world.getWorldGroup().getChildren().removeAll(
+                object.getCircle(), object.getImageView(), object.getLife(), object.getName(), object.getRectangle());
+        base.getState().add(object);
+    }
+
+    public static void removeFromMacro(Kamikaze object, Base base) {
+        object.flipInMacro();
+        base.getState().remove(object);
+        world.getWorldGroup().getChildren().addAll(
+                object.getCircle(), object.getImageView(), object.getLife(), object.getName(), object.getRectangle());
+    }
+
     private static Kamikaze checkClickWarrior(List<Kamikaze> list, double x, double y) {
         for (Kamikaze item : list)
             if (item.getImageView().getBoundsInParent().contains(x, y) && !item.isInMacro())
@@ -289,9 +281,15 @@ public class Utilities {
     public static void deleteWarrior(List<Kamikaze> list) {
         for (Kamikaze item : list)
             world.getWorldGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
+        list.forEach(e -> e.getAlive().stop());
         list.forEach(world.getAllWarriors()::remove);
         list.forEach(world.getWarriorsActive()::remove);
         list.forEach(world.getElectedWarriors()::remove);
+        list.forEach(obj -> {
+            world.getBaseSet().forEach(base -> {
+                base.getState().remove(obj);
+            });
+        });
     }
 
     public static void moveIfActive(Kamikaze warrior, double x, double y) {
