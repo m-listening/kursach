@@ -5,11 +5,10 @@ import data.macro_objects.Bunker;
 import data.macro_objects.GreenBase;
 import data.macro_objects.RedBase;
 import data.micro_objects.Kamikaze;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
-import javafx.util.Duration;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -27,7 +26,8 @@ public class World {
     private final Set<Base> baseSet;
 
     private final Group worldGroup;
-    private final Timeline activeWorld;
+
+    public final ImageView view = new ImageView(new Image("background.png"));
 
     public World() {
         electedWarriors = new HashSet<>();
@@ -36,32 +36,42 @@ public class World {
         warriorsActive = new ArrayList<>();
         worldGroup = new Group();
 
-        activeWorld = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-            baseSet.forEach(e -> e.setWithin(e.getState().size()));
-            allWarriors.forEach(object -> {
-                baseSet.forEach(base -> {
-                    if (base instanceof GreenBase)
-                        if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                                && object.getTeam() && !base.getState().contains(object)) {
-                            addToBase(object, base);
-                        }
-                    if (base instanceof RedBase) {
-                        if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                                && !object.getTeam() && !base.getState().contains(object)) {
-                            addToBase(object, base);
-                        }
-                    }
-                    if (base instanceof Bunker) {
-                        if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                                && !base.getState().contains(object)) {
-                            addToBase(object, base);
-                        }
-                    }
+        worldGroup.getChildren().add(view);
+        AnimationTimer activeWorld = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                ArrayList<Kamikaze> arrayList = new ArrayList<>();
+                baseSet.forEach(e -> e.setWithin(e.getState().size()));
+                allWarriors.forEach(object -> {
+                    if (object.getHealth() <= 0)
+                        arrayList.add(object);
                 });
-            });
-        }));
-        activeWorld.setCycleCount(Animation.INDEFINITE);
-        activeWorld.play();
+                Utilities.deleteWarrior(arrayList);
+                allWarriors.forEach(object -> {
+                    baseSet.forEach(base -> {
+                        if (base instanceof GreenBase)
+                            if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
+                                    && object.getTeam() && !base.getState().contains(object) && base.getState().size() < 4) {
+                                addToBase(object, base);
+                            }
+                        if (base instanceof RedBase) {
+                            if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
+                                    && !object.getTeam() && !base.getState().contains(object) && base.getState().size() < 4) {
+                                addToBase(object, base);
+                            }
+                        }
+                        if (base instanceof Bunker) {
+                            if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
+                                    && !base.getState().contains(object)) {
+                                addToBase(object, base);
+                            }
+                        }
+                    });
+                });
+                allWarriors.forEach(Kamikaze::lifeCycle);
+            }
+        };
+        activeWorld.start();
     }
 
     public void addToBase(Kamikaze object, Base base) {

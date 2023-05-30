@@ -1,12 +1,7 @@
 package data.micro_objects;
 
+import app.Play;
 import data.Methods.Utilities;
-import data.macro_objects.Bunker;
-import data.macro_objects.GreenBase;
-import data.macro_objects.RedBase;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,9 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static app.Play.world;
@@ -25,6 +18,7 @@ import static app.Play.world;
 public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     private int move;
     private double x, y, health;
+    private double aimX, aimY;
     private boolean elect, active, inMacro;
     private Boolean team;
     private Image image;
@@ -35,22 +29,18 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     private Line life;
     private Murder murders;
     private double armor, damage;
-    private Timeline alive;
 
     public Kamikaze(String name, double health) {
-        alive = lifeCycle(this);
-        alive.setCycleCount(Animation.INDEFINITE);
-        alive.play();
-
-        move = 20;
+        move = 3;
         armor = 200;
-        damage = 50;
+        damage = 3;
         this.health = health;
 
         murders = new Murder();
 
         this.name = new Label(name);
         this.name.setFont(Font.font("Impact", 14));
+
         active = false;
         elect = false;
         team = null;
@@ -79,41 +69,45 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         this("", 0);
     }
 
-    public Timeline lifeCycle(Kamikaze obj) {
-        return new Timeline(new KeyFrame(Duration.millis(100), event -> {
-            if (obj.getHealth() <= 0) {
-                ArrayList<Kamikaze> arrayList = new ArrayList<>();
-                arrayList.add(obj);
-                Utilities.deleteWarrior(arrayList);
+    public void lifeCycle() {
+        world.getAllWarriors().forEach(e -> {
+            if (!e.equals(this) && e.getTeam() != this.getTeam()) {
+                if (e.getImageView().getBoundsInParent().intersects(this.getCircle().getBoundsInParent())) {
+                    this.inflictDamage(e);
+                    if (e.getHealth() <= 0) this.getMurders().implementCount();
+                }
             }
-            world.getAllWarriors().forEach(e -> {
-                if (!e.equals(obj) && e.getTeam() != obj.getTeam()) {
-                    if (e.getImageView().getBoundsInParent().intersects(obj.getCircle().getBoundsInParent())) {
-                        obj.inflictDamage(e);
-                        if (e.getHealth() <= 0) obj.getMurders().implementCount();
-                    }
+        });
+        if (!this.isElect() && !this.isInMacro()) {
+            if (isEmptyAim()) {
+                Utilities.whatToDo(this);
+            } else {
+                if ((Math.abs(x - aimX) + Math.abs(y - aimY)) < 1.0) {
+                    clearAim();
+                } else {
+                    double signDeltaX = Math.signum(aimX - x);
+                    double dx = (Math.min(Math.abs(aimX - x), move)) * signDeltaX;
+
+                    double signDeltaY = Math.signum(aimY - y);
+                    double dy = (Math.min(Math.abs(aimY - y), move)) * signDeltaY;
+                    moveActive(dx, dy);
                 }
-            });
-            world.getBaseSet().forEach(base -> {
-                if (base instanceof GreenBase)
-                    if (obj.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                            && obj.getTeam() && !base.getState().contains(obj)) {
-                        world.addToBase(obj, base);
-                    }
-                if (base instanceof RedBase) {
-                    if (obj.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                            && !obj.getTeam() && !base.getState().contains(obj)) {
-                        world.addToBase(obj, base);
-                    }
-                }
-                if (base instanceof Bunker) {
-                    if (obj.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                            && !base.getState().contains(obj)) {
-                        world.addToBase(obj, base);
-                    }
-                }
-            });
-        }));
+            }
+        }
+    }
+
+    public void clearAim() {
+        this.aimX = -1000;
+        this.aimY = -1000;
+    }
+
+    public boolean isEmptyAim() {
+        return (this.aimX < 0) && (this.aimY < 0);
+    }
+
+    public void moveActive(double stepByX, double stepByY) {
+        if (this.getX() + stepByX < Play.sceneSizeMaxX && this.getX() + stepByX > 0) this.setX(this.getX() + stepByX);
+        if (this.getY() + stepByY < Play.sceneSizeMaxY && this.getY() + stepByY > 0) this.setY(this.getY() + stepByY);
     }
 
     public void inflictDamage(Kamikaze warrior) {
@@ -180,7 +174,11 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     @Override
     public Kamikaze clone() throws CloneNotSupportedException {
         Kamikaze kamikaze = (Kamikaze) super.clone();
+
         kamikaze.setMurders(new Murder());
+
+        kamikaze.setAimX(-1000);
+        kamikaze.setAimY(-1000);
 
         kamikaze.setName(new Label(kamikaze.getName().getText() + ".cl"));
         kamikaze.getName().setFont(Font.font("Impact", 14));
@@ -203,10 +201,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         kamikaze.setCircle(new Circle(kamikaze.getCircle().getRadius()));
         kamikaze.getCircle().setFill(Color.TRANSPARENT);
 
-        kamikaze.setAlive(lifeCycle(kamikaze));
-        kamikaze.getAlive().setCycleCount(Animation.INDEFINITE);
-        kamikaze.getAlive().play();
-
         world.getWorldGroup().getChildren().addAll(kamikaze.getCircle(), kamikaze.getImageView(), kamikaze.getLife(), kamikaze.getName(), kamikaze.getRectangle());
 
         kamikaze.setX(kamikaze.getX() + 100);
@@ -224,14 +218,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         return result;
     }
 
-    public Timeline getAlive() {
-        return alive;
-    }
-
-    public void setAlive(Timeline alive) {
-        this.alive = alive;
-    }
-
     public void setMurders(Murder murders) {
         this.murders = murders;
     }
@@ -246,6 +232,22 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
 
     public void setArmor(double armor) {
         this.armor = armor;
+    }
+
+    public double getAimX() {
+        return aimX;
+    }
+
+    public void setAimX(double aimX) {
+        this.aimX = aimX;
+    }
+
+    public double getAimY() {
+        return aimY;
+    }
+
+    public void setAimY(double aimY) {
+        this.aimY = aimY;
     }
 
     public double getDamage() {

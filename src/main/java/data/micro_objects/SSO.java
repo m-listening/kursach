@@ -3,9 +3,9 @@ package data.micro_objects;
 public class SSO extends SimpleSoldier {
     public SSO(String name, double health) {
         super(name, health);
-        setMove(7);
+        setMove(2);
         setArmor(100);
-        setDamage(15);
+        setDamage(7);
         getCircle().setRadius(200);
     }
 

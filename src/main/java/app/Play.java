@@ -7,13 +7,13 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Play extends Application {
     public static Stage globalStage;
-
+    public static double sceneSizeMinX = 640, sceneSizeMaxX = 2160;
+    public static double sceneSizeMinY = 480, sceneSizeMaxY = 1680;
     public static World world;
 
     @Override
@@ -21,7 +21,7 @@ public class Play extends Application {
         world = new World();
         world.initialize();
 
-        Scene scene = new Scene(world.getWorldGroup(), 1280, 720);
+        Scene scene = new Scene(world.getWorldGroup(), sceneSizeMinX, sceneSizeMinY);
         scene.setOnMouseClicked(event -> {
             try {
                 Utilities.mousePressedHandler(event);
@@ -37,7 +37,7 @@ public class Play extends Application {
             }
         });
         scene.setOnKeyPressed(Utilities::keyPressedHandler);
-        stage.getIcons().add(new Image(new FileInputStream("src/images/icon.jpg")));
+        stage.getIcons().add(new Image("icon.jpg"));
         stage.setTitle("Game!");
         stage.setScene(scene);
         stage.show();

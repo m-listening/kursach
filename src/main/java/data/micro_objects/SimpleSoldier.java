@@ -5,9 +5,9 @@ import java.util.Random;
 public class SimpleSoldier extends Kamikaze {
     public SimpleSoldier(String name, double health) {
         super(name, health);
-        setMove(5);
+        setMove(1);
         setArmor(75);
-        setDamage(10);
+        setDamage(5);
         getCircle().setRadius(100);
     }
 
