@@ -1,6 +1,5 @@
 package data.micro_objects;
 
-import app.Play;
 import data.Methods.Utilities;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -13,7 +12,7 @@ import javafx.scene.text.Font;
 
 import java.util.Objects;
 
-import static app.Play.world;
+import static app.Play.*;
 
 public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     private int move;
@@ -35,6 +34,8 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
         armor = 200;
         damage = 3;
         this.health = health;
+        aimY = -1000;
+        aimX = -1000;
 
         murders = new Murder();
 
@@ -71,18 +72,18 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
 
     public void lifeCycle() {
         world.getAllWarriors().forEach(e -> {
-            if (!e.equals(this) && e.getTeam() != this.getTeam()) {
+            if (!e.equals(this) && e.getTeam() != this.getTeam() && !this.isInMacro() && !e.isInMacro()) {
                 if (e.getImageView().getBoundsInParent().intersects(this.getCircle().getBoundsInParent())) {
                     this.inflictDamage(e);
                     if (e.getHealth() <= 0) this.getMurders().implementCount();
                 }
             }
         });
-        if (!this.isElect() && !this.isInMacro()) {
+        if (!isElect() && !isInMacro() && isActive()) {
             if (isEmptyAim()) {
                 Utilities.whatToDo(this);
             } else {
-                if ((Math.abs(x - aimX) + Math.abs(y - aimY)) < 1.0) {
+                if ((Math.abs(aimX - x) + Math.abs(aimY - y)) < 5.0) {
                     clearAim();
                 } else {
                     double signDeltaX = Math.signum(aimX - x);
@@ -94,6 +95,8 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
                 }
             }
         }
+        if (this.getAimX() > sceneSizeMaxX * 1.5 || this.getAimY() > sceneSizeMaxY * 2)
+            clearAim();
     }
 
     public void clearAim() {
@@ -106,8 +109,10 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     }
 
     public void moveActive(double stepByX, double stepByY) {
-        if (this.getX() + stepByX < Play.sceneSizeMaxX && this.getX() + stepByX > 0) this.setX(this.getX() + stepByX);
-        if (this.getY() + stepByY < Play.sceneSizeMaxY && this.getY() + stepByY > 0) this.setY(this.getY() + stepByY);
+        if (this.getX() + stepByX < sceneSizeMaxX * 1.5 && this.getX() + stepByX > 0)
+            this.setX(this.getX() + stepByX);
+        if (this.getY() + stepByY < sceneSizeMaxY * 2 && this.getY() + stepByY > 0)
+            this.setY(this.getY() + stepByY);
     }
 
     public void inflictDamage(Kamikaze warrior) {

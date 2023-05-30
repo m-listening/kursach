@@ -11,11 +11,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static app.Play.scene;
 import static data.Methods.Utilities.addToMacro;
 import static data.Methods.Utilities.initializeStartGame;
 
@@ -41,30 +43,45 @@ public class World {
             @Override
             public void handle(long l) {
                 ArrayList<Kamikaze> arrayList = new ArrayList<>();
-                baseSet.forEach(e -> e.setWithin(e.getState().size()));
                 allWarriors.forEach(object -> {
                     if (object.getHealth() <= 0)
                         arrayList.add(object);
                 });
                 Utilities.deleteWarrior(arrayList);
+                scene.setOnMouseClicked(event -> {
+                    try {
+                        Utilities.mousePressedHandler(event);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                scene.setOnMouseClicked(event -> {
+                    try {
+                        Utilities.mousePressedHandler(event);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                scene.setOnKeyPressed(Utilities::keyPressedHandler);
+                baseSet.forEach(e -> e.setWithin(e.getState().size()));
                 allWarriors.forEach(object -> {
                     baseSet.forEach(base -> {
                         if (base instanceof GreenBase)
                             if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                                    && object.getTeam() && !base.getState().contains(object) && base.getState().size() < 4) {
+                                    && object.getTeam() && !base.getState().contains(object) && base.getState().size() < 4)
                                 addToBase(object, base);
-                            }
-                        if (base instanceof RedBase) {
+                        if (base instanceof RedBase)
                             if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
-                                    && !object.getTeam() && !base.getState().contains(object) && base.getState().size() < 4) {
+                                    && !object.getTeam() && !base.getState().contains(object) && base.getState().size() < 4)
                                 addToBase(object, base);
-                            }
-                        }
                         if (base instanceof Bunker) {
                             if (object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent())
                                     && !base.getState().contains(object)) {
-                                addToBase(object, base);
+                                object.setHealth(object.getHealth() - 0.001);
+                                base.getState().add(object);
                             }
+                            if (!object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent()))
+                                base.getState().remove(object);
                         }
                     });
                 });

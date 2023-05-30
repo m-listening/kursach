@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 public class Bunker extends Base {
     public Bunker(double x, double y) throws FileNotFoundException {
         super(3);
-
         getName().setText("Bunker");
         getWithin().setText("0");
 

@@ -20,7 +20,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +57,7 @@ public class Utilities {
 
             globalStage = new Stage();
             globalStage.setTitle(title);
-            globalStage.getIcons().add(new Image(new FileInputStream("src/images/icon.jpg")));
+            globalStage.getIcons().add(new Image("icon.jpg"));
             globalStage.setScene(secondScene);
             globalStage.showAndWait();
         } catch (IOException e) {
@@ -63,13 +66,13 @@ public class Utilities {
     }
 
     public static void initializeStartGame() throws FileNotFoundException {
-        Bunker bunker = new Bunker(640, 360);
-        GreenBase greenBase = new GreenBase(150, 360);
-        RedBase redBase = new RedBase(1130, 360);
+        Bunker bunker = new Bunker(sceneSizeMaxX * 1.5 / 2, sceneSizeMaxY);
+        GreenBase greenBase = new GreenBase(400, sceneSizeMaxY);
+        RedBase redBase = new RedBase(sceneSizeMaxX * 1.5 - 400, sceneSizeMaxY);
 
         List<Kamikaze> warriorList = new ArrayList<>();
 
-        int number = 4, flag = 0;
+        int number = 200, flag = number;
         for (int i = 0; i < number; i++) {
             int rand = new Random().nextInt(3);
             if (rand == 0) {
@@ -81,21 +84,22 @@ public class Utilities {
             }
         }
         for (Kamikaze item : warriorList) {
-            int lvl = 1, x, y = flag * 30;
+            int lvl = 1;
+            double x, y = sceneSizeMaxY / 2;
             boolean team;
             if (item instanceof SSO) lvl = 3;
             else if (item instanceof SimpleSoldier) lvl = 2;
-            if (flag < number / 2) {
-                x = 300;
+            if (number / 2 < flag) {
+                x = 0;
                 team = true;
             } else {
-                x = 950;
+                x = sceneSizeMaxX * 1.5;
                 team = false;
             }
+            flag--;
             updateWarrior(item, x, y, lvl, team);
             world.getWarriorsActive().add(item);
             world.getAllWarriors().add(item);
-            flag++;
         }
 
         world.getBaseSet().add(bunker);
@@ -109,9 +113,9 @@ public class Utilities {
      */
     public static Image lvlImage(int lvl, boolean isMacro) throws FileNotFoundException {
         if (isMacro) {
-            if (lvl == 2) return new Image("greenB.png", 150, 150, false, false);
-            else if (lvl == 3) return new Image("bunker.png", 150, 150, false, false);
-            return new Image("redB.png", 150, 150, false, false);
+            if (lvl == 2) return new Image("greenB.png", 300, 300, false, false);
+            else if (lvl == 3) return new Image("bunker.png", 300, 300, false, false);
+            return new Image("redB.png", 300, 300, false, false);
         } else {
             if (lvl == 2) return new Image("sS.png", 50, 50, false, false);
             if (lvl == 3) return new Image("SSO.png", 50, 50, false, false);
@@ -122,7 +126,7 @@ public class Utilities {
     public static void mousePressedHandler(MouseEvent event) throws IOException {
         if (event.isAltDown()) {
             Base base = checkClickBase(world.getBaseSet().stream().toList(), event.getX(), event.getY());
-            if (base == null) return;
+            if (base == null || base instanceof  Bunker) return;
 
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 world.getElectedWarriors().forEach(e -> addToMacro(e, base));
@@ -171,21 +175,27 @@ public class Utilities {
     }
 
     public static void keyPressedHandler(KeyEvent event) {
-        double maxX = world.getWorldGroup().getBoundsInParent().getWidth() - sceneSizeMaxX;
-        double maxY = world.getWorldGroup().getBoundsInParent().getHeight() - sceneSizeMaxY;
         switch (event.getCode()) {
-            case UP -> {
-                world.getWorldGroup().setTranslateY(Math.min((world.view.getTranslateY() + 20), 0));
+            case W -> {
+                if (world.getWorldGroup().getTranslateY() + 20 <= 0)
+                    world.getWorldGroup().setTranslateY(world.getWorldGroup().getTranslateY() + 20);
             }
-            case LEFT -> {
-                world.getWorldGroup().setTranslateX(Math.min((world.view.getTranslateX() + 20), 0));
+
+            case A -> {
+                if (world.getWorldGroup().getTranslateX() + 20 <= 0)
+                    world.getWorldGroup().setTranslateX(world.getWorldGroup().getTranslateX() + 20);
             }
-            case DOWN -> {
-                world.getWorldGroup().setTranslateY(Math.max((world.view.getTranslateY() - 20), -maxY));
+
+            case S -> {
+                if (Math.abs(world.getWorldGroup().getTranslateY() - 20) <= sceneSizeMaxY)
+                    world.getWorldGroup().setTranslateY(world.getWorldGroup().getTranslateY() - 20);
             }
-            case RIGHT -> {
-                world.getWorldGroup().setTranslateX(Math.max((world.view.getTranslateX() - 20), -maxX));
+
+            case D -> {
+                if (Math.abs(world.getWorldGroup().getTranslateX() - 20) <= sceneSizeMaxX)
+                    world.getWorldGroup().setTranslateX(world.getWorldGroup().getTranslateX() - 20);
             }
+
 
             case NUMPAD8 -> moveIfActiveAndElect(0, -10);
             case NUMPAD4 -> moveIfActiveAndElect(-10, 0);
@@ -207,7 +217,7 @@ public class Utilities {
                     throw new RuntimeException(e);
                 }
             }
-            case S -> {
+            case I -> {
                 world.getAllWarriors().sort(Kamikaze::compareTo);
                 world.getWarriorsActive().sort(Kamikaze::compareTo);
                 showWindow("Search", "Search warrior");
@@ -265,8 +275,8 @@ public class Utilities {
     public static void moveIfActiveAndElect(double dx, double dy) {
         for (Kamikaze item : world.getElectedWarriors()) {
             if (item.isActive()) {
-                if (item.getX() + dx < Play.sceneSizeMaxX && item.getX() + dx > 0) item.setX(item.getX() + dx);
-                if (item.getY() + dy < Play.sceneSizeMaxY && item.getY() + dy > 0) item.setY(item.getY() + dy);
+                if (item.getX() + dx < sceneSizeMaxX * 1.5 && item.getX() + dx > 0) item.setX(item.getX() + dx);
+                if (item.getY() + dy < sceneSizeMaxY * 2 && item.getY() + dy > 0) item.setY(item.getY() + dy);
             }
         }
     }
@@ -300,7 +310,8 @@ public class Utilities {
     }
 
     public static void whatToDo(Kamikaze kamikaze) {
-        if (new Random().nextInt() * 3 == 1)
+        int rand = new Random().nextInt(0, 3);
+        if (rand == 1)
             for (Kamikaze e : world.getAllWarriors()) {
                 if (kamikaze.getTeam() != e.getTeam()) {
                     kamikaze.setAimX(e.getX());
@@ -308,20 +319,22 @@ public class Utilities {
                     return;
                 }
             }
-        boolean flag = kamikaze.getTeam();
-        if (new Random().nextInt() * 3 == 1) {
+        else if (rand == 2) {
             for (Base base : world.getBaseSet()) {
-                if (base instanceof GreenBase && flag) {
+                if (base instanceof GreenBase && kamikaze.getTeam()) {
                     kamikaze.setAimX(base.getX());
                     kamikaze.setAimY(base.getY());
+                    return;
                 }
-                if (base instanceof RedBase && !flag) {
+                if (base instanceof RedBase && !kamikaze.getTeam()) {
                     kamikaze.setAimX(base.getX());
                     kamikaze.setAimY(base.getY());
+                    return;
                 }
             }
+        } else {
+            kamikaze.setAimX(new Random().nextDouble() * sceneSizeMinX * 1.5);
+            kamikaze.setAimY(new Random().nextDouble() * sceneSizeMaxY * 2);
         }
-        kamikaze.setAimX(new Random().nextDouble() * 1200);
-        kamikaze.setAimY(new Random().nextDouble() * 720);
     }
 }

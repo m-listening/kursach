@@ -12,31 +12,19 @@ import java.io.IOException;
 
 public class Play extends Application {
     public static Stage globalStage;
-    public static double sceneSizeMinX = 640, sceneSizeMaxX = 2160;
-    public static double sceneSizeMinY = 480, sceneSizeMaxY = 1680;
+    public static double sceneSizeMinX = 640, sceneSizeMaxX;
+    public static double sceneSizeMinY = 480, sceneSizeMaxY;
     public static World world;
+    public static Scene scene;
 
     @Override
     public void start(Stage stage) throws FileNotFoundException {
         world = new World();
+        sceneSizeMaxX = world.view.getImage().getWidth() / 3;
+        sceneSizeMaxY = world.view.getImage().getHeight() / 3;
         world.initialize();
 
-        Scene scene = new Scene(world.getWorldGroup(), sceneSizeMinX, sceneSizeMinY);
-        scene.setOnMouseClicked(event -> {
-            try {
-                Utilities.mousePressedHandler(event);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        scene.setOnMouseClicked(event -> {
-            try {
-                Utilities.mousePressedHandler(event);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        scene.setOnKeyPressed(Utilities::keyPressedHandler);
+        scene = new Scene(world.getWorldGroup(), sceneSizeMinX, sceneSizeMinY);
         stage.getIcons().add(new Image("icon.jpg"));
         stage.setTitle("Game!");
         stage.setScene(scene);

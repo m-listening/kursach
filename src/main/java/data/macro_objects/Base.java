@@ -24,34 +24,37 @@ public abstract class Base {
     private final Circle circle;
     private final Label name, within;
     private final Group group;
-    private final Set<Kamikaze> state;
+    private Set<Kamikaze> state;
 
     public Base(int typeLvl) throws FileNotFoundException {
         state = new HashSet<>();
 
         name = new Label();
         name.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 16.0));
-        name.setLayoutX(-45);
-        name.setLayoutY(-100);
+        name.setLayoutX(-90);
+        name.setLayoutY(-200);
 
         within = new Label();
         within.setFont(Font.font("Arial", FontWeight.BOLD, 16.0));
-        within.setLayoutX(-5);
-        within.setLayoutY(100);
+        within.setLayoutX(-10);
+        within.setLayoutY(200);
 
-        circle = new Circle(150);
+        circle = new Circle(300);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
 
         image = Utilities.lvlImage(typeLvl, true);
         imageView = new ImageView(image);
-        imageView.setLayoutX(-75);
-        imageView.setLayoutY(-75);
+        imageView.setLayoutX(-150);
+        imageView.setLayoutY(-150);
 
         group = new Group(imageView, circle, name, within);
         Play.world.getWorldGroup().getChildren().add(group);
     }
 
+    public void setState(Set<Kamikaze> state) {
+        this.state = state;
+    }
 
     public double getX() {
         return x;
