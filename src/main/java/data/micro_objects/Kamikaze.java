@@ -30,7 +30,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze> {
     private double armor, damage;
 
     public Kamikaze(String name, double health) {
-        move = 3;
+        move = 10;
         armor = 200;
         damage = 3;
         this.health = health;

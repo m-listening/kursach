@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Play extends Application {
     public static Stage globalStage;

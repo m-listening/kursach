@@ -70,10 +70,14 @@ public class Utilities {
         GreenBase greenBase = new GreenBase(400, sceneSizeMaxY);
         RedBase redBase = new RedBase(sceneSizeMaxX * 1.5 - 400, sceneSizeMaxY);
 
+        world.getBaseSet().add(bunker);
+        world.getBaseSet().add(greenBase);
+        world.getBaseSet().add(redBase);
+
         List<Kamikaze> warriorList = new ArrayList<>();
 
-        int number = 200, flag = number;
-        for (int i = 0; i < number; i++) {
+        int count = 8, flag = count;
+        for (int i = 0; i < count; i++) {
             int rand = new Random().nextInt(3);
             if (rand == 0) {
                 warriorList.add(new Kamikaze("", 100));
@@ -83,28 +87,44 @@ public class Utilities {
                 warriorList.add(new SSO("", 100));
             }
         }
-        for (Kamikaze item : warriorList) {
+        for (Kamikaze obj : warriorList) {
             int lvl = 1;
-            double x, y = sceneSizeMaxY / 2;
+            double x, y;
             boolean team;
-            if (item instanceof SSO) lvl = 3;
-            else if (item instanceof SimpleSoldier) lvl = 2;
-            if (number / 2 < flag) {
-                x = 0;
-                team = true;
-            } else {
-                x = sceneSizeMaxX * 1.5;
-                team = false;
-            }
-            flag--;
-            updateWarrior(item, x, y, lvl, team);
-            world.getWarriorsActive().add(item);
-            world.getAllWarriors().add(item);
-        }
+            if (obj instanceof SSO) lvl = 3;
+            else if (obj instanceof SimpleSoldier) lvl = 2;
 
-        world.getBaseSet().add(bunker);
-        world.getBaseSet().add(greenBase);
-        world.getBaseSet().add(redBase);
+            team = count / 2 < flag;
+
+            x = coordinatesBaseX(team);
+            y = coordinatesBaseY(team);
+
+            updateWarrior(obj, x, y, lvl, team);
+            world.getWarriorsActive().add(obj);
+            world.getAllWarriors().add(obj);
+
+            flag--;
+        }
+    }
+
+    private static double coordinatesBaseX(boolean team) {
+        for (Base e : world.getBaseSet()) {
+            if (e instanceof GreenBase && team)
+                return e.getX();
+            if (e instanceof RedBase && !team)
+                return e.getX();
+        }
+        return 0;
+    }
+
+    private static double coordinatesBaseY(boolean team) {
+        for (Base e : world.getBaseSet()) {
+            if (e instanceof GreenBase && team)
+                return e.getY();
+            if (e instanceof RedBase && !team)
+                return e.getY();
+        }
+        return 0;
     }
 
     /**
@@ -126,7 +146,7 @@ public class Utilities {
     public static void mousePressedHandler(MouseEvent event) throws IOException {
         if (event.isAltDown()) {
             Base base = checkClickBase(world.getBaseSet().stream().toList(), event.getX(), event.getY());
-            if (base == null || base instanceof  Bunker) return;
+            if (base == null || base instanceof Bunker) return;
 
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 world.getElectedWarriors().forEach(e -> addToMacro(e, base));
@@ -159,18 +179,19 @@ public class Utilities {
             }
             return;
         }
-        if (event.getButton().equals(MouseButton.PRIMARY)) {
-            Kamikaze objectWarrior = checkClickWarrior(world.getAllWarriors().stream().toList(), event.getX(), event.getY());
-            if (objectWarrior != null) {
-                objectWarrior.flipActive();
-                if (objectWarrior.isActive()) world.getWarriorsActive().add(objectWarrior);
-                else world.getWarriorsActive().remove(objectWarrior);
-                return;
+        if (event.isControlDown()) {
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                Kamikaze objectWarrior = checkClickWarrior(world.getAllWarriors().stream().toList(), event.getX(), event.getY());
+                if (objectWarrior != null) {
+                    objectWarrior.flipActive();
+                    if (objectWarrior.isActive()) world.getWarriorsActive().add(objectWarrior);
+                    else world.getWarriorsActive().remove(objectWarrior);
+                    return;
+                }
             }
-            showWindow("Parameters", "Parameters");
-        }
-        if (event.getButton().equals(MouseButton.SECONDARY)) {
-            electWarrior(event.getX(), event.getY());
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                electWarrior(event.getX(), event.getY());
+            }
         }
     }
 
@@ -196,12 +217,12 @@ public class Utilities {
                     world.getWorldGroup().setTranslateX(world.getWorldGroup().getTranslateX() - 20);
             }
 
-
             case NUMPAD8 -> moveIfActiveAndElect(0, -10);
             case NUMPAD4 -> moveIfActiveAndElect(-10, 0);
             case NUMPAD6 -> moveIfActiveAndElect(10, 0);
             case NUMPAD2 -> moveIfActiveAndElect(0, 10);
 
+            case INSERT -> showWindow("Parameters", "Parameters");
             case DELETE -> deleteWarrior(world.getElectedWarriors().stream().toList());
             case C -> {
                 if (!world.getElectedWarriors().isEmpty()) showWindow("ChangeParameters", "New parameters");
@@ -258,7 +279,8 @@ public class Utilities {
 
     private static Base checkClickBase(List<Base> list, double x, double y) {
         for (Base base : list)
-            if (base.getGroup().boundsInParentProperty().get().contains(x, y))
+            if (base.getGroup().boundsInParentProperty().get().contains(x - world.getWorldGroup().getTranslateX(),
+                    y - world.getWorldGroup().getTranslateY()))
                 return base;
         return null;
     }
@@ -307,6 +329,16 @@ public class Utilities {
     private static void turnOf() {
         world.getWarriorsActive().forEach(Kamikaze::flipActive);
         world.getWarriorsActive().clear();
+    }
+
+    public static void whatToDo(SSO sso) {
+        int rand = new Random().nextInt(0, 3);
+        if (rand == 1) whatToDo((Kamikaze) sso);
+        else {
+            for (Kamikaze obj : world.getAllWarriors())
+                if (sso.getTeam() != obj.getTeam() && new Random().nextBoolean())
+                    sso.setAim(obj);
+        }
     }
 
     public static void whatToDo(Kamikaze kamikaze) {
