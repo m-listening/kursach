@@ -124,7 +124,7 @@
                         <Font name="System Bold Italic" size="16.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="RB_tmGreen" mnemonicParsing="false" text="Green">
+                  <RadioButton fx:id="RB_tmGreen" mnemonicParsing="false" selected="true" text="Green">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>

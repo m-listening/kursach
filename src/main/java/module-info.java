@@ -13,4 +13,8 @@ module app {
     opens data.micro_objects to javafx.fxml;
     exports data.Methods;
     opens data.Methods to javafx.fxml;
+    exports data.interfaces;
+    opens data.interfaces to javafx.fxml;
+    exports data.World;
+    opens data.World to javafx.fxml;
 }

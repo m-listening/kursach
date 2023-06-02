@@ -1,5 +1,8 @@
 package data.windows;
 
+import data.macro_objects.Bunker;
+import data.macro_objects.GreenBase;
+import data.macro_objects.RedBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,13 +39,13 @@ public class Search {
                     items.add(item.toString());
         }
         for (Base base : world.getBaseSet()) {
-            if (select == 1)
+            if (select == 1 && base instanceof Bunker)
                 for (Kamikaze item : base.getState())
                     items.add(item.toString());
-            if (select == 2)
+            if (select == 2 && base instanceof GreenBase)
                 for (Kamikaze item : base.getState())
                     items.add(item.toString());
-            if (select == 3)
+            if (select == 3 && base instanceof RedBase)
                 for (Kamikaze item : base.getState())
                     items.add(item.toString());
         }

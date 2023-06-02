@@ -1,10 +1,13 @@
 package data.macro_objects;
 
-import java.io.FileNotFoundException;
+import data.micro_objects.Kamikaze;
+
+import static app.Play.world;
+import static data.Methods.Utilities.boundsIntersectOtherBounds;
 
 public class Bunker extends Base {
-    public Bunker(double x, double y) throws FileNotFoundException {
-        super(3);
+    public Bunker(double x, double y) {
+        super();
         getName().setText("Bunker");
         getWithin().setText("0");
 
@@ -14,17 +17,23 @@ public class Bunker extends Base {
         getGroup().setLayoutY(y);
     }
 
-    public Bunker() throws FileNotFoundException {
+    public Bunker() {
         this(0, 0);
     }
 
     @Override
-    public String toString() {
-        return "Bunker{" +
-                "x=" + getX() +
-                ", y=" + getY() +
-                ", name=" + getName().getText() +
-                ", within=" + getWithin().getText() +
-                '}';
+    public void lifeCycle() {
+        world.getAllWarriors().forEach(obj -> {
+            if (boundsIntersectOtherBounds(obj, this))
+                getState().add(obj);
+            else getState().remove(obj);
+        });
+        setWithin(getState().size());
+        getState().forEach(this::inflictDamage);
+    }
+
+    @Override
+    public void inflictDamage(Kamikaze kamikaze) {
+        kamikaze.setHealth(kamikaze.getHealth() - 0.005);
     }
 }

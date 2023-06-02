@@ -2,29 +2,20 @@ package data.micro_objects;
 
 import data.Methods.Utilities;
 
-import static app.Play.*;
-
 public class SSO extends SimpleSoldier {
     private Kamikaze aim;
 
     public SSO(String name, double health) {
         super(name, health);
-        setMove(7);
+        setMove(0.9);
         setArmor(100);
-        setDamage(7);
+        setDamage(0.4);
         getCircle().setRadius(200);
     }
 
     @Override
     public void lifeCycle() {
-        world.getAllWarriors().forEach(e -> {
-            if (!e.equals(this) && e.getTeam() != this.getTeam() && !this.isInMacro() && !e.isInMacro()) {
-                if (e.getImageView().getBoundsInParent().intersects(this.getCircle().getBoundsInParent())) {
-                    this.inflictDamage(e);
-                    if (e.getHealth() <= 0) this.getMurders().implementCount();
-                }
-            }
-        });
+        fight();
         if (!isElect() && !isInMacro() && isActive()) {
             if (isEmptyAim()) {
                 Utilities.whatToDo(this);
@@ -53,13 +44,7 @@ public class SSO extends SimpleSoldier {
 
     @Override
     public void inflictDamage(Kamikaze warrior) {
-        if (warrior.getArmor() > 0)
-            warrior.setArmor(warrior.getArmor() - this.getDamage());
-        else if (warrior.getArmor() < 0) {
-            warrior.setHealth(warrior.getHealth() - Math.abs(warrior.getArmor()));
-            warrior.setArmor(0);
-        } else if (warrior.getArmor() == 0)
-            warrior.setHealth(warrior.getHealth() - this.getDamage());
+        damage(warrior);
     }
 
     public Kamikaze getAim() {

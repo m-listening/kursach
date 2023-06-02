@@ -5,15 +5,19 @@ import java.util.Random;
 public class SimpleSoldier extends Kamikaze {
     public SimpleSoldier(String name, double health) {
         super(name, health);
-        setMove(5);
+        setMove(0.8);
         setArmor(75);
-        setDamage(5);
+        setDamage(0.2);
         getCircle().setRadius(100);
     }
 
     @Override
     public void inflictDamage(Kamikaze warrior) {
         if (new Random().nextInt() * 3 == 2) return;
+        damage(warrior);
+    }
+
+    public void damage(Kamikaze warrior) {
         if (warrior.getArmor() > 0)
             warrior.setArmor(warrior.getArmor() - this.getDamage());
         else if (warrior.getArmor() < 0) {
@@ -22,4 +26,5 @@ public class SimpleSoldier extends Kamikaze {
         } else if (warrior.getArmor() == 0)
             warrior.setHealth(warrior.getHealth() - this.getDamage());
     }
+
 }

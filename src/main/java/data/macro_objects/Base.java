@@ -1,7 +1,9 @@
 package data.macro_objects;
 
-import data.Methods.Utilities;
 import app.Play;
+import data.Methods.Utilities;
+import data.interfaces.LifeCycle;
+import data.micro_objects.Kamikaze;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -11,13 +13,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import data.micro_objects.Kamikaze;
 
-import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class Base {
+public abstract class Base implements LifeCycle {
     private double x, y;
     private final Image image;
     private final ImageView imageView;
@@ -26,7 +26,7 @@ public abstract class Base {
     private final Group group;
     private Set<Kamikaze> state;
 
-    public Base(int typeLvl) throws FileNotFoundException {
+    public Base() {
         state = new HashSet<>();
 
         name = new Label();
@@ -43,13 +43,23 @@ public abstract class Base {
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
 
-        image = Utilities.lvlImage(typeLvl, true);
+        image = Utilities.getImage(this.getClass().getSimpleName());
         imageView = new ImageView(image);
         imageView.setLayoutX(-150);
         imageView.setLayoutY(-150);
 
         group = new Group(imageView, circle, name, within);
-        Play.world.getWorldGroup().getChildren().add(group);
+        Play.world.getWorldPane().getChildren().add(group);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" +
+                "x=" + getX() +
+                ", y=" + getY() +
+                ", name=" + getName().getText() +
+                ", within=" + getWithin().getText() +
+                '}';
     }
 
     public void setState(Set<Kamikaze> state) {

@@ -29,7 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import static app.Play.*;
+import static app.Play.globalStage;
+import static app.Play.world;
+import static data.Methods.CONSTANTS.*;
 
 public class Utilities {
 
@@ -65,10 +67,12 @@ public class Utilities {
         }
     }
 
-    public static void initializeStartGame() throws FileNotFoundException {
-        Bunker bunker = new Bunker(sceneSizeMaxX * 1.5 / 2, sceneSizeMaxY);
-        GreenBase greenBase = new GreenBase(400, sceneSizeMaxY);
-        RedBase redBase = new RedBase(sceneSizeMaxX * 1.5 - 400, sceneSizeMaxY);
+    public static void initializeStartWorld() throws FileNotFoundException {
+        Bunker bunker = new Bunker(WORLD_SIZE_WIDTH_MAX / 2, WORLD_SIZE_HEIGHT_MAX / 2);
+        GreenBase greenBase = new GreenBase(400, 400);
+        RedBase redBase = new RedBase(WORLD_SIZE_HEIGHT_MAX - 400, WORLD_SIZE_HEIGHT_MAX - 400);
+
+        world.setCamera();
 
         world.getBaseSet().add(bunker);
         world.getBaseSet().add(greenBase);
@@ -76,15 +80,13 @@ public class Utilities {
 
         List<Kamikaze> warriorList = new ArrayList<>();
 
-        int count = 8, flag = count;
+        int count = 40, flag = count;
         for (int i = 0; i < count; i++) {
-            int rand = new Random().nextInt(3);
+            int rand = new Random().nextInt(0, 2);
             if (rand == 0) {
                 warriorList.add(new Kamikaze("", 100));
             } else if (rand == 1) {
                 warriorList.add(new SimpleSoldier("", 100));
-            } else {
-                warriorList.add(new SSO("", 100));
             }
         }
         for (Kamikaze obj : warriorList) {
@@ -99,7 +101,7 @@ public class Utilities {
             x = coordinatesBaseX(team);
             y = coordinatesBaseY(team);
 
-            updateWarrior(obj, x, y, lvl, team);
+            updateWarrior(obj, x, y, team);
             world.getWarriorsActive().add(obj);
             world.getAllWarriors().add(obj);
 
@@ -127,20 +129,37 @@ public class Utilities {
         return 0;
     }
 
-    /**
-     * @param lvl -> 1 -> kamikaze, 2 -> simple soldier, 3-> SSO
-     * @return -> new Image, if lvl != 1,2,3, return Image lvl 1
-     */
-    public static Image lvlImage(int lvl, boolean isMacro) throws FileNotFoundException {
-        if (isMacro) {
-            if (lvl == 2) return new Image("greenB.png", 300, 300, false, false);
-            else if (lvl == 3) return new Image("bunker.png", 300, 300, false, false);
-            return new Image("redB.png", 300, 300, false, false);
-        } else {
-            if (lvl == 2) return new Image("sS.png", 50, 50, false, false);
-            if (lvl == 3) return new Image("SSO.png", 50, 50, false, false);
-            return new Image("kamikaze.png", 50, 50, false, false);
+    public static Image getImage(String name) {
+        switch (name) {
+            case "GreenBase" -> {
+                return new Image("greenB.png", 300, 300, false, false);
+            }
+            case "RedBase" -> {
+                return new Image("redB.png", 300, 300, false, false);
+            }
+            case "Bunker" -> {
+                return new Image("bunker.png", 300, 300, false, false);
+            }
+            case "Kamikaze" -> {
+                return new Image("kamikaze.png", 50, 50, false, false);
+            }
+            case "SimpleSoldier" -> {
+                return new Image("sS.png", 50, 50, false, false);
+            }
+            case "SSO" -> {
+                return new Image("SSO.png", 50, 50, false, false);
+            }
+            case "Icon" -> {
+                return new Image("icon.png");
+            }
+            case "Map" -> {
+                return new Image("map.png");
+            }
+            case "Fight" -> {
+                return new Image("fight.png", 20, 20, false, false);
+            }
         }
+        return null;
     }
 
     public static void mousePressedHandler(MouseEvent event) throws IOException {
@@ -168,7 +187,7 @@ public class Utilities {
                     if (k == null) return;
                     k.flipInMacro();
                     flowPane.getChildren().removeAll(k.getRectangle(), k.getImageView(), k.getName(), k.getLife());
-                    world.getWorldGroup().getChildren().addAll(k.getCircle(), k.getRectangle(), k.getImageView(), k.getName(), k.getLife());
+                    addToWorld(k);
                     base.getState().remove(k);
                     k.setX(base.getX() + 160);
                 });
@@ -192,31 +211,52 @@ public class Utilities {
             if (event.getButton().equals(MouseButton.SECONDARY)) {
                 electWarrior(event.getX(), event.getY());
             }
+            return;
+        }
+        if (event.getButton().equals(MouseButton.PRIMARY)) {
+            if (world.getMiniMap().getView().contains(event.getX(), event.getY())) {
+                double x = world.getCamera().calculateX(event.getX());
+                double y = world.getCamera().calculateY(event.getY());
+                world.getCamera().moveCameraByX(-x);
+                world.getCamera().moveCameraByY(-y);
+            }
         }
     }
 
     public static void keyPressedHandler(KeyEvent event) {
         switch (event.getCode()) {
             case W -> {
-                if (world.getWorldGroup().getTranslateY() + 20 <= 0)
-                    world.getWorldGroup().setTranslateY(world.getWorldGroup().getTranslateY() + 20);
-            }
-
-            case A -> {
-                if (world.getWorldGroup().getTranslateX() + 20 <= 0)
-                    world.getWorldGroup().setTranslateX(world.getWorldGroup().getTranslateX() + 20);
+                if (world.getCamera().getPositionY() + MOVE_CAMERA_BY_Y <= 0)
+                    world.getCamera().setPositionY(1);
             }
 
             case S -> {
-                if (Math.abs(world.getWorldGroup().getTranslateY() - 20) <= sceneSizeMaxY)
-                    world.getWorldGroup().setTranslateY(world.getWorldGroup().getTranslateY() - 20);
+                if (Math.abs(world.getCamera().getPositionY() - MOVE_CAMERA_BY_Y) <= WORLD_CAMERA_SIZE_HEIGHT)
+                    world.getCamera().setPositionY(-1);
+            }
+
+            case A -> {
+                if (world.getCamera().getPositionX() + MOVE_CAMERA_BY_X <= 0)
+                    world.getCamera().setPositionX(1);
             }
 
             case D -> {
-                if (Math.abs(world.getWorldGroup().getTranslateX() - 20) <= sceneSizeMaxX)
-                    world.getWorldGroup().setTranslateX(world.getWorldGroup().getTranslateX() - 20);
+                if (Math.abs(world.getCamera().getPositionX() - MOVE_CAMERA_BY_X) <= WORLD_CAMERA_SIZE_WIDTH)
+                    world.getCamera().setPositionX(-1);
             }
-
+            case T -> {
+                world.getAllWarriors().forEach(e -> {
+                    if (e.isInMacro()) {
+                        world.getBaseSet().forEach(base -> base.getState().remove(e));
+                    }
+                    e.setActive(true);
+                    if (!world.getWarriorsActive().contains(e))
+                        world.getWarriorsActive().add(e);
+                    e.setAimX(WORLD_SIZE_WIDTH_MAX / 2);
+                    e.setAimY(WORLD_SIZE_HEIGHT_MAX / 2);
+                    e.flipSaint();
+                });
+            }
             case NUMPAD8 -> moveIfActiveAndElect(0, -10);
             case NUMPAD4 -> moveIfActiveAndElect(-10, 0);
             case NUMPAD6 -> moveIfActiveAndElect(10, 0);
@@ -250,22 +290,31 @@ public class Utilities {
     public static void addToMacro(Kamikaze object, Base base) {
         object.flipInMacro();
         if (object.isElect()) object.flipElect();
-        world.getWorldGroup().getChildren().removeAll(
-                object.getCircle(), object.getImageView(), object.getLife(), object.getName(), object.getRectangle());
+        removeFromWorld(object);
         base.getState().add(object);
     }
 
     public static void removeFromMacro(Kamikaze object, Base base) {
         object.flipInMacro();
         base.getState().remove(object);
-        world.getWorldGroup().getChildren().addAll(
-                object.getCircle(), object.getImageView(), object.getLife(), object.getName(), object.getRectangle());
+        addToWorld(object);
+        object.setX(base.getX());
+        object.setY(base.getY());
+    }
+
+    public static void removeFromWorld(Kamikaze object) {
+        world.getWorldPane().getChildren().removeAll(object.getCircle(), object.getImageView(), object.getLife(), object.getName(), object.getRectangle(), object.getIdentifierTeam(), object.getFightView());
+    }
+
+    public static void addToWorld(Kamikaze object) {
+        world.getWorldPane().getChildren().addAll(object.getCircle(), object.getImageView(), object.getLife(), object.getName(), object.getRectangle(), object.getIdentifierTeam(), object.getFightView());
     }
 
     private static Kamikaze checkClickWarrior(List<Kamikaze> list, double x, double y) {
         for (Kamikaze item : list)
-            if (item.getImageView().getBoundsInParent().contains(x - world.getWorldGroup().getTranslateX(),
-                    y - world.getWorldGroup().getTranslateY()) && !item.isInMacro())
+            if (item.getImageView().getBoundsInParent().contains(
+                    x - world.getWorldPane().getTranslateX(),
+                    y - world.getWorldPane().getTranslateY()) && !item.isInMacro())
                 return item;
         return null;
     }
@@ -279,15 +328,15 @@ public class Utilities {
 
     private static Base checkClickBase(List<Base> list, double x, double y) {
         for (Base base : list)
-            if (base.getGroup().boundsInParentProperty().get().contains(x - world.getWorldGroup().getTranslateX(),
-                    y - world.getWorldGroup().getTranslateY()))
+            if (base.getGroup().boundsInParentProperty().get().contains(x - world.getWorldPane().getTranslateX(),
+                    y - world.getWorldPane().getTranslateY()))
                 return base;
         return null;
     }
 
-    public static void updateWarrior(Kamikaze object, double x, double y, int lvl, Boolean team) throws FileNotFoundException {
+    public static void updateWarrior(Kamikaze object, double x, double y, Boolean team) {
         object.setTeam(team);
-        object.setImage(lvlImage(lvl, false));
+        object.setImage(getImage(object.getClass().getSimpleName()));
         object.getImageView().setImage(object.getImage());
         object.setX(x);
         object.setY(y);
@@ -297,8 +346,8 @@ public class Utilities {
     public static void moveIfActiveAndElect(double dx, double dy) {
         for (Kamikaze item : world.getElectedWarriors()) {
             if (item.isActive()) {
-                if (item.getX() + dx < sceneSizeMaxX * 1.5 && item.getX() + dx > 0) item.setX(item.getX() + dx);
-                if (item.getY() + dy < sceneSizeMaxY * 2 && item.getY() + dy > 0) item.setY(item.getY() + dy);
+                if (item.getX() + dx < WORLD_SIZE_WIDTH_MAX * 1.5 && item.getX() + dx > 0) item.setX(item.getX() + dx);
+                if (item.getY() + dy < WORLD_SIZE_HEIGHT_MAX * 2 && item.getY() + dy > 0) item.setY(item.getY() + dy);
             }
         }
     }
@@ -314,8 +363,8 @@ public class Utilities {
     }
 
     public static void deleteWarrior(List<Kamikaze> list) {
-        for (Kamikaze item : list)
-            world.getWorldGroup().getChildren().removeAll(item.getCircle(), item.getImageView(), item.getLife(), item.getName(), item.getRectangle());
+        for (Kamikaze object : list)
+            removeFromWorld(object);
         list.forEach(world.getAllWarriors()::remove);
         list.forEach(world.getWarriorsActive()::remove);
         list.forEach(world.getElectedWarriors()::remove);
@@ -365,8 +414,25 @@ public class Utilities {
                 }
             }
         } else {
-            kamikaze.setAimX(new Random().nextDouble() * sceneSizeMinX * 1.5);
-            kamikaze.setAimY(new Random().nextDouble() * sceneSizeMaxY * 2);
+            kamikaze.setAimX(new Random().nextDouble() * WORLD_SIZE_WIDTH_MAX);
+            kamikaze.setAimY(new Random().nextDouble() * WORLD_SIZE_HEIGHT_MAX);
+        }
+    }
+
+    public static boolean boundsIntersectOtherBounds(Kamikaze object, Base base) {
+        return object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent()) && !base.getState().contains(object);
+    }
+
+    public static void interactionWithMacro(Base base, boolean teamBase) {
+        for (Kamikaze object : world.getAllWarriors()) {
+            if (object.isOffering()) continue;
+            if (boundsIntersectOtherBounds(object, base) && object.getTeam() != teamBase)
+                base.inflictDamage(object);
+            if (boundsIntersectOtherBounds(object, base) && object.getTeam() == teamBase && !base.getState().contains(object) && base.getState().size() < 3) {
+                if (!(object instanceof SSO))
+                    if (new Random().nextInt(0, 1000) == 3)
+                        world.addToBase(object, base);
+            }
         }
     }
 }

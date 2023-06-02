@@ -1,13 +1,19 @@
 package data.macro_objects;
 
-import java.io.FileNotFoundException;
+import data.Methods.Utilities;
+import data.micro_objects.Kamikaze;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import static data.Methods.Utilities.interactionWithMacro;
 
 public class GreenBase extends Base {
 
-    public GreenBase(double x, double y) throws FileNotFoundException {
-        super(2);
+    public GreenBase(double x, double y) {
+        super();
 
-        getName().setText("GreenBase");
+        getName().setText("Бог зна Що");
         getWithin().setText("0");
 
         setX(x);
@@ -16,17 +22,36 @@ public class GreenBase extends Base {
         getGroup().setLayoutY(y);
     }
 
-    public GreenBase() throws FileNotFoundException {
+    public GreenBase() {
         this(150, 360);
     }
 
     @Override
-    public String toString() {
-        return "GreenBase{ " +
-                "x=" + getX() +
-                ", y=" + getY() +
-                ", name=" + getName().getText() +
-                ", within=" + getWithin().getText() +
-                '}';
+    public void lifeCycle() {
+        interactionWithMacro(this, true);
+        setWithin(getState().size());
+        ArrayList<Kamikaze> toRemoveFromMacro = new ArrayList<>();
+        getState().forEach(e -> {
+            if (e.getHealth() <= e.getMaxHealth())
+                e.setHealth(e.getHealth() + 0.1);
+            if (e.getHealth() >= e.getMaxHealth())
+                toRemoveFromMacro.add(e);
+        });
+        toRemoveFromMacro.forEach(e -> {
+            if (new Random().nextInt(0, 1000) == 3) {
+                Utilities.removeFromMacro(e, this);
+                if (!e.isPowerUp()) {
+                    e.setDamage(e.getDamage() * 2);
+                    e.setMove(e.getMove() + 2);
+                    e.setPowerUp(true);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void inflictDamage(Kamikaze kamikaze) {
+        if (!kamikaze.getTeam())
+            kamikaze.setHealth(kamikaze.getHealth() - 0.005);
     }
 }
