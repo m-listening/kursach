@@ -20,10 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,19 +29,24 @@ import java.util.Random;
 import static app.Play.globalStage;
 import static app.Play.world;
 import static data.Methods.CONSTANTS.*;
+import static data.Methods.Serialization.MicroObjectConfig.convertToConfig;
 
 public class Utilities {
 
-    public static void json(Object object) throws IOException {
-        Writer file = new FileWriter("data.json", true);
+    public static void json(ArrayList<Kamikaze> arrayToJson) throws IOException {
+        FileWriter file = new FileWriter("data.json", false);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonGenerator jsonGenerator = objectMapper.getFactory().createGenerator(file);
 
-        jsonGenerator.writeStartObject();
-        jsonGenerator.writeFieldName(object.getClass().getSimpleName());
-        jsonGenerator.writeString(object.toString());
-        jsonGenerator.writeEndObject();
-        file.write("\n");
+        jsonGenerator.writeStartArray();
+        arrayToJson.forEach(object -> {
+            try {
+                jsonGenerator.writeObject(convertToConfig(object));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        jsonGenerator.writeEndArray();
         jsonGenerator.close();
     }
 
@@ -185,11 +187,10 @@ public class Utilities {
                 newScene.setOnMouseClicked(e -> {
                     Kamikaze k = checkClickOnWarriorInBase(kamikazeHashMap, e.getX(), e.getY());
                     if (k == null) return;
-                    k.flipInMacro();
                     flowPane.getChildren().removeAll(k.getRectangle(), k.getImageView(), k.getName(), k.getLife());
-                    addToWorld(k);
                     base.getState().remove(k);
-                    k.setX(base.getX() + 160);
+                    k.flipInMacro();
+                    addToWorld(k);
                 });
                 globalStage = new Stage();
                 globalStage.setTitle("Warriors in Base");
@@ -223,7 +224,7 @@ public class Utilities {
         }
     }
 
-    public static void keyPressedHandler(KeyEvent event) {
+    public static void keyPressedHandler(KeyEvent event) throws IOException {
         switch (event.getCode()) {
             case W -> {
                 if (world.getCamera().getPositionY() + MOVE_CAMERA_BY_Y <= 0)
@@ -257,6 +258,8 @@ public class Utilities {
                     e.flipSaint();
                 });
             }
+
+            case U -> json((ArrayList<Kamikaze>) world.getAllWarriors());
             case NUMPAD8 -> moveIfActiveAndElect(0, -10);
             case NUMPAD4 -> moveIfActiveAndElect(-10, 0);
             case NUMPAD6 -> moveIfActiveAndElect(10, 0);
@@ -285,6 +288,10 @@ public class Utilities {
             }
             case ESCAPE -> turnOf();
         }
+    }
+
+    private static void notification(String text) {
+
     }
 
     public static void addToMacro(Kamikaze object, Base base) {

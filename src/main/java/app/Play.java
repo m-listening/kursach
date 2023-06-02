@@ -29,7 +29,13 @@ public class Play extends Application {
                 throw new RuntimeException(e);
             }
         });
-        scene.setOnKeyPressed(Utilities::keyPressedHandler);
+        scene.setOnKeyPressed(event -> {
+            try {
+                Utilities.keyPressedHandler(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         stage.getIcons().add(new Image("icon.jpg"));
         stage.setTitle("Game!");
         stage.setScene(scene);

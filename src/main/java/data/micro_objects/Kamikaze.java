@@ -2,6 +2,7 @@ package data.micro_objects;
 
 import data.Methods.Utilities;
 import data.interfaces.LifeCycle;
+import data.macro_objects.Base;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,6 +12,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static app.Play.world;
@@ -20,22 +22,31 @@ import static data.Methods.Utilities.addToWorld;
 import static data.Methods.Utilities.whatToDo;
 
 public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
+    private double maxHealth;
     private double move;
-    private double x, y, health;
-    private final double maxHealth;
+    private double x;
+    private double y;
+    private double aimX;
+    private double aimY;
+    private double health;
+    private double damage;
+    private double armor;
     private boolean powerUp;
-    private double aimX, aimY;
-    private boolean elect, active, inMacro;
+    private boolean elect;
+    private boolean active;
+    private boolean inMacro;
+    private boolean offering;
     private Boolean team;
-    private Image image, inFightImage;
-    private ImageView imageView, fightView;
+    private Image image;
+    private Image inFightImage;
+    private ImageView imageView;
+    private ImageView fightView;
     private Label name;
-    private Circle circle, identifierTeam;
+    private Circle circle;
+    private Circle identifierTeam;
     private Rectangle rectangle;
     private Line life;
     private Murder murders;
-    private double armor, damage;
-    private boolean offering;
 
     public Kamikaze(String name, double health) {
         move = 1;
@@ -48,7 +59,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         aimX = -1000;
 
         murders = new Murder();
-
         this.name = new Label(name);
         this.name.setFont(Font.font("Impact", 14));
 
@@ -277,6 +287,10 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         if (getTeam()) {
             identifierTeam.setFill(Color.GREEN);
         } else identifierTeam.setFill(Color.RED);
+    }
+
+    public void setMaxHealth(double maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     public boolean isOffering() {
