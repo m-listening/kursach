@@ -10,17 +10,29 @@ import data.macro_objects.RedBase;
 import data.micro_objects.Kamikaze;
 import data.micro_objects.SSO;
 import data.micro_objects.SimpleSoldier;
+import javafx.animation.PauseTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +41,12 @@ import java.util.Random;
 import static app.Play.globalStage;
 import static app.Play.world;
 import static data.Methods.CONSTANTS.*;
-import static data.Methods.Serialization.MicroObjectConfig.convertToConfig;
+import static data.Methods.MicroObjectConfig.convertToConfig;
 
 public class Utilities {
 
-    public static void json(ArrayList<Kamikaze> arrayToJson) throws IOException {
-        FileWriter file = new FileWriter("data.json", false);
+    public static void json(List<Kamikaze> arrayToJson, String path) throws IOException {
+        FileWriter file = new FileWriter(path, false);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonGenerator jsonGenerator = objectMapper.getFactory().createGenerator(file);
 
@@ -48,6 +60,10 @@ public class Utilities {
         });
         jsonGenerator.writeEndArray();
         jsonGenerator.close();
+    }
+
+    public static void jsonParseMicroObject(File file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
     }
 
     /**
@@ -69,34 +85,38 @@ public class Utilities {
         }
     }
 
-    public static void initializeStartWorld() throws FileNotFoundException {
-        Bunker bunker = new Bunker(WORLD_SIZE_WIDTH_MAX / 2, WORLD_SIZE_HEIGHT_MAX / 2);
+    public static void createStartWorld() {
+        Bunker bunker = new Bunker(WORLD_SIZE_WIDTH / 2, WORLD_SIZE_HEIGHT / 2);
         GreenBase greenBase = new GreenBase(400, 400);
-        RedBase redBase = new RedBase(WORLD_SIZE_HEIGHT_MAX - 400, WORLD_SIZE_HEIGHT_MAX - 400);
-
-        world.setCamera();
+        RedBase redBase = new RedBase(WORLD_SIZE_HEIGHT - 400, WORLD_SIZE_HEIGHT - 400);
 
         world.getBaseSet().add(bunker);
         world.getBaseSet().add(greenBase);
         world.getBaseSet().add(redBase);
+    }
 
+    public static void createMicroObjects(int count) {
+        List<Kamikaze> warriorList = createWarriors(count);
+        setCoordinatesForWarriors(warriorList);
+    }
+
+    private static List<Kamikaze> createWarriors(int count) {
         List<Kamikaze> warriorList = new ArrayList<>();
-
-        int count = 40, flag = count;
         for (int i = 0; i < count; i++) {
-            int rand = new Random().nextInt(0, 2);
-            if (rand == 0) {
-                warriorList.add(new Kamikaze("", 100));
-            } else if (rand == 1) {
-                warriorList.add(new SimpleSoldier("", 100));
-            }
+            if (i % 2 == 0) warriorList.add(new Kamikaze("Agent " + i, 200));
+            else warriorList.add(new SimpleSoldier("Agent " + i, 220));
         }
-        for (Kamikaze obj : warriorList) {
-            int lvl = 1;
+        return warriorList;
+    }
+
+    private static void setCoordinatesForWarriors(List<Kamikaze> warriors) {
+        int count = warriors.size();
+        int flag = count;
+        for (Kamikaze obj : warriors) {
             double x, y;
             boolean team;
-            if (obj instanceof SSO) lvl = 3;
-            else if (obj instanceof SimpleSoldier) lvl = 2;
+            if (obj instanceof SSO) ;
+            else if (obj instanceof SimpleSoldier) ;
 
             team = count / 2 < flag;
 
@@ -224,7 +244,7 @@ public class Utilities {
         }
     }
 
-    public static void keyPressedHandler(KeyEvent event) throws IOException {
+    public static void keyPressedHandler(KeyEvent event) throws IOException, ClassNotFoundException {
         switch (event.getCode()) {
             case W -> {
                 if (world.getCamera().getPositionY() + MOVE_CAMERA_BY_Y <= 0)
@@ -247,19 +267,18 @@ public class Utilities {
             }
             case T -> {
                 world.getAllWarriors().forEach(e -> {
-                    if (e.isInMacro()) {
-                        world.getBaseSet().forEach(base -> base.getState().remove(e));
-                    }
+                    if (e.isInMacro()) world.getBaseSet().forEach(base -> Utilities.removeFromMacro(e, base));
                     e.setActive(true);
                     if (!world.getWarriorsActive().contains(e))
                         world.getWarriorsActive().add(e);
-                    e.setAimX(WORLD_SIZE_WIDTH_MAX / 2);
-                    e.setAimY(WORLD_SIZE_HEIGHT_MAX / 2);
-                    e.flipSaint();
+                    e.setAimX(WORLD_SIZE_WIDTH / 2);
+                    e.setAimY(WORLD_SIZE_HEIGHT / 2);
+                    e.flipOffering();
                 });
             }
 
-            case U -> json((ArrayList<Kamikaze>) world.getAllWarriors());
+            case F1 -> saveDataToFile();
+            case F2 -> openDataFile();
             case NUMPAD8 -> moveIfActiveAndElect(0, -10);
             case NUMPAD4 -> moveIfActiveAndElect(-10, 0);
             case NUMPAD6 -> moveIfActiveAndElect(10, 0);
@@ -291,22 +310,42 @@ public class Utilities {
     }
 
     private static void notification(String text) {
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
 
+        Label label = new Label(text);
+        Button showChosen = new Button("Show chosen");
+        vBox.getChildren().addAll(label, showChosen);
+
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(4));
+        pauseTransition.setOnFinished(e -> globalStage.close());
+        pauseTransition.play();
+        showChosen.setOnAction(e -> {
+            pauseTransition.stop();
+            globalStage.close();
+            showChosen();
+        });
+
+        globalStage = new Stage();
+        globalStage.setScene(new Scene(vBox, 100, 100));
+        globalStage.setTitle("Notification");
+        globalStage.show();
     }
 
     public static void addToMacro(Kamikaze object, Base base) {
+        removeFromWorld(object);
         object.flipInMacro();
         if (object.isElect()) object.flipElect();
-        removeFromWorld(object);
         base.getState().add(object);
     }
 
     public static void removeFromMacro(Kamikaze object, Base base) {
-        object.flipInMacro();
-        base.getState().remove(object);
-        addToWorld(object);
-        object.setX(base.getX());
-        object.setY(base.getY());
+        if (base.getState().remove(object)) {
+            addToWorld(object);
+            object.flipInMacro();
+            object.setX(base.getX());
+            object.setY(base.getY());
+        }
     }
 
     public static void removeFromWorld(Kamikaze object) {
@@ -353,8 +392,7 @@ public class Utilities {
     public static void moveIfActiveAndElect(double dx, double dy) {
         for (Kamikaze item : world.getElectedWarriors()) {
             if (item.isActive()) {
-                if (item.getX() + dx < WORLD_SIZE_WIDTH_MAX * 1.5 && item.getX() + dx > 0) item.setX(item.getX() + dx);
-                if (item.getY() + dy < WORLD_SIZE_HEIGHT_MAX * 2 && item.getY() + dy > 0) item.setY(item.getY() + dy);
+                item.moveActive(dx, dy);
             }
         }
     }
@@ -367,6 +405,20 @@ public class Utilities {
         if (world.getElectedWarriors().contains(objectWarrior))
             world.getElectedWarriors().remove(objectWarrior);
         else world.getElectedWarriors().add(objectWarrior);
+        notification("Chosen: " + world.getElectedWarriors().size());
+    }
+
+    private static void showChosen() {
+        VBox vBox = new VBox();
+        ObservableList<String> items = FXCollections.observableArrayList();
+        ListView<String> listView = new ListView<>();
+        world.getElectedWarriors().forEach(e -> items.add(e.toString()));
+        listView.setItems(items);
+        vBox.getChildren().add(listView);
+        globalStage = new Stage();
+        globalStage.setScene(new Scene(vBox, 800, 200));
+        globalStage.setTitle("Chosen warriors");
+        globalStage.show();
     }
 
     public static void deleteWarrior(List<Kamikaze> list) {
@@ -421,8 +473,8 @@ public class Utilities {
                 }
             }
         } else {
-            kamikaze.setAimX(new Random().nextDouble() * WORLD_SIZE_WIDTH_MAX);
-            kamikaze.setAimY(new Random().nextDouble() * WORLD_SIZE_HEIGHT_MAX);
+            kamikaze.setAimX(new Random().nextDouble() * WORLD_SIZE_WIDTH);
+            kamikaze.setAimY(new Random().nextDouble() * WORLD_SIZE_HEIGHT);
         }
     }
 
@@ -437,9 +489,33 @@ public class Utilities {
                 base.inflictDamage(object);
             if (boundsIntersectOtherBounds(object, base) && object.getTeam() == teamBase && !base.getState().contains(object) && base.getState().size() < 3) {
                 if (!(object instanceof SSO))
-                    if (new Random().nextInt(0, 1000) == 3)
+                    if (new Random().nextInt(0, 1000) == 3) {
                         world.addToBase(object, base);
+                    }
             }
         }
+    }
+
+    public static void saveDataToFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("C:\\"));
+        fileChooser.setInitialFileName("data.json");
+        FileChooser.ExtensionFilter textFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+        fileChooser.getExtensionFilters().add(textFilter);
+        File file = fileChooser.showSaveDialog(globalStage);
+        if (file != null) {
+            json(world.getAllWarriors(), file.getPath());
+        } else {
+            System.out.println("Вибір файлу скасовано.");
+        }
+    }
+
+    private static void openDataFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("C:\\"));
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("JSON files(*.json)", "*.json");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        File file = fileChooser.showOpenDialog(globalStage);
+        jsonParseMicroObject(file);
     }
 }

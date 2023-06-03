@@ -7,11 +7,6 @@ public class Camera {
     private double positionX;
     private double positionY;
 
-    public Camera() {
-        world.getWorldPane().setTranslateX(0);
-        world.getWorldPane().setTranslateY(0);
-    }
-
     public void moveCameraByX(double positionX) {
         this.positionX = positionX;
         world.getWorldPane().setTranslateX(positionX);

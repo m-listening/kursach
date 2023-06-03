@@ -2,7 +2,6 @@ package data.micro_objects;
 
 import data.Methods.Utilities;
 import data.interfaces.LifeCycle;
-import data.macro_objects.Base;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,8 +15,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import static app.Play.world;
-import static data.Methods.CONSTANTS.WORLD_SIZE_HEIGHT_MAX;
-import static data.Methods.CONSTANTS.WORLD_SIZE_WIDTH_MAX;
+import static data.Methods.CONSTANTS.WORLD_SIZE_HEIGHT;
+import static data.Methods.CONSTANTS.WORLD_SIZE_WIDTH;
 import static data.Methods.Utilities.addToWorld;
 import static data.Methods.Utilities.whatToDo;
 
@@ -147,10 +146,20 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     }
 
     public void moveActive(double stepByX, double stepByY) {
-        if (this.getX() + stepByX < WORLD_SIZE_WIDTH_MAX && this.getX() + stepByX > 0)
+        if (borderCheckByX(stepByX))
             this.setX(this.getX() + stepByX);
-        if (this.getY() + stepByY < WORLD_SIZE_HEIGHT_MAX && this.getY() + stepByY > 0)
+        if (borderCheckByY(stepByY))
             this.setY(this.getY() + stepByY);
+    }
+
+    private boolean borderCheckByX(double stepByX) {
+        return getX() + stepByX < WORLD_SIZE_WIDTH
+                && getX() + stepByX > 0;
+    }
+
+    private boolean borderCheckByY(double stepByY) {
+        return getY() + stepByY < WORLD_SIZE_HEIGHT
+                && getY() + stepByY > 0;
     }
 
     @Override
@@ -199,12 +208,12 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Kamikaze kamikaze = (Kamikaze) o;
-        return Objects.equals(imageView, kamikaze.imageView) && Objects.equals(name, kamikaze.name) && Objects.equals(circle, kamikaze.circle) && Objects.equals(rectangle, kamikaze.rectangle) && Objects.equals(life, kamikaze.life) && Objects.equals(murders, kamikaze.murders);
+        return Objects.equals(imageView, kamikaze.imageView) && Objects.equals(fightView, kamikaze.fightView) && Objects.equals(name, kamikaze.name) && Objects.equals(circle, kamikaze.circle) && Objects.equals(identifierTeam, kamikaze.identifierTeam) && Objects.equals(rectangle, kamikaze.rectangle) && Objects.equals(life, kamikaze.life);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imageView, name, circle, rectangle, life, murders);
+        return Objects.hash(imageView, fightView, name, circle, identifierTeam, rectangle, life);
     }
 
     static {
@@ -297,8 +306,12 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         return offering;
     }
 
-    public void flipSaint() {
+    public void flipOffering() {
         this.offering = !offering;
+    }
+
+    public void setElect(boolean elect) {
+        this.elect = elect;
     }
 
     public Circle getIdentifierTeam() {

@@ -7,6 +7,7 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -15,11 +16,11 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
+import static data.Methods.CONSTANTS.SCENE_SIZE_X;
+import static data.Methods.CONSTANTS.SCENE_SIZE_Y;
 import static data.Methods.Utilities.*;
 
 public class World {
@@ -30,8 +31,9 @@ public class World {
     private final StackPane game;
     private final Pane worldPane;
     private final MiniMap miniMap;
-    private Camera camera;
+    private final Camera camera;
     private final ImageView view = new ImageView(getImage("Map"));
+    private final Scene scene;
 
     public World() {
         electedWarriors = new HashSet<>();
@@ -42,6 +44,9 @@ public class World {
         worldPane = new Pane(view);
         miniMap = new MiniMap();
         game = new StackPane(worldPane, miniMap.getMap());
+
+        camera = new Camera();
+
         AnimationTimer activeWorld = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -57,16 +62,42 @@ public class World {
             }
         };
         activeWorld.start();
+
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             WritableImage screen = worldPane.snapshot(new SnapshotParameters(), null);
             miniMap.getView().setImage(screen);
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
+        scene = new Scene(game, SCENE_SIZE_X, SCENE_SIZE_Y);
+        scene.setOnMouseClicked(event1 -> {
+            try {
+                Utilities.mousePressedHandler(event1);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        scene.setOnKeyPressed(event -> {
+            try {
+                Utilities.keyPressedHandler(event);
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    public void setCamera() {
-        this.camera = new Camera();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        World world = (World) o;
+        return Objects.equals(allWarriors, world.allWarriors) && Objects.equals(warriorsActive, world.warriorsActive) && Objects.equals(electedWarriors, world.electedWarriors) && Objects.equals(baseSet, world.baseSet) && Objects.equals(game, world.game) && Objects.equals(worldPane, world.worldPane) && Objects.equals(miniMap, world.miniMap) && Objects.equals(camera, world.camera) && Objects.equals(view, world.view) && Objects.equals(scene, world.scene);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(allWarriors, warriorsActive, electedWarriors, baseSet, game, worldPane, miniMap, camera, view, scene);
     }
 
     public Camera getCamera() {
@@ -92,8 +123,17 @@ public class World {
         electedWarriors.remove(object);
     }
 
-    public void initialize() throws FileNotFoundException {
-        initializeStartWorld();
+    public void initializeWithMicroObjects(int count) {
+        createStartWorld();
+        createMicroObjects(count);
+    }
+
+    public void initializeWithoutMicroObjects() {
+        createStartWorld();
+    }
+
+    public Scene getScene() {
+        return scene;
     }
 
     public MiniMap getMiniMap() {

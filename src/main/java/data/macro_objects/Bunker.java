@@ -24,12 +24,12 @@ public class Bunker extends Base {
     @Override
     public void lifeCycle() {
         world.getAllWarriors().forEach(obj -> {
-            if (boundsIntersectOtherBounds(obj, this))
+            if (boundsIntersectOtherBounds(obj, this) && !getState().contains(obj))
                 getState().add(obj);
-            else getState().remove(obj);
+            else if(!boundsIntersectOtherBounds(obj, this))getState().remove(obj);
         });
-        setWithin(getState().size());
         getState().forEach(this::inflictDamage);
+        setWithin(getState().size());
     }
 
     @Override
