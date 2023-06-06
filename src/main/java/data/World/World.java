@@ -124,7 +124,7 @@ public class World {
     }
 
     public void initializeWithMicroObjects(int count) {
-        createStartWorld();
+        initializeWithoutMicroObjects();
         createMicroObjects(count);
     }
 

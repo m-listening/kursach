@@ -12,7 +12,7 @@ public class Play extends Application {
     @Override
     public void start(Stage stage) {
         world = new World();
-        world.initializeWithMicroObjects(100);
+        world.initializeWithMicroObjects(400);
         stage.getIcons().add(new Image("icon.jpg"));
         stage.setTitle("Game!");
         stage.setScene(world.getScene());

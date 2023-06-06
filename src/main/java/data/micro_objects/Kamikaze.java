@@ -1,5 +1,6 @@
 package data.micro_objects;
 
+import data.Methods.Team;
 import data.Methods.Utilities;
 import data.interfaces.LifeCycle;
 import javafx.scene.control.Label;
@@ -33,7 +34,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     private boolean active;
     private boolean inMacro;
     private boolean offering;
-    private Boolean team;
+    private Team team;
     private Image image;
     private Image inFightImage;
     private ImageView imageView;
@@ -178,7 +179,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
                 ", elect=" + elect +
                 ", active=" + active +
                 ", inMacro=" + inMacro +
-                ", team=" + (team != null ? team ? "Green" : "Red" : null) +
+                ", team=" + getTeam() +
                 '}';
     }
 
@@ -294,7 +295,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     }
 
     private void setColorIdentifierTeam() {
-        if (getTeam()) {
+        if (getTeam().equals(Team.GREEN)) {
             identifierTeam.setFill(Color.GREEN);
         } else identifierTeam.setFill(Color.RED);
     }
@@ -385,11 +386,11 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         return rectangle;
     }
 
-    public Boolean getTeam() {
+    public Team getTeam() {
         return team;
     }
 
-    public void setTeam(Boolean team) {
+    public void setTeam(Team team) {
         this.team = team;
         setColorIdentifierTeam();
     }

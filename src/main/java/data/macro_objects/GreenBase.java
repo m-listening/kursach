@@ -1,18 +1,19 @@
 package data.macro_objects;
 
+import data.Methods.Team;
 import data.Methods.Utilities;
 import data.micro_objects.Kamikaze;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import static data.Methods.Team.*;
 import static data.Methods.Utilities.interactionWithMacro;
 
 public class GreenBase extends Base {
-
     public GreenBase(double x, double y) {
         super();
-
+        setTeam(GREEN);
         getName().setText("Бог зна Що");
         getWithin().setText("0");
 
@@ -28,7 +29,7 @@ public class GreenBase extends Base {
 
     @Override
     public void lifeCycle() {
-        interactionWithMacro(this, true);
+        interactionWithMacro(this, getTeam());
         setWithin(getState().size());
         ArrayList<Kamikaze> toRemoveFromMacro = new ArrayList<>();
         getState().forEach(e -> {
@@ -51,7 +52,7 @@ public class GreenBase extends Base {
 
     @Override
     public void inflictDamage(Kamikaze kamikaze) {
-        if (!kamikaze.getTeam())
+        if (kamikaze.getTeam().equals(RED))
             kamikaze.setHealth(kamikaze.getHealth() - 0.005);
     }
 }

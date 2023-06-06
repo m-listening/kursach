@@ -1,18 +1,20 @@
 package data.macro_objects;
 
+import data.Methods.Team;
 import data.micro_objects.Kamikaze;
 import data.micro_objects.SSO;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import static data.Methods.Team.*;
 import static data.Methods.Utilities.*;
 
 public class RedBase extends Base {
 
     public RedBase(double x, double y) {
         super();
-
+        setTeam(RED);
         getName().setText("Україна");
         getWithin().setText("0");
 
@@ -28,7 +30,7 @@ public class RedBase extends Base {
 
     @Override
     public void lifeCycle()   {
-        interactionWithMacro(this, false);
+        interactionWithMacro(this, getTeam());
         setWithin(getState().size());
         boolean withoutSSO = true;
         if (getState().size() >= 3) {
@@ -55,7 +57,7 @@ public class RedBase extends Base {
         for (Kamikaze e : getState())
             health += e.getHealth();
         SSO sso = new SSO("IMBA", health);
-        updateWarrior(sso, this.getX(), this.getY(), false);
+        updateWarrior(sso, this.getX(), this.getY(), RED);
         addToMacro(sso, this);
         deleteWarrior(toRemove());
     }
@@ -71,7 +73,7 @@ public class RedBase extends Base {
 
     @Override
     public void inflictDamage(Kamikaze kamikaze) {
-        if (kamikaze.getTeam())
+        if (kamikaze.getTeam().equals(GREEN))
             kamikaze.setHealth(kamikaze.getHealth() - 0.005);
     }
 }

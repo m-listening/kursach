@@ -1,6 +1,7 @@
 package data.macro_objects;
 
 import app.Play;
+import data.Methods.Team;
 import data.Methods.Utilities;
 import data.interfaces.LifeCycle;
 import data.micro_objects.Kamikaze;
@@ -20,6 +21,7 @@ import java.util.Set;
 import static data.Methods.CONSTANTS.*;
 
 public abstract class Base implements LifeCycle {
+    private Team team;
     private double x, y;
     private final Image image;
     private final ImageView imageView;
@@ -66,6 +68,14 @@ public abstract class Base implements LifeCycle {
 
     public void setState(Set<Kamikaze> state) {
         this.state = state;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public double getX() {

@@ -38,6 +38,7 @@ import java.util.Random;
 import static app.Play.globalStage;
 import static app.Play.world;
 import static data.Methods.CONSTANTS.*;
+import static data.Methods.Team.*;
 
 public class Utilities {
 
@@ -89,9 +90,8 @@ public class Utilities {
         int flag = count;
         for (Kamikaze obj : warriors) {
             double x, y;
-            boolean team;
 
-            team = count / 2 < flag;
+            Team team = (count / 2 < flag) ? GREEN : RED;
 
             x = coordinatesBaseX(team);
             y = coordinatesBaseY(team);
@@ -102,21 +102,21 @@ public class Utilities {
         }
     }
 
-    private static double coordinatesBaseX(boolean team) {
+    private static double coordinatesBaseX(Team team) {
         for (Base e : world.getBaseSet()) {
-            if (e instanceof GreenBase && team)
+            if (e instanceof GreenBase && team.equals(GREEN))
                 return e.getX();
-            if (e instanceof RedBase && !team)
+            if (e instanceof RedBase && team.equals(RED))
                 return e.getX();
         }
         return 0;
     }
 
-    private static double coordinatesBaseY(boolean team) {
+    private static double coordinatesBaseY(Team team) {
         for (Base e : world.getBaseSet()) {
-            if (e instanceof GreenBase && team)
+            if (e instanceof GreenBase && team.equals(GREEN))
                 return e.getY();
-            if (e instanceof RedBase && !team)
+            if (e instanceof RedBase && team.equals(RED))
                 return e.getY();
         }
         return 0;
@@ -341,7 +341,7 @@ public class Utilities {
         return null;
     }
 
-    public static void updateWarrior(Kamikaze object, double x, double y, Boolean team) {
+    public static void updateWarrior(Kamikaze object, double x, double y, Team team) {
         object.setTeam(team);
         object.setImage(getImage(object.getClass().getSimpleName()));
         object.getImageView().setImage(object.getImage());
@@ -414,12 +414,12 @@ public class Utilities {
             }
         else if (rand == 2) {
             for (Base base : world.getBaseSet()) {
-                if (base instanceof GreenBase && kamikaze.getTeam()) {
+                if (base instanceof GreenBase && kamikaze.getTeam().equals(GREEN)) {
                     kamikaze.setAimX(base.getX());
                     kamikaze.setAimY(base.getY());
                     return;
                 }
-                if (base instanceof RedBase && !kamikaze.getTeam()) {
+                if (base instanceof RedBase && kamikaze.getTeam().equals(RED)) {
                     kamikaze.setAimX(base.getX());
                     kamikaze.setAimY(base.getY());
                     return;
@@ -435,12 +435,12 @@ public class Utilities {
         return object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent()) && !base.getState().contains(object);
     }
 
-    public static void interactionWithMacro(Base base, boolean teamBase) {
+    public static void interactionWithMacro(Base base, Team teamBase) {
         for (Kamikaze object : world.getAllWarriors()) {
             if (object.isOffering()) continue;
-            if (boundsIntersectOtherBounds(object, base) && object.getTeam() != teamBase)
+            if (boundsIntersectOtherBounds(object, base) && !object.getTeam().equals(teamBase))
                 base.inflictDamage(object);
-            if (boundsIntersectOtherBounds(object, base) && object.getTeam() == teamBase && !base.getState().contains(object) && base.getState().size() < 3) {
+            if (boundsIntersectOtherBounds(object, base) && object.getTeam().equals(teamBase) && !base.getState().contains(object) && base.getState().size() < 3) {
                 if (!(object instanceof SSO))
                     if (new Random().nextInt(0, 1000) == 3)
                         world.addToBase(object, base);

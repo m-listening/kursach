@@ -1,6 +1,7 @@
 package data.windows;
 
 import app.Play;
+import data.Methods.Team;
 import data.micro_objects.Kamikaze;
 import data.micro_objects.SSO;
 import data.micro_objects.SimpleSoldier;
@@ -38,12 +39,11 @@ public class Parameters {
             warrior = new SSO(name, health);
         else warrior = new Kamikaze(name, health);
 
-        Boolean selectedTeam;
-        if (RB_tmGreen.isSelected()) {
-            selectedTeam = true;
-        } else if (RB_tmRed.isSelected()) {
-            selectedTeam = false;
-        } else selectedTeam = null;
+        Team selectedTeam = null;
+        if (RB_tmGreen.isSelected())
+            selectedTeam = Team.GREEN;
+        else if (RB_tmRed.isSelected())
+            selectedTeam = Team.RED;
         updateWarrior(warrior, x, y, selectedTeam);
 
         Play.globalStage.close();

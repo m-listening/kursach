@@ -19,7 +19,7 @@ public record MicroObjectConfig(
         boolean powerUp,
         boolean active,
         boolean elect,
-        Boolean team,
+        Team team,
         int murders
 ) implements Serializable {
     public static MicroObjectConfig convertToConfig(Kamikaze kamikaze) {

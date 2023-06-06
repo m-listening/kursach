@@ -10,7 +10,6 @@ public class Bunker extends Base {
         super();
         getName().setText("Bunker");
         getWithin().setText("0");
-
         setX(x);
         setY(y);
         getGroup().setLayoutX(x);
