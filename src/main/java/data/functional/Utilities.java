@@ -56,7 +56,7 @@ public class Utilities {
             globalStage.setTitle(title);
             globalStage.getIcons().add(new Image("icon.jpg"));
             globalStage.setScene(secondScene);
-            globalStage.showAndWait();
+            globalStage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -237,11 +237,17 @@ public class Utilities {
             }
             case T -> world.getAllWarriors().forEach(e -> {
                 if (e.isInMacro()) world.getBaseSet().forEach(base -> removeFromMacro(e, base));
-                e.flipOffering();
+                e.setOffering(true);
                 e.setActive(true);
                 e.setElect(false);
                 e.setAimX(MACRO_BUNKER_LAYOUT_X);
                 e.setAimY(MACRO_BUNKER_LAYOUT_Y);
+            });
+            case R -> world.getAllWarriors().forEach(e->{
+                if(e.isOffering()){
+                    e.setOffering(false);
+                    e.clearAim();
+                }
             });
 
             case F1 -> saveDataToFile();
