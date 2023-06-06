@@ -3,11 +3,9 @@ package data.macro_objects;
 import data.micro_objects.Kamikaze;
 import data.micro_objects.SSO;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static app.Play.world;
 import static data.Methods.Utilities.*;
 
 public class RedBase extends Base {

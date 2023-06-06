@@ -1,6 +1,5 @@
 package data.World;
 
-import data.Methods.Utilities;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

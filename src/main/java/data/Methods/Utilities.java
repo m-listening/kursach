@@ -1,9 +1,6 @@
 package data.Methods;
 
 import app.Play;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import data.macro_objects.Base;
 import data.macro_objects.Bunker;
 import data.macro_objects.GreenBase;
@@ -32,7 +29,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,37 +38,8 @@ import java.util.Random;
 import static app.Play.globalStage;
 import static app.Play.world;
 import static data.Methods.CONSTANTS.*;
-import static data.Methods.MicroObjectConfig.convertToConfig;
 
 public class Utilities {
-
-    public static void json(List<Kamikaze> arrayToJson, String path) throws IOException {
-        FileWriter file = new FileWriter(path, false);
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonGenerator jsonGenerator = objectMapper.getFactory().createGenerator(file);
-
-        jsonGenerator.writeStartArray();
-        arrayToJson.forEach(object -> {
-            try {
-                jsonGenerator.writeObject(convertToConfig(object));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        jsonGenerator.writeEndArray();
-        jsonGenerator.close();
-    }
-
-    public static void jsonParseMicroObject(File file) throws IOException {
-        if (file == null) return;
-        deleteWarrior(world.getAllWarriors());
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(file);
-        for (JsonNode item : jsonNode) {
-            MicroObjectConfig object = objectMapper.readValue(item.traverse(), MicroObjectConfig.class);
-            object.convertToObject();
-        }
-    }
 
     /**
      * @Url -> Name of the .fxml file. Transfer without .fxml.
@@ -123,8 +90,6 @@ public class Utilities {
         for (Kamikaze obj : warriors) {
             double x, y;
             boolean team;
-            if (obj instanceof SSO) ;
-            else if (obj instanceof SimpleSoldier) ;
 
             team = count / 2 < flag;
 
@@ -267,15 +232,14 @@ public class Utilities {
                 if (Math.abs(world.getCamera().getPositionX() - MOVE_CAMERA_BY_X) <= WORLD_CAMERA_SIZE_WIDTH)
                     world.getCamera().setPositionX(-1);
             }
-            case T -> {
-                world.getAllWarriors().forEach(e -> {
-                    if (e.isInMacro()) world.getBaseSet().forEach(base -> Utilities.removeFromMacro(e, base));
-                    e.setActive(true);
-                    e.setAimX(MACRO_BUNKER_LAYOUT_X);
-                    e.setAimY(MACRO_BUNKER_LAYOUT_Y);
-                    e.flipOffering();
-                });
-            }
+            case T -> world.getAllWarriors().forEach(e -> {
+                if (e.isInMacro()) world.getBaseSet().forEach(base -> Utilities.removeFromMacro(e, base));
+                e.setActive(true);
+                e.setElect(false);
+                e.setAimX(MACRO_BUNKER_LAYOUT_X);
+                e.setAimY(MACRO_BUNKER_LAYOUT_Y);
+                e.flipOffering();
+            });
 
             case F1 -> saveDataToFile();
             case F2 -> openDataFile();
@@ -425,7 +389,7 @@ public class Utilities {
 
     private static void turnOf() {
         List<Kamikaze> forFlip = world.getAllWarriors().subList(0, world.getAllWarriors().size());
-        forFlip.forEach(Kamikaze::flipActive);
+        forFlip.forEach(e -> e.setActive(false));
     }
 
     public static void whatToDo(SSO sso) {
@@ -478,9 +442,8 @@ public class Utilities {
                 base.inflictDamage(object);
             if (boundsIntersectOtherBounds(object, base) && object.getTeam() == teamBase && !base.getState().contains(object) && base.getState().size() < 3) {
                 if (!(object instanceof SSO))
-                    if (new Random().nextInt(0, 1000) == 3) {
+                    if (new Random().nextInt(0, 1000) == 3)
                         world.addToBase(object, base);
-                    }
             }
         }
     }
@@ -493,7 +456,7 @@ public class Utilities {
         fileChooser.getExtensionFilters().add(textFilter);
         File file = fileChooser.showSaveDialog(globalStage);
         if (file != null) {
-            json(world.getAllWarriors(), file.getPath());
+            JSON.saveData(world.getAllWarriors(), file.getPath());
         } else {
             System.out.println("Вибір файлу скасовано.");
         }
@@ -505,6 +468,6 @@ public class Utilities {
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("JSON files(*.json)", "*.json");
         fileChooser.getExtensionFilters().add(extensionFilter);
         File file = fileChooser.showOpenDialog(globalStage);
-        jsonParseMicroObject(file);
+        JSON.parseData(file);
     }
 }

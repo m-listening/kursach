@@ -39,7 +39,7 @@ public record MicroObjectConfig(
         );
     }
 
-    public Kamikaze convertToObject() {
+    public void convertToObject() {
         var result = switch (classType) {
             case "Kamikaze" -> new Kamikaze(name, maxHealth);
             case "SimpleSoldier" -> new SimpleSoldier(name, maxHealth);
@@ -53,7 +53,6 @@ public record MicroObjectConfig(
         result.setActive(active);
         result.setElect(elect);
         result.getMurders().setCount(murders);
-        return result;
     }
 
     @Override

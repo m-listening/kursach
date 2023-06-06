@@ -1,7 +1,6 @@
 package data.macro_objects;
 
 import app.Play;
-import data.Methods.CONSTANTS;
 import data.Methods.Utilities;
 import data.interfaces.LifeCycle;
 import data.micro_objects.Kamikaze;

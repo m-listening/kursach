@@ -8,14 +8,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
-import java.io.FileNotFoundException;
-
 import static data.Methods.Utilities.updateWarrior;
 
 public class Parameters {
 
     @FXML
-    private RadioButton RB_lvl1, RB_lvl2, RB_lvl3;
+    private RadioButton RB_lvl2, RB_lvl3;
 
     @FXML
     private RadioButton RB_tmGreen, RB_tmRed;
@@ -27,7 +25,7 @@ public class Parameters {
     private TextField setY_field, setX_field;
 
     @FXML
-    void createNewWarrior() throws FileNotFoundException {
+    void createNewWarrior() {
         String name = setName_field.getText();
         double health = Double.parseDouble(setHealth_field.getText());
         double x = Double.parseDouble(setX_field.getText());
