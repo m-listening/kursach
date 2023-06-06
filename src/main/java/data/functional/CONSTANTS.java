@@ -1,4 +1,4 @@
-package data.Methods;
+package data.functional;
 
 import javafx.stage.Screen;
 

@@ -11,10 +11,10 @@ module app {
     exports data.micro_objects;
     exports data.macro_objects;
     opens data.micro_objects to javafx.fxml;
-    exports data.Methods;
-    opens data.Methods;
+    exports data.functional;
+    opens data.functional;
     exports data.interfaces;
     opens data.interfaces to javafx.fxml;
-    exports data.World;
-    opens data.World to javafx.fxml;
+    exports data.world;
+    opens data.world to javafx.fxml;
 }

@@ -1,4 +1,4 @@
-package data.Methods;
+package data.functional;
 
 import data.micro_objects.Kamikaze;
 

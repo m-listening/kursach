@@ -1,6 +1,6 @@
-package data.World;
+package data.world;
 
-import data.Methods.Utilities;
+import data.functional.Utilities;
 import data.macro_objects.Base;
 import data.micro_objects.Kamikaze;
 import javafx.animation.Animation;
@@ -19,9 +19,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import static data.Methods.CONSTANTS.START_SCENE_SIZE_X;
-import static data.Methods.CONSTANTS.START_SCENE_SIZE_Y;
-import static data.Methods.Utilities.*;
+import static data.functional.CONSTANTS.START_SCENE_SIZE_X;
+import static data.functional.CONSTANTS.START_SCENE_SIZE_Y;
+import static data.functional.Utilities.*;
 
 public class World {
     private final List<Kamikaze> allWarriors;

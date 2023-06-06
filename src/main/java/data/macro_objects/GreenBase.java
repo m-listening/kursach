@@ -1,14 +1,13 @@
 package data.macro_objects;
 
-import data.Methods.Team;
-import data.Methods.Utilities;
+import data.functional.Utilities;
 import data.micro_objects.Kamikaze;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import static data.Methods.Team.*;
-import static data.Methods.Utilities.interactionWithMacro;
+import static data.functional.Team.*;
+import static data.functional.Utilities.interactionWithMacro;
 
 public class GreenBase extends Base {
     public GreenBase(double x, double y) {

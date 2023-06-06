@@ -1,12 +1,12 @@
-package data.World;
+package data.world;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import static data.Methods.CONSTANTS.*;
-import static data.Methods.Utilities.*;
+import static data.functional.CONSTANTS.*;
+import static data.functional.Utilities.*;
 
 
 public class MiniMap {

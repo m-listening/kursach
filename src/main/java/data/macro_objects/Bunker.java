@@ -3,7 +3,7 @@ package data.macro_objects;
 import data.micro_objects.Kamikaze;
 
 import static app.Play.world;
-import static data.Methods.Utilities.boundsIntersectOtherBounds;
+import static data.functional.Utilities.boundsIntersectOtherBounds;
 
 public class Bunker extends Base {
     public Bunker(double x, double y) {
@@ -23,9 +23,14 @@ public class Bunker extends Base {
     @Override
     public void lifeCycle() {
         world.getAllWarriors().forEach(obj -> {
-            if (boundsIntersectOtherBounds(obj, this))
+            if (boundsIntersectOtherBounds(obj, this)) {
                 getState().add(obj);
-            else if(!boundsIntersectOtherBounds(obj, this))getState().remove(obj);
+                obj.flipInMacro();
+            }
+            else{
+                getState().remove(obj);
+                obj.flipInMacro();
+            }
         });
         getState().forEach(this::inflictDamage);
         setWithin(getState().size());

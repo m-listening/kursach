@@ -1,7 +1,7 @@
 package data.windows;
 
 import app.Play;
-import data.Methods.Team;
+import data.functional.Team;
 import data.micro_objects.Kamikaze;
 import data.micro_objects.SSO;
 import data.micro_objects.SimpleSoldier;
@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
-import static data.Methods.Utilities.updateWarrior;
+import static data.functional.Utilities.updateWarrior;
 
 public class Parameters {
 

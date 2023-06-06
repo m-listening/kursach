@@ -1,4 +1,4 @@
-package data.Methods;
+package data.functional;
 
 import data.micro_objects.Kamikaze;
 import data.micro_objects.SSO;
@@ -6,7 +6,7 @@ import data.micro_objects.SimpleSoldier;
 
 import java.io.Serializable;
 
-import static data.Methods.Utilities.*;
+import static data.functional.Utilities.*;
 
 public record MicroObjectConfig(
         String classType,

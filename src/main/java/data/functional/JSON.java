@@ -1,4 +1,4 @@
-package data.Methods;
+package data.functional;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static app.Play.world;
-import static data.Methods.MicroObjectConfig.convertToConfig;
-import static data.Methods.Utilities.deleteWarrior;
+import static data.functional.MicroObjectConfig.convertToConfig;
+import static data.functional.Utilities.deleteWarrior;
 
 public class JSON {
     public static void saveData(List<Kamikaze> arrayToJson, String path) throws IOException {

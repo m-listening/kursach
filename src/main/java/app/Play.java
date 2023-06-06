@@ -1,6 +1,6 @@
 package app;
 
-import data.World.World;
+import data.world.World;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;

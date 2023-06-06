@@ -1,4 +1,4 @@
-package data.Methods;
+package data.functional;
 
 public enum Team {
     RED,

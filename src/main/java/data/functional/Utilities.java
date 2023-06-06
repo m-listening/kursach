@@ -1,4 +1,4 @@
-package data.Methods;
+package data.functional;
 
 import app.Play;
 import data.macro_objects.Base;
@@ -37,8 +37,8 @@ import java.util.Random;
 
 import static app.Play.globalStage;
 import static app.Play.world;
-import static data.Methods.CONSTANTS.*;
-import static data.Methods.Team.*;
+import static data.functional.CONSTANTS.*;
+import static data.functional.Team.*;
 
 public class Utilities {
 
@@ -125,19 +125,19 @@ public class Utilities {
     public static Image getImage(String name) {
         switch (name) {
             case "GreenBase" -> {
-                return new Image("greenB.png", 300, 300, false, false);
+                return new Image("GreenBase.png", 300, 300, false, false);
             }
             case "RedBase" -> {
-                return new Image("redB.png", 300, 300, false, false);
+                return new Image("RedBase.png", 300, 300, false, false);
             }
             case "Bunker" -> {
-                return new Image("bunker.png", 300, 300, false, false);
+                return new Image("Bunker.png", 300, 300, false, false);
             }
             case "Kamikaze" -> {
-                return new Image("kamikaze.png", 50, 50, false, false);
+                return new Image("Kamikaze.png", 50, 50, false, false);
             }
             case "SimpleSoldier" -> {
-                return new Image("sS.png", 50, 50, false, false);
+                return new Image("SimpleSoldier.png", 50, 50, false, false);
             }
             case "SSO" -> {
                 return new Image("SSO.png", 50, 50, false, false);
@@ -149,7 +149,7 @@ public class Utilities {
                 return new Image("map.png");
             }
             case "Fight" -> {
-                return new Image("fight.png", 20, 20, false, false);
+                return new Image("Fight.png", 20, 20, false, false);
             }
         }
         return null;

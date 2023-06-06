@@ -1,7 +1,7 @@
 package data.micro_objects;
 
-import data.Methods.Team;
-import data.Methods.Utilities;
+import data.functional.Team;
+import data.functional.Utilities;
 import data.interfaces.LifeCycle;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,9 +15,9 @@ import javafx.scene.text.Font;
 import java.util.Objects;
 
 import static app.Play.world;
-import static data.Methods.CONSTANTS.*;
-import static data.Methods.Utilities.addToWorld;
-import static data.Methods.Utilities.whatToDo;
+import static data.functional.CONSTANTS.*;
+import static data.functional.Utilities.addToWorld;
+import static data.functional.Utilities.whatToDo;
 
 public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     private double x;

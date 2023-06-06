@@ -1,8 +1,8 @@
 package data.macro_objects;
 
 import app.Play;
-import data.Methods.Team;
-import data.Methods.Utilities;
+import data.functional.Team;
+import data.functional.Utilities;
 import data.interfaces.LifeCycle;
 import data.micro_objects.Kamikaze;
 import javafx.scene.Group;
@@ -18,7 +18,7 @@ import javafx.scene.text.FontWeight;
 import java.util.HashSet;
 import java.util.Set;
 
-import static data.Methods.CONSTANTS.*;
+import static data.functional.CONSTANTS.*;
 
 public abstract class Base implements LifeCycle {
     private Team team;

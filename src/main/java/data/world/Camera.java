@@ -1,7 +1,7 @@
-package data.World;
+package data.world;
 
 import static app.Play.world;
-import static data.Methods.CONSTANTS.*;
+import static data.functional.CONSTANTS.*;
 
 public class Camera {
     private double positionX;

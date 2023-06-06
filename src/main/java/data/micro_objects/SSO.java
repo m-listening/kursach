@@ -1,6 +1,6 @@
 package data.micro_objects;
 
-import data.Methods.Utilities;
+import data.functional.Utilities;
 
 public class SSO extends SimpleSoldier {
     private Kamikaze aim;

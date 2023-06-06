@@ -1,14 +1,13 @@
 package data.macro_objects;
 
-import data.Methods.Team;
 import data.micro_objects.Kamikaze;
 import data.micro_objects.SSO;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import static data.Methods.Team.*;
-import static data.Methods.Utilities.*;
+import static data.functional.Team.*;
+import static data.functional.Utilities.*;
 
 public class RedBase extends Base {
 
