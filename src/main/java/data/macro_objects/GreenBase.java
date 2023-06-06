@@ -39,12 +39,12 @@ public class GreenBase extends Base {
         });
         toRemoveFromMacro.forEach(e -> {
             if (new Random().nextInt(0, 1000) == 3) {
-                Utilities.removeFromMacro(e, this);
                 if (!e.isPowerUp()) {
                     e.setDamage(e.getDamage() * 2);
                     e.setMove(e.getMove() + 2);
                     e.setPowerUp(true);
                 }
+                Utilities.removeFromMacro(e, this);
             }
         });
     }

@@ -243,8 +243,14 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
+        kamikaze.setRectangle(new Rectangle(0, 0, 65, 85));
+        kamikaze.getRectangle().setFill(Color.TRANSPARENT);
+        kamikaze.getRectangle().setStrokeWidth(2);
+        kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
+
         kamikaze.setElect(false);
-        kamikaze.offering = false;
+        kamikaze.setInMacro(false);
+        kamikaze.setOffering(false);
         kamikaze.setActive(kamikaze.isActive());
 
         kamikaze.setImage(Utilities.getImage(kamikaze.getClass().getSimpleName()));
@@ -253,11 +259,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         kamikaze.setInFightImage(Utilities.getImage("Fight"));
         kamikaze.setFightView(new ImageView(kamikaze.getInFightImage()));
         kamikaze.getFightView().setVisible(false);
-
-        kamikaze.setRectangle(new Rectangle(0, 0, 65, 85));
-        kamikaze.getRectangle().setFill(Color.TRANSPARENT);
-        kamikaze.getRectangle().setStrokeWidth(2);
-        kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
 
         kamikaze.setIdentifierTeam(new Circle(5));
         kamikaze.setTeam(kamikaze.getTeam());
@@ -306,6 +307,14 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
 
     public boolean isOffering() {
         return offering;
+    }
+
+    public void setInMacro(boolean inMacro) {
+        this.inMacro = inMacro;
+    }
+
+    public void setOffering(boolean offering) {
+        this.offering = offering;
     }
 
     public void flipOffering() {

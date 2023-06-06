@@ -236,12 +236,12 @@ public class Utilities {
                     world.getCamera().setPositionX(-1);
             }
             case T -> world.getAllWarriors().forEach(e -> {
-                if (e.isInMacro()) world.getBaseSet().forEach(base -> Utilities.removeFromMacro(e, base));
+                if (e.isInMacro()) world.getBaseSet().forEach(base -> removeFromMacro(e, base));
+                e.flipOffering();
                 e.setActive(true);
                 e.setElect(false);
                 e.setAimX(MACRO_BUNKER_LAYOUT_X);
                 e.setAimY(MACRO_BUNKER_LAYOUT_Y);
-                e.flipOffering();
             });
 
             case F1 -> saveDataToFile();
@@ -299,15 +299,15 @@ public class Utilities {
     public static void addToMacro(Kamikaze object, Base base) {
         if (base.getState().contains(object)) return;
         removeFromWorld(object);
-        object.flipInMacro();
+        object.setInMacro(true);
         if (object.isElect()) object.flipElect();
         base.getState().add(object);
     }
 
     public static void removeFromMacro(Kamikaze object, Base base) {
-        if (base.getState().remove(object) && object.isInMacro()) {
+        if (base.getState().remove(object) && !(base instanceof Bunker)) {
             addToWorld(object);
-            object.flipInMacro();
+            object.setInMacro(false);
             object.setX(base.getX());
             object.setY(base.getY());
         }
@@ -435,16 +435,16 @@ public class Utilities {
         }
     }
 
-    public static boolean boundsIntersectOtherBounds(Kamikaze object, Base base) {
-        return object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent()) && !base.getState().contains(object);
+    public static boolean boundsIntersectBaseBounds(Kamikaze object, Base base) {
+        return object.getImageView().getBoundsInParent().intersects(base.getGroup().getBoundsInParent());
     }
 
     public static void interactionWithMacro(Base base, Team teamBase) {
         for (Kamikaze object : world.getAllWarriors()) {
             if (object.isOffering()) continue;
-            if (boundsIntersectOtherBounds(object, base) && !object.getTeam().equals(teamBase))
+            if (boundsIntersectBaseBounds(object, base) && !object.getTeam().equals(teamBase))
                 base.inflictDamage(object);
-            if (boundsIntersectOtherBounds(object, base) && object.getTeam().equals(teamBase) && !base.getState().contains(object) && base.getState().size() < 3) {
+            if (boundsIntersectBaseBounds(object, base) && object.getTeam().equals(teamBase) && !base.getState().contains(object) && base.getState().size() < 3) {
                 if (!(object instanceof SSO))
                     if (new Random().nextInt(0, 1000) == 3)
                         world.addToBase(object, base);

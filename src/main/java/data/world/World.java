@@ -43,14 +43,16 @@ public class World {
 
         worldPane = new Pane(view);
         miniMap = new MiniMap();
+        camera = new Camera();
         game = new StackPane(worldPane, miniMap.getMap());
 
-        camera = new Camera();
+        scene = new Scene(game, START_SCENE_SIZE_X, START_SCENE_SIZE_Y);
 
         AnimationTimer activeWorld = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 checkWarriorsForDelete();
+
                 for (Base base : baseSet) {
                     try {
                         base.lifeCycle();
@@ -58,19 +60,11 @@ public class World {
                         throw new RuntimeException(e);
                     }
                 }
+
                 allWarriors.forEach(Kamikaze::lifeCycle);
             }
         };
         activeWorld.start();
-
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            WritableImage screen = worldPane.snapshot(new SnapshotParameters(), null);
-            miniMap.getView().setImage(screen);
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-
-        scene = new Scene(game, START_SCENE_SIZE_X, START_SCENE_SIZE_Y);
         scene.setOnMouseClicked(event1 -> {
             try {
                 Utilities.mousePressedHandler(event1);
@@ -85,6 +79,13 @@ public class World {
                 throw new RuntimeException(e);
             }
         });
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            WritableImage screen = worldPane.snapshot(new SnapshotParameters(), null);
+            miniMap.getView().setImage(screen);
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
     }
 
     @Override
