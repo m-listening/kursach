@@ -11,22 +11,20 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import static app.Play.world;
-import static data.Methods.CONSTANTS.WORLD_SIZE_HEIGHT;
-import static data.Methods.CONSTANTS.WORLD_SIZE_WIDTH;
+import static data.Methods.CONSTANTS.*;
 import static data.Methods.Utilities.addToWorld;
 import static data.Methods.Utilities.whatToDo;
 
 public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
-    private double maxHealth;
-    private double move;
     private double x;
     private double y;
     private double aimX;
     private double aimY;
+    private double maxHealth;
+    private double move;
     private double health;
     private double damage;
     private double armor;
@@ -90,6 +88,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         circle.setFill(Color.TRANSPARENT);
 
         addToWorld(this);
+        world.getAllWarriors().add(this);
         System.out.println("Конструктор викликаний.\n" + this);
     }
 
@@ -201,6 +200,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         public void setCount(int v) {
             this.count = v;
         }
+
     }
 
     @Override
@@ -242,7 +242,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
 
-        kamikaze.elect = false;
+        kamikaze.setElect(false);
         kamikaze.offering = false;
         kamikaze.setActive(kamikaze.isActive());
 
@@ -265,6 +265,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         kamikaze.getCircle().setFill(Color.TRANSPARENT);
 
         addToWorld(kamikaze);
+        world.getAllWarriors().add(kamikaze);
         kamikaze.setX(kamikaze.getX() + 50);
         kamikaze.setY(kamikaze.getY() + 50);
 
@@ -308,10 +309,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
 
     public void flipOffering() {
         this.offering = !offering;
-    }
-
-    public void setElect(boolean elect) {
-        this.elect = elect;
     }
 
     public Circle getIdentifierTeam() {
@@ -440,13 +437,13 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
 
     public void setX(double x) {
         this.x = x;
-        this.imageView.setLayoutX(x - 5);
-        this.rectangle.setLayoutX(x - 5);
-        this.circle.setLayoutX(x + 20);
-        this.name.setLayoutX(x + 5);
-        this.life.setLayoutX(x);
-        this.identifierTeam.setLayoutX(x + 40);
-        this.fightView.setLayoutX(x + 15);
+        this.imageView.setLayoutX(x + MICRO_IMAGE_VIEW_LAYOUT_X);
+        this.rectangle.setLayoutX(x + MICRO_RECTANGLE_LAYOUT_X);
+        this.circle.setLayoutX(x + MICRO_CIRCLE_LAYOUT_X);
+        this.name.setLayoutX(x + MICRO_NAME_LAYOUT_X);
+        this.life.setLayoutX(x + MICRO_LIFE_LAYOUT_X);
+        this.identifierTeam.setLayoutX(x + MICRO_IDENTIFIER_TEAM_LAYOUT_X);
+        this.fightView.setLayoutX(x + MICRO_FIGHT_VIEW_LAYOUT_X);
     }
 
     public double getY() {
@@ -455,13 +452,13 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
 
     public void setY(double y) {
         this.y = y;
-        this.fightView.setLayoutY(y - 12);
-        this.imageView.setLayoutY(y + 20);
-        this.rectangle.setLayoutY(y - 5);
-        this.circle.setLayoutY(y + 40);
-        this.name.setLayoutY(y - 2);
-        this.life.setLayoutY(y);
-        this.identifierTeam.setLayoutY(y + 70);
+        this.imageView.setLayoutY(y + MICRO_IMAGE_VIEW_LAYOUT_Y);
+        this.rectangle.setLayoutY(y + MICRO_RECTANGLE_LAYOUT_Y);
+        this.circle.setLayoutY(y + MICRO_CIRCLE_LAYOUT_Y);
+        this.name.setLayoutY(y + MICRO_NAME_LAYOUT_Y);
+        this.life.setLayoutY(y + MICRO_LIFE_LAYOUT_Y);
+        this.identifierTeam.setLayoutY(y + MICRO_IDENTIFIER_TEAM_LAYOUT_Y);
+        this.fightView.setLayoutY(y + MICRO_FIGHT_VIEW_LAYOUT_Y);
     }
 
     public boolean isElect() {
@@ -469,7 +466,15 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     }
 
     public void flipElect() {
-        this.elect = !this.elect;
+        setElect(!isElect());
+    }
+
+    public void setElect(boolean elect) {
+        this.elect = elect;
+        if (isElect())
+            world.getElectedWarriors().add(this);
+        else
+            world.getElectedWarriors().remove(this);
         setRectangleColor();
     }
 
@@ -481,7 +486,11 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         this.active = active;
         if (isActive()) {
             colorHP();
-        } else this.life.setStroke(Color.BLACK);
+            world.getWarriorsActive().add(this);
+        } else {
+            this.life.setStroke(Color.BLACK);
+            world.getWarriorsActive().remove(this);
+        }
     }
 
     public void colorHP() {

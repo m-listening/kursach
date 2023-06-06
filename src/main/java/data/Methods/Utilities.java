@@ -2,6 +2,7 @@ package data.Methods;
 
 import app.Play;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import data.macro_objects.Base;
 import data.macro_objects.Bunker;
@@ -63,7 +64,14 @@ public class Utilities {
     }
 
     public static void jsonParseMicroObject(File file) throws IOException {
+        if (file == null) return;
+        deleteWarrior(world.getAllWarriors());
         ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(file);
+        for (JsonNode item : jsonNode) {
+            MicroObjectConfig object = objectMapper.readValue(item.traverse(), MicroObjectConfig.class);
+            object.convertToObject();
+        }
     }
 
     /**
@@ -86,9 +94,9 @@ public class Utilities {
     }
 
     public static void createStartWorld() {
-        Bunker bunker = new Bunker(WORLD_SIZE_WIDTH / 2, WORLD_SIZE_HEIGHT / 2);
-        GreenBase greenBase = new GreenBase(400, 400);
-        RedBase redBase = new RedBase(WORLD_SIZE_HEIGHT - 400, WORLD_SIZE_HEIGHT - 400);
+        Bunker bunker = new Bunker(MACRO_BUNKER_LAYOUT_X, MACRO_BUNKER_LAYOUT_Y);
+        GreenBase greenBase = new GreenBase(MACRO_GREEN_BASE_LAYOUT_X, MACRO_GREEN_BASE_LAYOUT_Y);
+        RedBase redBase = new RedBase(MACRO_RED_BASE_LAYOUT_X, MACRO_RED_BASE_LAYOUT_Y);
 
         world.getBaseSet().add(bunker);
         world.getBaseSet().add(greenBase);
@@ -124,8 +132,6 @@ public class Utilities {
             y = coordinatesBaseY(team);
 
             updateWarrior(obj, x, y, team);
-            world.getWarriorsActive().add(obj);
-            world.getAllWarriors().add(obj);
 
             flag--;
         }
@@ -208,9 +214,7 @@ public class Utilities {
                     Kamikaze k = checkClickOnWarriorInBase(kamikazeHashMap, e.getX(), e.getY());
                     if (k == null) return;
                     flowPane.getChildren().removeAll(k.getRectangle(), k.getImageView(), k.getName(), k.getLife());
-                    base.getState().remove(k);
-                    k.flipInMacro();
-                    addToWorld(k);
+                    removeFromMacro(k, base);
                 });
                 globalStage = new Stage();
                 globalStage.setTitle("Warriors in Base");
@@ -224,8 +228,6 @@ public class Utilities {
                 Kamikaze objectWarrior = checkClickWarrior(world.getAllWarriors().stream().toList(), event.getX(), event.getY());
                 if (objectWarrior != null) {
                     objectWarrior.flipActive();
-                    if (objectWarrior.isActive()) world.getWarriorsActive().add(objectWarrior);
-                    else world.getWarriorsActive().remove(objectWarrior);
                     return;
                 }
             }
@@ -269,10 +271,8 @@ public class Utilities {
                 world.getAllWarriors().forEach(e -> {
                     if (e.isInMacro()) world.getBaseSet().forEach(base -> Utilities.removeFromMacro(e, base));
                     e.setActive(true);
-                    if (!world.getWarriorsActive().contains(e))
-                        world.getWarriorsActive().add(e);
-                    e.setAimX(WORLD_SIZE_WIDTH / 2);
-                    e.setAimY(WORLD_SIZE_HEIGHT / 2);
+                    e.setAimX(MACRO_BUNKER_LAYOUT_X);
+                    e.setAimY(MACRO_BUNKER_LAYOUT_Y);
                     e.flipOffering();
                 });
             }
@@ -291,11 +291,8 @@ public class Utilities {
             }
             case Q -> {
                 try {
-                    for (Kamikaze item : world.getElectedWarriors()) {
-                        Kamikaze clone = (item).clone();
-                        world.getAllWarriors().add(clone);
-                        if (clone.isActive()) world.getWarriorsActive().add(clone);
-                    }
+                    for (Kamikaze item : world.getElectedWarriors())
+                        item.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new RuntimeException(e);
                 }
@@ -402,9 +399,6 @@ public class Utilities {
         if (objectWarrior == null) return;
 
         objectWarrior.flipElect();
-        if (world.getElectedWarriors().contains(objectWarrior))
-            world.getElectedWarriors().remove(objectWarrior);
-        else world.getElectedWarriors().add(objectWarrior);
         notification("Chosen: " + world.getElectedWarriors().size());
     }
 
@@ -422,21 +416,16 @@ public class Utilities {
     }
 
     public static void deleteWarrior(List<Kamikaze> list) {
-        for (Kamikaze object : list)
-            removeFromWorld(object);
-        list.forEach(world.getAllWarriors()::remove);
-        list.forEach(world.getWarriorsActive()::remove);
-        list.forEach(world.getElectedWarriors()::remove);
-        list.forEach(obj -> {
-            world.getBaseSet().forEach(base -> {
-                base.getState().remove(obj);
-            });
-        });
+        world.getBaseSet().forEach(base -> list.forEach(obj -> base.getState().remove(obj)));
+        list.forEach(Utilities::removeFromWorld);
+        world.getAllWarriors().removeAll(list);
+        list.forEach(e -> e.setActive(false));
+        list.forEach(e -> e.setElect(false));
     }
 
     private static void turnOf() {
-        world.getWarriorsActive().forEach(Kamikaze::flipActive);
-        world.getWarriorsActive().clear();
+        List<Kamikaze> forFlip = world.getAllWarriors().subList(0, world.getAllWarriors().size());
+        forFlip.forEach(Kamikaze::flipActive);
     }
 
     public static void whatToDo(SSO sso) {

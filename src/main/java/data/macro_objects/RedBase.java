@@ -58,8 +58,6 @@ public class RedBase extends Base {
             health += e.getHealth();
         SSO sso = new SSO("IMBA", health);
         updateWarrior(sso, this.getX(), this.getY(), false);
-        world.getAllWarriors().add(sso);
-        world.getWarriorsActive().add(sso);
         addToMacro(sso, this);
         deleteWarrior(toRemove());
     }

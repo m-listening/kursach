@@ -19,8 +19,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import static data.Methods.CONSTANTS.SCENE_SIZE_X;
-import static data.Methods.CONSTANTS.SCENE_SIZE_Y;
+import static data.Methods.CONSTANTS.START_SCENE_SIZE_X;
+import static data.Methods.CONSTANTS.START_SCENE_SIZE_Y;
 import static data.Methods.Utilities.*;
 
 public class World {
@@ -70,7 +70,7 @@ public class World {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
-        scene = new Scene(game, SCENE_SIZE_X, SCENE_SIZE_Y);
+        scene = new Scene(game, START_SCENE_SIZE_X, START_SCENE_SIZE_Y);
         scene.setOnMouseClicked(event1 -> {
             try {
                 Utilities.mousePressedHandler(event1);

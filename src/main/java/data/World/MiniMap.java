@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import static data.Methods.CONSTANTS.*;
+import static data.Methods.Utilities.*;
 
 
 public class MiniMap {
@@ -17,7 +18,7 @@ public class MiniMap {
     private ImageView view;
 
     public MiniMap() {
-        view = new ImageView(Utilities.getImage("Map"));
+        view = new ImageView(getImage("Map"));
         view.setFitWidth(MINIMAP_SIZE_FIT_X);
         view.setFitHeight(MINIMAP_SIZE_FIT_Y);
 

@@ -6,6 +6,8 @@ import data.micro_objects.SimpleSoldier;
 
 import java.io.Serializable;
 
+import static data.Methods.Utilities.*;
+
 public record MicroObjectConfig(
         String classType,
         String name,
@@ -44,15 +46,13 @@ public record MicroObjectConfig(
             case "SSO" -> new SSO(name, maxHealth);
             default -> throw new IllegalStateException("Unexpected value: " + classType);
         };
+        updateWarrior(result, x, y, team);
         result.setHealth(health);
         result.setArmor(armor);
         result.setPowerUp(powerUp);
         result.setActive(active);
         result.setElect(elect);
-        result.setTeam(team);
         result.getMurders().setCount(murders);
-        result.setX(x);
-        result.setY(y);
         return result;
     }
 

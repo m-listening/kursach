@@ -1,6 +1,7 @@
 package data.macro_objects;
 
 import app.Play;
+import data.Methods.CONSTANTS;
 import data.Methods.Utilities;
 import data.interfaces.LifeCycle;
 import data.micro_objects.Kamikaze;
@@ -17,6 +18,8 @@ import javafx.scene.text.FontWeight;
 import java.util.HashSet;
 import java.util.Set;
 
+import static data.Methods.CONSTANTS.*;
+
 public abstract class Base implements LifeCycle {
     private double x, y;
     private final Image image;
@@ -31,22 +34,22 @@ public abstract class Base implements LifeCycle {
 
         name = new Label();
         name.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 16.0));
-        name.setLayoutX(-90);
-        name.setLayoutY(-200);
+        name.setLayoutX(MACRO_NAME_LAYOUT_X);
+        name.setLayoutY(MACRO_NAME_LAYOUT_Y);
 
         within = new Label();
         within.setFont(Font.font("Arial", FontWeight.BOLD, 16.0));
-        within.setLayoutX(-10);
-        within.setLayoutY(200);
+        within.setLayoutX(MACRO_WITHIN_LAYOUT_X);
+        within.setLayoutY(MACRO_WITHIN_LAYOUT_Y);
 
-        circle = new Circle(300);
+        circle = new Circle(MACRO_CIRCLE_RADIUS);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.GREY);
 
         image = Utilities.getImage(this.getClass().getSimpleName());
         imageView = new ImageView(image);
-        imageView.setLayoutX(-150);
-        imageView.setLayoutY(-150);
+        imageView.setLayoutX(MACRO_IMAGE_VIEW_LAYOUT_X);
+        imageView.setLayoutY(MACRO_IMAGE_VIEW_LAYOUT_Y);
 
         group = new Group(imageView, circle, name, within);
         Play.world.getWorldPane().getChildren().add(group);

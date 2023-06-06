@@ -47,7 +47,6 @@ public class Parameters {
             selectedTeam = false;
         } else selectedTeam = null;
         updateWarrior(warrior, x, y, selectedTeam);
-        Play.world.getAllWarriors().add(warrior);
 
         Play.globalStage.close();
     }
