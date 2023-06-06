@@ -177,9 +177,7 @@ public class Utilities {
                     flowPane.getChildren().add(group);
                 });
                 newScene.setOnMouseClicked(e -> {
-                    Kamikaze k = checkClickOnWarriorInBase(kamikazeHashMap,
-                            e.getX() - world.getWorldPane().getTranslateX(),
-                            e.getY() - world.getWorldPane().getTranslateY());
+                    Kamikaze k = checkClickOnWarriorInBase(kamikazeHashMap, e.getX(), e.getY());
                     if (k == null) return;
                     flowPane.getChildren().removeAll(k.getRectangle(), k.getImageView(), k.getName(), k.getLife());
                     removeFromMacro(k, base);
@@ -243,8 +241,8 @@ public class Utilities {
                 e.setAimX(MACRO_BUNKER_LAYOUT_X);
                 e.setAimY(MACRO_BUNKER_LAYOUT_Y);
             });
-            case R -> world.getAllWarriors().forEach(e->{
-                if(e.isOffering()){
+            case R -> world.getAllWarriors().forEach(e -> {
+                if (e.isOffering()) {
                     e.setOffering(false);
                     e.clearAim();
                 }
@@ -337,9 +335,10 @@ public class Utilities {
     }
 
     private static Kamikaze checkClickOnWarriorInBase(HashMap<Group, Kamikaze> hashLow, double x, double y) {
-        for (Group group : hashLow.keySet())
+        for (Group group : hashLow.keySet()) {
             if (group.getBoundsInParent().contains(x, y))
                 return hashLow.get(group);
+        }
         return null;
     }
 
