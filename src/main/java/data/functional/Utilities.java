@@ -38,7 +38,8 @@ import java.util.Random;
 import static app.Play.globalStage;
 import static app.Play.world;
 import static data.functional.CONSTANTS.*;
-import static data.functional.Team.*;
+import static data.functional.Team.GREEN;
+import static data.functional.Team.RED;
 
 public class Utilities {
 
@@ -161,8 +162,8 @@ public class Utilities {
             if (base == null || base instanceof Bunker) return;
 
             if (event.getButton().equals(MouseButton.PRIMARY)) {
-                world.getElectedWarriors().forEach(e -> addToMacro(e, base));
-                world.getElectedWarriors().clear();
+                List<Kamikaze> nodes = new ArrayList<>(world.getElectedWarriors());
+                nodes.forEach(e -> addToMacro(e, base));
             }
 
             if (event.getButton().equals(MouseButton.SECONDARY)) {
@@ -176,7 +177,9 @@ public class Utilities {
                     flowPane.getChildren().add(group);
                 });
                 newScene.setOnMouseClicked(e -> {
-                    Kamikaze k = checkClickOnWarriorInBase(kamikazeHashMap, e.getX(), e.getY());
+                    Kamikaze k = checkClickOnWarriorInBase(kamikazeHashMap,
+                            e.getX() - world.getWorldPane().getTranslateX(),
+                            e.getY() - world.getWorldPane().getTranslateY());
                     if (k == null) return;
                     flowPane.getChildren().removeAll(k.getRectangle(), k.getImageView(), k.getName(), k.getLife());
                     removeFromMacro(k, base);
@@ -278,7 +281,7 @@ public class Utilities {
         Button showChosen = new Button("Show chosen");
         vBox.getChildren().addAll(label, showChosen);
 
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(4));
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2));
         pauseTransition.setOnFinished(e -> globalStage.close());
         pauseTransition.play();
         showChosen.setOnAction(e -> {
@@ -294,6 +297,7 @@ public class Utilities {
     }
 
     public static void addToMacro(Kamikaze object, Base base) {
+        if (base.getState().contains(object)) return;
         removeFromWorld(object);
         object.flipInMacro();
         if (object.isElect()) object.flipElect();
@@ -301,7 +305,7 @@ public class Utilities {
     }
 
     public static void removeFromMacro(Kamikaze object, Base base) {
-        if (base.getState().remove(object)) {
+        if (base.getState().remove(object) && object.isInMacro()) {
             addToWorld(object);
             object.flipInMacro();
             object.setX(base.getX());

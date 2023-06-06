@@ -118,9 +118,7 @@ public class World {
     }
 
     public void addToBase(Kamikaze object, Base base) {
-        base.getState().add(object);
         addToMacro(object, base);
-        electedWarriors.remove(object);
     }
 
     public void initializeWithMicroObjects(int count) {
