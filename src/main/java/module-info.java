@@ -8,13 +8,17 @@ module app {
     exports app;
     exports data.windows;
     opens data.windows to javafx.fxml;
-    exports data.micro_objects;
-    exports data.macro_objects;
-    opens data.micro_objects to javafx.fxml;
+    exports data.objects.micro_objects;
+    exports data.objects.macro_objects;
     exports data.functional;
     opens data.functional;
     exports data.interfaces;
     opens data.interfaces to javafx.fxml;
     exports data.world;
     opens data.world to javafx.fxml;
+    opens data.objects.micro_objects;
+    exports data.functional.forObjects;
+    opens data.functional.forObjects;
+    exports data.functional.PressedHandlers;
+    opens data.functional.PressedHandlers;
 }

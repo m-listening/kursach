@@ -1,6 +1,6 @@
 package data.interfaces;
 
-import data.micro_objects.Kamikaze;
+import data.objects.micro_objects.Kamikaze;
 
 import java.io.FileNotFoundException;
 

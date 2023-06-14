@@ -3,7 +3,7 @@ package data.windows;
 import app.Play;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import data.micro_objects.Kamikaze;
+import data.objects.micro_objects.Kamikaze;
 
 
 public class ChangeParameters {

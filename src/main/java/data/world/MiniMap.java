@@ -5,23 +5,21 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import static data.functional.CONSTANTS.*;
-import static data.functional.Utilities.*;
+import static data.functional.forObjects.CONSTANTS.*;
 
 
 public class MiniMap {
     private double x, y;
-    private Pane map;
-    private Rectangle outline;
-    private Rectangle miniMapCamera;
-    private ImageView view;
+    private final Pane map;
+    private final Rectangle miniMapCamera;
+    private final ImageView view;
 
     public MiniMap() {
-        view = new ImageView(getImage("Map"));
-        view.setFitWidth(MINIMAP_SIZE_FIT_X);
-        view.setFitHeight(MINIMAP_SIZE_FIT_Y);
+        view = new ImageView();
+        view.setFitWidth(MINIMAP_FIT_WIDTH);
+        view.setFitHeight(MINIMAP_FIT_HEIGHT);
 
-        outline = new Rectangle(MINIMAP_SIZE_FIT_X, MINIMAP_SIZE_FIT_Y);
+        Rectangle outline = new Rectangle(MINIMAP_FIT_WIDTH, MINIMAP_FIT_HEIGHT);
         outline.setFill(Color.TRANSPARENT);
         outline.setStrokeWidth(2);
         outline.setStroke(Color.AZURE);
@@ -44,16 +42,8 @@ public class MiniMap {
         return miniMapCamera;
     }
 
-    public void setMiniMapCamera(Rectangle miniMapCamera) {
-        this.miniMapCamera = miniMapCamera;
-    }
-
     public ImageView getView() {
         return view;
-    }
-
-    public void setView(ImageView view) {
-        this.view = view;
     }
 
     public double getX() {
@@ -74,17 +64,5 @@ public class MiniMap {
 
     public Pane getMap() {
         return map;
-    }
-
-    public void setMap(Pane map) {
-        this.map = map;
-    }
-
-    public Rectangle getOutline() {
-        return outline;
-    }
-
-    public void setOutline(Rectangle outline) {
-        this.outline = outline;
     }
 }

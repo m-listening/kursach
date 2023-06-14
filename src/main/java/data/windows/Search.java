@@ -1,8 +1,8 @@
 package data.windows;
 
-import data.macro_objects.Bunker;
-import data.macro_objects.GreenBase;
-import data.macro_objects.RedBase;
+import data.objects.macro_objects.Bunker;
+import data.objects.macro_objects.GreenBase;
+import data.objects.macro_objects.RedBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,8 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
-import data.macro_objects.Base;
-import data.micro_objects.Kamikaze;
+import data.objects.macro_objects.Base;
+import data.objects.micro_objects.Kamikaze;
 
 import static app.Play.world;
 

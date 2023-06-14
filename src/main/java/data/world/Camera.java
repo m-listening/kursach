@@ -1,7 +1,7 @@
 package data.world;
 
 import static app.Play.world;
-import static data.functional.CONSTANTS.*;
+import static data.functional.forObjects.CONSTANTS.*;
 
 public class Camera {
     private double positionX;
@@ -47,7 +47,7 @@ public class Camera {
         double dx = (x - MINIMAP_LAYOUT_X) * DIVISOR;
         dx -= SCREEN_WIDTH / 2;
         if (dx < 0) return 0;
-        else if (dx > WORLD_CAMERA_SIZE_WIDTH) return WORLD_CAMERA_SIZE_WIDTH;
+        else if (dx > WORLD_CAMERA_WIDTH) return WORLD_CAMERA_WIDTH;
         return dx;
     }
 
@@ -55,7 +55,7 @@ public class Camera {
         double dy = (y - MINIMAP_LAYOUT_Y) * DIVISOR;
         dy -= SCREEN_HEIGHT / 2;
         if (dy < 0) return 0;
-        else if (dy > WORLD_CAMERA_SIZE_HEIGHT) return WORLD_CAMERA_SIZE_HEIGHT;
+        else if (dy > WORLD_CAMERA_HEIGHT) return WORLD_CAMERA_HEIGHT;
         return dy;
     }
 

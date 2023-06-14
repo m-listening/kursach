@@ -1,8 +1,12 @@
 package data.world;
 
-import data.functional.Utilities;
-import data.macro_objects.Base;
-import data.micro_objects.Kamikaze;
+import data.functional.PressedHandlers.KeyPressedHandler;
+import data.functional.PressedHandlers.MousePressedHandler;
+import data.objects.macro_objects.Base;
+import data.objects.macro_objects.Bunker;
+import data.objects.macro_objects.GreenBase;
+import data.objects.macro_objects.RedBase;
+import data.objects.micro_objects.Kamikaze;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -19,20 +23,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import static data.functional.CONSTANTS.START_SCENE_SIZE_X;
-import static data.functional.CONSTANTS.START_SCENE_SIZE_Y;
-import static data.functional.Utilities.*;
+import static app.Play.world;
+import static data.functional.forObjects.CONSTANTS.*;
+import static data.functional.forObjects.CONSTANTS.MACRO_RED_BASE_LAYOUT_Y;
+import static data.functional.forObjects.Macro.addToMacro;
+import static data.functional.forObjects.Micro.createMicroObjects;
+import static data.functional.forObjects.Micro.deleteWarrior;
+import static data.functional.Utilities.getImage;
 
 public class World {
     private final List<Kamikaze> allWarriors;
     private final List<Kamikaze> warriorsActive;
     private final Set<Kamikaze> electedWarriors;
     private final Set<Base> baseSet;
-    private final StackPane game;
     private final Pane worldPane;
     private final MiniMap miniMap;
     private final Camera camera;
-    private final ImageView view = new ImageView(getImage("Map"));
     private final Scene scene;
 
     public World() {
@@ -41,12 +47,13 @@ public class World {
         allWarriors = new ArrayList<>();
         warriorsActive = new ArrayList<>();
 
+        ImageView view = new ImageView(getImage("Map"));
         worldPane = new Pane(view);
         miniMap = new MiniMap();
         camera = new Camera();
-        game = new StackPane(worldPane, miniMap.getMap());
+        StackPane game = new StackPane(worldPane, miniMap.getMap());
 
-        scene = new Scene(game, START_SCENE_SIZE_X, START_SCENE_SIZE_Y);
+        scene = new Scene(game, START_SCENE_WIDTH_X, START_SCENE_HEIGHT_Y);
 
         AnimationTimer activeWorld = new AnimationTimer() {
             @Override
@@ -61,21 +68,17 @@ public class World {
                     }
                 }
 
-                allWarriors.forEach(Kamikaze::lifeCycle);
+                for (Kamikaze obj : allWarriors) {
+                    obj.lifeCycle();
+                }
             }
         };
         activeWorld.start();
-        scene.setOnMouseClicked(event1 -> {
-            try {
-                Utilities.mousePressedHandler(event1);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        scene.setOnMouseClicked(MousePressedHandler::handle);
         scene.setOnKeyPressed(event -> {
             try {
-                Utilities.keyPressedHandler(event);
-            } catch (IOException | ClassNotFoundException e) {
+                KeyPressedHandler.handle(event);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -88,25 +91,8 @@ public class World {
 
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        World world = (World) o;
-        return Objects.equals(allWarriors, world.allWarriors) && Objects.equals(warriorsActive, world.warriorsActive) && Objects.equals(electedWarriors, world.electedWarriors) && Objects.equals(baseSet, world.baseSet) && Objects.equals(game, world.game) && Objects.equals(worldPane, world.worldPane) && Objects.equals(miniMap, world.miniMap) && Objects.equals(camera, world.camera) && Objects.equals(view, world.view) && Objects.equals(scene, world.scene);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(allWarriors, warriorsActive, electedWarriors, baseSet, game, worldPane, miniMap, camera, view, scene);
-    }
-
     public Camera getCamera() {
         return camera;
-    }
-
-    public ImageView getView() {
-        return view;
     }
 
     private void checkWarriorsForDelete() {
@@ -115,7 +101,7 @@ public class World {
             if (object.getHealth() <= 0)
                 arrayList.add(object);
         });
-        Utilities.deleteWarrior(arrayList);
+        deleteWarrior(arrayList);
     }
 
     public void addToBase(Kamikaze object, Base base) {
@@ -130,6 +116,15 @@ public class World {
     public void initializeWithoutMicroObjects() {
         createStartWorld();
     }
+    private static void createStartWorld() {
+        Bunker bunker = new Bunker(MACRO_BUNKER_LAYOUT_X, MACRO_BUNKER_LAYOUT_Y);
+        GreenBase greenBase = new GreenBase(MACRO_GREEN_BASE_LAYOUT_X, MACRO_GREEN_BASE_LAYOUT_Y);
+        RedBase redBase = new RedBase(MACRO_RED_BASE_LAYOUT_X, MACRO_RED_BASE_LAYOUT_Y);
+
+        world.getBaseSet().add(bunker);
+        world.getBaseSet().add(greenBase);
+        world.getBaseSet().add(redBase);
+    }
 
     public Scene getScene() {
         return scene;
@@ -137,10 +132,6 @@ public class World {
 
     public MiniMap getMiniMap() {
         return miniMap;
-    }
-
-    public StackPane getGame() {
-        return game;
     }
 
     public Set<Kamikaze> getElectedWarriors() {

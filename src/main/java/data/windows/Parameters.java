@@ -1,15 +1,13 @@
 package data.windows;
 
 import app.Play;
-import data.functional.Team;
-import data.micro_objects.Kamikaze;
-import data.micro_objects.SSO;
-import data.micro_objects.SimpleSoldier;
+import data.objects.micro_objects.Team;
+import data.objects.micro_objects.Kamikaze;
+import data.objects.micro_objects.SSO;
+import data.objects.micro_objects.SimpleSoldier;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-
-import static data.functional.Utilities.updateWarrior;
 
 public class Parameters {
 
@@ -34,17 +32,19 @@ public class Parameters {
 
         Kamikaze warrior;
         if (RB_lvl2.isSelected())
-            warrior = new SimpleSoldier(name, health);
+            warrior = new SimpleSoldier(name, health, x, y);
         else if (RB_lvl3.isSelected())
-            warrior = new SSO(name, health);
-        else warrior = new Kamikaze(name, health);
+            warrior = new SSO(name, health, x, y);
+        else warrior = new Kamikaze(name, health, x, y);
 
         Team selectedTeam = null;
         if (RB_tmGreen.isSelected())
             selectedTeam = Team.GREEN;
         else if (RB_tmRed.isSelected())
             selectedTeam = Team.RED;
-        updateWarrior(warrior, x, y, selectedTeam);
+        warrior.setTeam(selectedTeam);
+        warrior.setX(x);
+        warrior.setY(y);
 
         Play.globalStage.close();
     }
