@@ -52,22 +52,4 @@ public record MicroObjectConfig(
         result.setElect(elect);
         result.getMurders().setCount(murders);
     }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "classType='" + classType + '\'' +
-                ", name='" + name + '\'' +
-                ", x=" + x +
-                ", y=" + y +
-                ", health=" + health +
-                ", maxHealth=" + maxHealth +
-                ", armor=" + armor +
-                ", powerUp=" + powerUp +
-                ", active=" + active +
-                ", elect=" + elect +
-                ", team=" + team +
-                ", murders=" + murders +
-                '}';
-    }
 }
