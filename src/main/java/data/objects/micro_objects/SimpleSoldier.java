@@ -7,7 +7,7 @@ public class SimpleSoldier extends Kamikaze {
         super(name, health,x,y);
         setMove(0.8);
         setArmor(75);
-        setDamage(0.2);
+        setDamage(0.3);
         getCircle().setRadius(100);
     }
 

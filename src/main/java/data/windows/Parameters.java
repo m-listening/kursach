@@ -1,16 +1,23 @@
 package data.windows;
 
 import app.Play;
-import data.objects.micro_objects.Team;
 import data.objects.micro_objects.Kamikaze;
 import data.objects.micro_objects.SSO;
 import data.objects.micro_objects.SimpleSoldier;
+import data.functional.forObjects.micro.Team;
 import javafx.fxml.FXML;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 public class Parameters {
-
+    @FXML
+    public RadioButton RB_lvl1;
+    @FXML
+    public ToggleGroup lvl;
+    @FXML
+    public ToggleGroup team;
+    @FXML
+    public Button createWarrior_button;
     @FXML
     private RadioButton RB_lvl2, RB_lvl3;
 
@@ -22,6 +29,11 @@ public class Parameters {
 
     @FXML
     private TextField setY_field, setX_field;
+
+    @FXML
+    private CheckBox active, elect;
+    @FXML
+    private VBox window_params;
 
     @FXML
     void createNewWarrior() {
@@ -42,6 +54,8 @@ public class Parameters {
             selectedTeam = Team.GREEN;
         else if (RB_tmRed.isSelected())
             selectedTeam = Team.RED;
+        warrior.setActive(active.isSelected());
+        warrior.setElect(elect.isSelected());
         warrior.setTeam(selectedTeam);
         warrior.setX(x);
         warrior.setY(y);

@@ -6,10 +6,10 @@ import data.objects.micro_objects.SSO;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static data.functional.forObjects.Macro.*;
-import static data.functional.forObjects.Micro.deleteWarrior;
-import static data.objects.micro_objects.Team.GREEN;
-import static data.objects.micro_objects.Team.RED;
+import static data.functional.forObjects.MethodsOfMacro.*;
+import static data.functional.forObjects.micro.MethodsOfMicro.deleteWarrior;
+import static data.functional.forObjects.micro.Team.GREEN;
+import static data.functional.forObjects.micro.Team.RED;
 
 public class RedBase extends Base {
 
@@ -75,6 +75,6 @@ public class RedBase extends Base {
     @Override
     public void inflictDamage(Kamikaze kamikaze) {
         if (kamikaze.getTeam().equals(GREEN))
-            kamikaze.setHealth(kamikaze.getHealth() - 0.005);
+            kamikaze.setHealth(kamikaze.getHealth() - 0.05);
     }
 }

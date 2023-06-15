@@ -1,9 +1,11 @@
 package data.objects.macro_objects;
 
 import data.objects.micro_objects.Kamikaze;
+import data.objects.micro_objects.SSO;
 
-import static app.Play.world;
-import static data.functional.forObjects.Macro.boundsIntersectBaseBounds;
+import java.util.Random;
+
+import static data.functional.forObjects.MethodsOfMacro.*;
 
 public class Bunker extends Base {
     public Bunker(double x, double y) {
@@ -22,21 +24,19 @@ public class Bunker extends Base {
 
     @Override
     public void lifeCycle() {
-        world.getAllWarriors().forEach(obj -> {
-            if (boundsIntersectBaseBounds(obj, this)) {
-                getState().add(obj);
-                obj.flipInMacro();
-            } else if (!boundsIntersectBaseBounds(obj, this)) {
-                getState().remove(obj);
-                obj.flipInMacro();
+        interactionWithMacro(this, getTeam());
+        for (Kamikaze e : getState()) {
+            if (e instanceof SSO && new Random().nextInt(0, 300) == 228) {
+                removeFromMacro(e, this);
+                break;
             }
-        });
+        }
         getState().forEach(this::inflictDamage);
         setWithin(getState().size());
     }
 
     @Override
     public void inflictDamage(Kamikaze kamikaze) {
-        kamikaze.setHealth(kamikaze.getHealth() - 0.005);
+        kamikaze.setHealth(kamikaze.getHealth() - 0.05);
     }
 }

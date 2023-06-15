@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import data.objects.micro_objects.Kamikaze;
-import data.objects.micro_objects.MicroObjectConfig;
+import data.functional.forObjects.micro.MicroObjectConfig;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -14,8 +14,8 @@ import java.util.List;
 
 import static app.Play.globalStage;
 import static app.Play.world;
-import static data.functional.forObjects.Micro.deleteWarrior;
-import static data.objects.micro_objects.MicroObjectConfig.convertToConfig;
+import static data.functional.forObjects.micro.MethodsOfMicro.deleteWarrior;
+import static data.functional.forObjects.micro.MicroObjectConfig.convertToConfig;
 
 public class JSON {
     private static void saveData(List<Kamikaze> arrayToJson, String path) throws IOException {

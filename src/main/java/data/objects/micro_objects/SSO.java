@@ -1,6 +1,6 @@
 package data.objects.micro_objects;
 
-import data.functional.forObjects.Micro;
+import data.functional.forObjects.micro.MethodsOfMicro;
 
 public class SSO extends SimpleSoldier {
     private Kamikaze aim;
@@ -9,7 +9,7 @@ public class SSO extends SimpleSoldier {
         super(name, health,x,y);
         setMove(0.9);
         setArmor(100);
-        setDamage(0.4);
+        setDamage(0.6);
         getCircle().setRadius(200);
     }
 
@@ -18,7 +18,7 @@ public class SSO extends SimpleSoldier {
         fight();
         if (!isElect() && !isInMacro() && isActive()) {
             if (isEmptyAim()) {
-                Micro.whatToDo(this);
+                MethodsOfMicro.whatToDo(this);
             } else {
                 if ((Math.abs(getAim().getX() - getX()) + Math.abs(getAim().getY() - getY())) < 5.0) {
                     clearAim();

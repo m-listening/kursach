@@ -7,10 +7,10 @@ import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 
 import static app.Play.world;
+import static data.functional.Utilities.showWindow;
 import static data.functional.forObjects.CONSTANTS.*;
-import static data.functional.forObjects.Macro.removeFromMacro;
-import static data.functional.forObjects.Micro.*;
-import static data.functional.Utilities.*;
+import static data.functional.forObjects.MethodsOfMacro.removeFromMacro;
+import static data.functional.forObjects.micro.MethodsOfMicro.*;
 
 public class KeyPressedHandler {
     public static void handle(KeyEvent event) throws IOException {
@@ -34,7 +34,7 @@ public class KeyPressedHandler {
                 if (Math.abs(world.getCamera().getPositionX() - MOVE_CAMERA_BY_X) <= WORLD_CAMERA_WIDTH)
                     world.getCamera().setPositionX(-1);
             }
-            case T -> world.getAllWarriors().forEach(e -> {
+            case DIGIT1 -> world.getAllWarriors().forEach(e -> {
                 if (e.isInMacro()) world.getBaseSet().forEach(base -> removeFromMacro(e, base));
                 e.setOffering(true);
                 e.setActive(true);
@@ -42,7 +42,9 @@ public class KeyPressedHandler {
                 e.setAimX(MACRO_BUNKER_LAYOUT_X);
                 e.setAimY(MACRO_BUNKER_LAYOUT_Y);
             });
-            case R -> world.getAllWarriors().forEach(e -> {
+            case DIGIT0 -> world.getAllWarriors().forEach(e -> {
+                e.setHealth(e.getMaxHealth());
+                e.setElect(false);
                 e.setActive(true);
                 e.setOffering(false);
                 e.clearAim();
@@ -68,11 +70,7 @@ public class KeyPressedHandler {
                     throw new RuntimeException(e);
                 }
             }
-            case I -> {
-                world.getAllWarriors().sort(Kamikaze::compareTo);
-                world.getWarriorsActive().sort(Kamikaze::compareTo);
-                showWindow("Search", "Search warrior");
-            }
+            case I -> showWindow("Search", "Search warrior");
             case ESCAPE -> turnOf();
         }
     }

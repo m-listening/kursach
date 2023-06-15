@@ -1,6 +1,7 @@
 package data.objects.micro_objects;
 
 import data.functional.Utilities;
+import data.functional.forObjects.micro.Team;
 import data.interfaces.LifeCycle;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,8 +16,8 @@ import java.util.Objects;
 
 import static app.Play.world;
 import static data.functional.forObjects.CONSTANTS.*;
-import static data.functional.forObjects.Micro.addToWorld;
-import static data.functional.forObjects.Micro.whatToDo;
+import static data.functional.forObjects.micro.MethodsOfMicro.addToWorld;
+import static data.functional.forObjects.micro.MethodsOfMicro.whatToDo;
 
 public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     private double x;
@@ -49,7 +50,6 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         move = 1;
         armor = 200;
         damage = 0.5;
-        this.health = health;
         maxHealth = health;
 
         aimY = -1000;
@@ -69,7 +69,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         life = new Line(MICRO_LIFE_LAYOUT_START_X, +15, MICRO_LIFE_LAYOUT_END_X, +15);
         life.setStrokeWidth(3);
         life.setStroke(Color.BLACK);
-
+        setHealth(health);
 
         inFightImage = Utilities.getImage("Fight");
         fightView = new ImageView(inFightImage);
@@ -78,7 +78,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         image = Utilities.getImage(getClass().getSimpleName());
         imageView = new ImageView(image);
 
-        rectangle = new Rectangle(0, 0, 65, 85);
+        rectangle = new Rectangle(MICRO_RECTANGLE_LAYOUT_X, MICRO_RECTANGLE_LAYOUT_Y, 65, 90);
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStrokeWidth(2);
         rectangle.setStroke(Color.TRANSPARENT);
@@ -113,12 +113,15 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
                     if (offering) setActive(false);
                     clearAim();
                 } else {
-                    double signDeltaX = Math.signum(getAimX() - x);
-                    double dx = (Math.min(Math.abs(getAimX() - x), move)) * signDeltaX;
+                    Move moveAnim = k -> {
+                        double signDeltaX = Math.signum(k.getAimX() - k.getX());
+                        double dx = (Math.min(Math.abs(k.getAimX() - k.getX()), k.getMove())) * signDeltaX;
 
-                    double signDeltaY = Math.signum(getAimY() - y);
-                    double dy = (Math.min(Math.abs(getAimY() - y), move)) * signDeltaY;
-                    moveActive(dx, dy);
+                        double signDeltaY = Math.signum(k.getAimY() - k.getY());
+                        double dy = (Math.min(Math.abs(k.getAimY() - k.getY()), k.getMove())) * signDeltaY;
+                        moveActive(dx, dy);
+                    };
+                    moveAnim.moveAnim(this);
                 }
             }
         }
@@ -238,23 +241,21 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         kamikaze.setAimX(-1000);
         kamikaze.setAimY(-1000);
 
-        kamikaze.powerUp = false;
-
         kamikaze.setName(new Label(kamikaze.getName().getText() + ".cl"));
         kamikaze.getName().setFont(Font.font("Impact", 14));
 
-        kamikaze.setLife(new Line(0, +15, +50, +15));
+        kamikaze.setLife(new Line(MICRO_LIFE_LAYOUT_START_X, +15, MICRO_LIFE_LAYOUT_END_X, +15));
         kamikaze.getLife().setStrokeWidth(3);
         kamikaze.getLife().setStroke(Color.BLACK);
+        kamikaze.setHealth(kamikaze.getHealth());
 
-        kamikaze.setRectangle(new Rectangle(0, 0, 65, 85));
+        kamikaze.setRectangle(new Rectangle(MICRO_RECTANGLE_LAYOUT_X, MICRO_RECTANGLE_LAYOUT_Y, 65, 90));
         kamikaze.getRectangle().setFill(Color.TRANSPARENT);
         kamikaze.getRectangle().setStrokeWidth(2);
         kamikaze.getRectangle().setStroke(Color.TRANSPARENT);
 
         kamikaze.setElect(false);
         kamikaze.setInMacro(false);
-        kamikaze.setOffering(false);
         kamikaze.setActive(kamikaze.isActive());
 
         kamikaze.setImage(Utilities.getImage(kamikaze.getClass().getSimpleName()));
@@ -434,6 +435,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
 
     public void setHealth(double health) {
         this.health = health;
+        life.setEndX(health / (maxHealth / MICRO_OBJECT_IMAGE_WIDTH));
         colorHP();
     }
 
@@ -446,7 +448,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         this.imageView.setLayoutX(x + MICRO_IMAGE_VIEW_LAYOUT_X);
         this.rectangle.setLayoutX(x + MICRO_RECTANGLE_LAYOUT_X);
         this.circle.setLayoutX(x + MICRO_CIRCLE_LAYOUT_X);
-        this.name.setLayoutX(x + MICRO_NAME_LAYOUT_X);
+        this.name.setLayoutX(x);
         this.life.setLayoutX(x + MICRO_LIFE_LAYOUT_START_X);
         this.identifierTeam.setLayoutX(x + MICRO_IDENTIFIER_TEAM_LAYOUT_X);
         this.fightView.setLayoutX(x + MICRO_FIGHT_VIEW_LAYOUT_X);
@@ -461,8 +463,8 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         this.imageView.setLayoutY(y + MICRO_IMAGE_VIEW_LAYOUT_Y);
         this.rectangle.setLayoutY(y + MICRO_RECTANGLE_LAYOUT_Y);
         this.circle.setLayoutY(y + MICRO_CIRCLE_LAYOUT_Y);
-        this.name.setLayoutY(y + MICRO_NAME_LAYOUT_Y);
-        this.life.setLayoutY(y + MICRO_LIFE_LAYOUT_Y);
+        this.name.setLayoutY(y - 5);
+        this.life.setLayoutY(y);
         this.identifierTeam.setLayoutY(y + MICRO_IDENTIFIER_TEAM_LAYOUT_Y);
         this.fightView.setLayoutY(y + MICRO_FIGHT_VIEW_LAYOUT_Y);
     }
@@ -546,4 +548,8 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     public void setName(Label name) {
         this.name = name;
     }
+}
+
+interface Move {
+    void moveAnim(Kamikaze kamikaze);
 }

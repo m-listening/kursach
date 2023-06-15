@@ -34,7 +34,6 @@ public class CONSTANTS {
     public static final double MICRO_RECTANGLE_LAYOUT_X = -MICRO_OBJECT_IMAGE_WIDTH / 10;
     public static final double MICRO_IMAGE_VIEW_LAYOUT_X = -MICRO_OBJECT_IMAGE_WIDTH / 10;
     public static final double MICRO_CIRCLE_LAYOUT_X = MICRO_OBJECT_IMAGE_WIDTH / 2.5;
-    public static final double MICRO_NAME_LAYOUT_X = 0;
     public static final double MICRO_LIFE_LAYOUT_START_X = 0;
     public static final double MICRO_LIFE_LAYOUT_END_X = MICRO_OBJECT_IMAGE_WIDTH;
     public static final double MICRO_IDENTIFIER_TEAM_LAYOUT_X = MICRO_OBJECT_IMAGE_WIDTH - MICRO_OBJECT_IMAGE_WIDTH / 5;
@@ -43,8 +42,6 @@ public class CONSTANTS {
     public static final double MICRO_RECTANGLE_LAYOUT_Y = -MICRO_OBJECT_IMAGE_HEIGHT / 10;
     public static final double MICRO_IMAGE_VIEW_LAYOUT_Y = MICRO_OBJECT_IMAGE_HEIGHT / 2.5;
     public static final double MICRO_CIRCLE_LAYOUT_Y = MICRO_OBJECT_IMAGE_HEIGHT - MICRO_OBJECT_IMAGE_HEIGHT / 5;
-    public static final double MICRO_NAME_LAYOUT_Y = -5;
-    public static final double MICRO_LIFE_LAYOUT_Y = 0;
     public static final double MICRO_IDENTIFIER_TEAM_LAYOUT_Y = MICRO_OBJECT_IMAGE_HEIGHT + MICRO_OBJECT_IMAGE_HEIGHT / 2.5;
     public static final double MICRO_FIGHT_VIEW_LAYOUT_Y = -MICRO_OBJECT_IMAGE_HEIGHT / 4;
 

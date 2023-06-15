@@ -6,99 +6,156 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="data.windows.Search">
-   <children>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="data.windows.Search">
+   <HBox prefHeight="100.0" prefWidth="200.0">
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
+         <Label text="Word in the name">
+            <font>
+               <Font name="Corbel Bold Italic" size="16.0" />
+            </font>
+         </Label>
+         <TextField fx:id="tF_name" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="Enter a word">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="25.0" />
+            </VBox.margin>
+         </TextField>
+         <Button mnemonicParsing="false" onAction="#searchByName" text="Search">
+            <font>
+               <Font name="Corbel Bold Italic" size="14.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="25.0" />
+            </VBox.margin>
+         </Button>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
+         <Label text="By macro object">
+            <font>
+               <Font name="Corbel Bold Italic" size="16.0" />
+            </font>
+         </Label>
+         <MenuButton fx:id="name_BMO" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Base">
+            <items>
+               <MenuItem mnemonicParsing="false" onAction="#selectBunker" text="Bunker" />
+               <MenuItem mnemonicParsing="false" onAction="#selectGreenBase" text="Green Base" />
+               <MenuItem mnemonicParsing="false" onAction="#selectRedBase" text="Red Base" />
+               <MenuItem mnemonicParsing="false" onAction="#selectNowhere" text="Nowhere" />
+            </items>
+            <VBox.margin>
+               <Insets top="25.0" />
+            </VBox.margin>
+         </MenuButton>
+         <Button mnemonicParsing="false" onAction="#searchByBase" text="Search">
+            <font>
+               <Font name="Corbel Bold Italic" size="14.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="25.0" />
+            </VBox.margin>
+         </Button>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
+         <Label text="Sort">
+            <font>
+               <Font name="Corbel Bold Italic" size="16.0" />
+            </font>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+         </Label>
+         <RadioButton fx:id="rb_HP" mnemonicParsing="false" prefWidth="100.0" text="Top by HP">
+            <toggleGroup>
+               <ToggleGroup fx:id="choice" />
+            </toggleGroup>
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+            <font>
+               <Font name="Corbel Bold Italic" size="12.0" />
+            </font>
+         </RadioButton>
+         <RadioButton fx:id="rb_topByMurders" mnemonicParsing="false" prefWidth="100.0" text="Most murders" toggleGroup="$choice">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+            <font>
+               <Font name="Corbel Bold Italic" size="12.0" />
+            </font>
+         </RadioButton>
+         <RadioButton fx:id="rb_topByName" mnemonicParsing="false" prefHeight="18.0" prefWidth="100.0" text="Top by Name" toggleGroup="$choice">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+            <font>
+               <Font name="Corbel Bold Italic" size="12.0" />
+            </font>
+         </RadioButton>
+         <Button mnemonicParsing="false" onAction="#showChoice" text="Show">
+            <font>
+               <Font name="Corbel Bold Italic" size="14.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Button>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
-               <children>
-                  <Label text="Word in the name">
-                     <font>
-                        <Font name="System Bold Italic" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tF_name" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="Enter a word">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Button mnemonicParsing="false" onAction="#searchByName" text="Search">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
-               <children>
-                  <Label text="By macro object">
-                     <font>
-                        <Font name="System Bold Italic" size="14.0" />
-                     </font>
-                  </Label>
-                  <MenuButton fx:id="name_BMO" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Base">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#selectBunker" text="Bunker" />
-                      <MenuItem mnemonicParsing="false" onAction="#selectGreenBase" text="Green Base" />
-                        <MenuItem mnemonicParsing="false" onAction="#selectRedBase" text="Red Base" />
-                        <MenuItem mnemonicParsing="false" onAction="#selectNowhere" text="Nowhere" />
-                    </items>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MenuButton>
-                  <Button mnemonicParsing="false" onAction="#searchByBase" text="Search">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
-               <children>
-                  <Label text="Show all who">
-                     <font>
-                        <Font name="System Bold Italic" size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <MenuButton fx:id="saw_Activity" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Activity">
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#selectTrue" text="True" />
-                        <MenuItem mnemonicParsing="false" onAction="#selectFalse" text="False" />
-                     </items>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MenuButton>
-                  <Button mnemonicParsing="false" onAction="#searchByActivity" text="Search">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
+            <Label text="Show">
+               <font>
+                  <Font name="Corbel Bold Italic" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <RadioButton fx:id="rb_leftPart" mnemonicParsing="false" prefWidth="100.0" text="Left part">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Corbel Bold Italic" size="12.0" />
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="choice1" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rb_rightPart" mnemonicParsing="false" prefWidth="100.0" text="Right part" toggleGroup="$choice1">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Corbel Bold Italic" size="12.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="rb_hpMoreThan" mnemonicParsing="false" prefHeight="18.0" prefWidth="100.0" text="HP &gt; 50" toggleGroup="$choice1">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Corbel Bold Italic" size="12.0" />
+               </font>
+            </RadioButton>
+            <Button mnemonicParsing="false" onAction="#showChoice1" text="Show">
+               <font>
+                  <Font name="Corbel Bold Italic" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
          </children>
-      </HBox>
-      <ListView fx:id="listView" prefHeight="380.0" prefWidth="720.0" />
-   </children>
+      </VBox>
+   </HBox>
+   <ListView fx:id="listView" prefHeight="358.0" prefWidth="835.0" />
 </VBox>

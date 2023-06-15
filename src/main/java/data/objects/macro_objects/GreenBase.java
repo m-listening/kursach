@@ -1,13 +1,13 @@
 package data.objects.macro_objects;
 
-import data.functional.forObjects.Macro;
+import data.functional.forObjects.MethodsOfMacro;
 import data.objects.micro_objects.Kamikaze;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import static data.functional.forObjects.Macro.interactionWithMacro;
-import static data.objects.micro_objects.Team.*;
+import static data.functional.forObjects.MethodsOfMacro.interactionWithMacro;
+import static data.functional.forObjects.micro.Team.*;
 
 public class GreenBase extends Base {
     public GreenBase(double x, double y) {
@@ -44,7 +44,7 @@ public class GreenBase extends Base {
                     e.setMove(e.getMove() + 2);
                     e.setPowerUp(true);
                 }
-                Macro.removeFromMacro(e, this);
+                MethodsOfMacro.removeFromMacro(e, this);
             }
         });
     }
@@ -52,6 +52,6 @@ public class GreenBase extends Base {
     @Override
     public void inflictDamage(Kamikaze kamikaze) {
         if (kamikaze.getTeam().equals(RED))
-            kamikaze.setHealth(kamikaze.getHealth() - 0.005);
+            kamikaze.setHealth(kamikaze.getHealth() - 0.05);
     }
 }

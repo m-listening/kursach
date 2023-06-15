@@ -21,15 +21,17 @@ import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static app.Play.world;
-import static data.functional.forObjects.CONSTANTS.*;
-import static data.functional.forObjects.CONSTANTS.MACRO_RED_BASE_LAYOUT_Y;
-import static data.functional.forObjects.Macro.addToMacro;
-import static data.functional.forObjects.Micro.createMicroObjects;
-import static data.functional.forObjects.Micro.deleteWarrior;
 import static data.functional.Utilities.getImage;
+import static data.functional.forObjects.CONSTANTS.*;
+import static data.functional.forObjects.MethodsOfMacro.addToMacro;
+import static data.functional.forObjects.micro.MethodsOfMicro.createMicroObjects;
+import static data.functional.forObjects.micro.MethodsOfMicro.deleteWarrior;
 
 public class World {
     private final List<Kamikaze> allWarriors;
@@ -58,19 +60,7 @@ public class World {
         AnimationTimer activeWorld = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                checkWarriorsForDelete();
-
-                for (Base base : baseSet) {
-                    try {
-                        base.lifeCycle();
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                for (Kamikaze obj : allWarriors) {
-                    obj.lifeCycle();
-                }
+                lifeCycle();
             }
         };
         activeWorld.start();
@@ -89,6 +79,21 @@ public class World {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
+    }
+
+    private void lifeCycle() {
+        checkWarriorsForDelete();
+
+        for (Base base : baseSet) {
+            try {
+                base.lifeCycle();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        for (Kamikaze obj : allWarriors)
+            obj.lifeCycle();
     }
 
     public Camera getCamera() {
@@ -116,6 +121,7 @@ public class World {
     public void initializeWithoutMicroObjects() {
         createStartWorld();
     }
+
     private static void createStartWorld() {
         Bunker bunker = new Bunker(MACRO_BUNKER_LAYOUT_X, MACRO_BUNKER_LAYOUT_Y);
         GreenBase greenBase = new GreenBase(MACRO_GREEN_BASE_LAYOUT_X, MACRO_GREEN_BASE_LAYOUT_Y);

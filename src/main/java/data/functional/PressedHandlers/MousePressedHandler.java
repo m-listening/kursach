@@ -1,7 +1,6 @@
 package data.functional.PressedHandlers;
 
 import data.objects.macro_objects.Base;
-import data.objects.macro_objects.Bunker;
 import data.objects.micro_objects.Kamikaze;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,14 +15,14 @@ import java.util.List;
 
 import static app.Play.globalStage;
 import static app.Play.world;
-import static data.functional.forObjects.Macro.*;
-import static data.functional.forObjects.Micro.*;
+import static data.functional.forObjects.MethodsOfMacro.*;
+import static data.functional.forObjects.micro.MethodsOfMicro.*;
 
 public class MousePressedHandler {
     public static void handle(MouseEvent event) {
         if (event.isAltDown()) {
             Base base = checkClickBase(world.getBaseSet().stream().toList(), event.getX(), event.getY());
-            if (base == null || base instanceof Bunker) return;
+            if (base == null) return;
 
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 List<Kamikaze> nodes = new ArrayList<>(world.getElectedWarriors());

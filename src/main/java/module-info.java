@@ -21,4 +21,6 @@ module app {
     opens data.functional.forObjects;
     exports data.functional.PressedHandlers;
     opens data.functional.PressedHandlers;
+    exports data.functional.forObjects.micro;
+    opens data.functional.forObjects.micro;
 }
