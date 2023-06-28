@@ -7,6 +7,8 @@ import data.objects.micro_objects.SimpleSoldier;
 
 import java.util.ArrayList;
 
+import static data.functional.forObjects.CONSTANTS.*;
+
 public class Generator {
     public static void generateMicro(int number, Team team) {
         String name = team == Team.GREEN ? "Зелені" : "Червоні";
@@ -26,11 +28,11 @@ public class Generator {
     private static void setCoordinates(ArrayList<Kamikaze> list, Team team) {
         list.forEach(object -> {
             if (team.equals(Team.GREEN)) {
-                object.setX(CONSTANTS.MACRO_GREEN_BASE_LAYOUT_X);
-                object.setY(CONSTANTS.MACRO_GREEN_BASE_LAYOUT_Y);
+                object.setX(MACRO_GREEN_BASE_LAYOUT_X);
+                object.setY(MACRO_GREEN_BASE_LAYOUT_Y);
             } else if (team.equals(Team.RED)) {
-                object.setX(CONSTANTS.MACRO_RED_BASE_LAYOUT_X);
-                object.setY(CONSTANTS.MACRO_RED_BASE_LAYOUT_Y);
+                object.setX(MACRO_RED_BASE_LAYOUT_X);
+                object.setY(MACRO_RED_BASE_LAYOUT_Y);
             }
         });
     }
