@@ -1,15 +1,17 @@
 package data.objects.micro_objects;
 
 import data.functional.forObjects.micro.MethodsOfMicro;
+import data.functional.forObjects.micro.enums.Level;
 
 public class SSO extends SimpleSoldier {
     private Kamikaze aim;
 
-    public SSO(String name, double health,double x, double y) {
-        super(name, health,x,y);
-        setMove(0.9);
-        setArmor(100);
-        setDamage(0.6);
+    public SSO(String name, double health, double x, double y) {
+        super(name, health, x, y);
+        level = Level.SSO;
+        move = 0.9;
+        armor = 100;
+        damage = 0.6;
         getCircle().setRadius(200);
     }
 

@@ -1,6 +1,6 @@
 package data.functional.PressedHandlers;
 
-import data.functional.forObjects.JSON;
+import data.functional.JSON;
 import data.objects.micro_objects.Kamikaze;
 import javafx.scene.input.KeyEvent;
 
@@ -52,6 +52,7 @@ public class KeyPressedHandler {
 
             case F1 -> JSON.saveDataToFile();
             case F2 -> JSON.openDataFile();
+
             case NUMPAD8 -> moveIfActiveAndElect(0, -10);
             case NUMPAD4 -> moveIfActiveAndElect(-10, 0);
             case NUMPAD6 -> moveIfActiveAndElect(10, 0);

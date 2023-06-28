@@ -1,13 +1,16 @@
 package data.objects.micro_objects;
 
+import data.functional.forObjects.micro.enums.Level;
+
 import java.util.Random;
 
 public class SimpleSoldier extends Kamikaze {
-    public SimpleSoldier(String name, double health,double x,double y) {
-        super(name, health,x,y);
-        setMove(0.8);
-        setArmor(75);
-        setDamage(0.3);
+    public SimpleSoldier(String name, double health, double x, double y) {
+        super(name, health, x, y);
+        level = Level.SIMPLE_SOLDIER;
+        move = 0.8;
+        armor = 75;
+        damage = 0.3;
         getCircle().setRadius(100);
     }
 

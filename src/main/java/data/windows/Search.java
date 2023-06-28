@@ -1,8 +1,8 @@
 package data.windows;
 
-import data.functional.forObjects.micro.HealthComparator;
-import data.functional.forObjects.micro.MurdersComparator;
-import data.functional.forObjects.micro.NameComparator;
+import data.functional.forObjects.micro.comparators.HealthComparator;
+import data.functional.forObjects.micro.comparators.MurdersComparator;
+import data.functional.forObjects.micro.comparators.NameComparator;
 import data.objects.macro_objects.Base;
 import data.objects.macro_objects.Bunker;
 import data.objects.macro_objects.GreenBase;

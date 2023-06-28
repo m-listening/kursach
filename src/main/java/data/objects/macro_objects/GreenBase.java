@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static data.functional.forObjects.MethodsOfMacro.interactionWithMacro;
-import static data.functional.forObjects.micro.Team.*;
+import static data.functional.forObjects.micro.enums.Team.*;
 
 public class GreenBase extends Base {
     public GreenBase(double x, double y) {

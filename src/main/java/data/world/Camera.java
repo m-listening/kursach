@@ -36,10 +36,10 @@ public class Camera {
     }
 
     /**
-     * @param LR -> (-) - up, (+) - down
+     * @param UD -> (-) - up, (+) - down
      */
-    public void setPositionY(int LR) {
-        positionY += MOVE_CAMERA_BY_Y * LR;
+    public void setPositionY(int UD) {
+        positionY += MOVE_CAMERA_BY_Y * UD;
         moveCameraByY(positionY);
     }
 

@@ -1,7 +1,7 @@
 package data.objects.macro_objects;
 
 import app.Play;
-import data.functional.forObjects.micro.Team;
+import data.functional.forObjects.micro.enums.Team;
 import data.functional.Utilities;
 import data.interfaces.LifeCycle;
 import data.objects.micro_objects.Kamikaze;

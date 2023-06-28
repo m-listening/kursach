@@ -5,7 +5,6 @@ import data.objects.macro_objects.GreenBase;
 import data.objects.macro_objects.RedBase;
 import data.objects.micro_objects.Kamikaze;
 import data.objects.micro_objects.SSO;
-import data.objects.micro_objects.SimpleSoldier;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -28,10 +26,8 @@ import static app.Play.globalStage;
 import static app.Play.world;
 import static data.functional.forObjects.CONSTANTS.WORLD_HEIGHT;
 import static data.functional.forObjects.CONSTANTS.WORLD_WIDTH;
-import static data.functional.forObjects.MethodsOfMacro.coordinatesBaseX;
-import static data.functional.forObjects.MethodsOfMacro.coordinatesBaseY;
-import static data.functional.forObjects.micro.Team.GREEN;
-import static data.functional.forObjects.micro.Team.RED;
+import static data.functional.forObjects.micro.enums.Team.GREEN;
+import static data.functional.forObjects.micro.enums.Team.RED;
 
 public class MethodsOfMicro {
     public static void deleteWarrior(List<Kamikaze> list) {
@@ -90,39 +86,6 @@ public class MethodsOfMicro {
             if (item.isActive()) {
                 item.moveActive(dx, dy);
             }
-        }
-    }
-
-    public static void createMicroObjects(int count) {
-        List<Kamikaze> warriorList = createWarriors(count);
-        setCoordinatesForWarriors(warriorList);
-    }
-
-    private static List<Kamikaze> createWarriors(int count) {
-        List<Kamikaze> warriorList = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            if (i % 2 == 0) warriorList.add(new Kamikaze("Agent " + i, 200, 0, 0));
-            else warriorList.add(new SimpleSoldier("Agent " + i, 300, 0, 0));
-        }
-        return warriorList;
-    }
-
-    private static void setCoordinatesForWarriors(List<Kamikaze> warriors) {
-        int count = warriors.size();
-        int flag = count;
-        for (Kamikaze obj : warriors) {
-            double x, y;
-
-            Team team = (count / 2 < flag) ? GREEN : RED;
-
-            x = coordinatesBaseX(team);
-            y = coordinatesBaseY(team);
-
-            obj.setTeam(team);
-            obj.setX(x);
-            obj.setY(y);
-
-            flag--;
         }
     }
 

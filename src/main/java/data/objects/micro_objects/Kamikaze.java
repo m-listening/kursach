@@ -1,7 +1,8 @@
 package data.objects.micro_objects;
 
 import data.functional.Utilities;
-import data.functional.forObjects.micro.Team;
+import data.functional.forObjects.micro.enums.Level;
+import data.functional.forObjects.micro.enums.Team;
 import data.interfaces.LifeCycle;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -25,16 +26,15 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     private double aimX;
     private double aimY;
     private final double maxHealth;
-    private double move;
+    protected double move;
     private double health;
-    private double damage;
-    private double armor;
+    protected double damage;
+    protected double armor;
     private boolean powerUp;
     private boolean elect;
     private boolean active;
     private boolean inMacro;
     private boolean offering;
-    private Team team;
     private Image image;
     private Image inFightImage;
     private ImageView imageView;
@@ -45,12 +45,15 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     private Rectangle rectangle;
     private Line life;
     private Murder murders;
+    private Team team;
+    protected Level level;
 
     public Kamikaze(String name, double health, double x, double y) {
         move = 1;
         armor = 200;
         damage = 0.5;
         maxHealth = health;
+        level = Level.KAMIKAZE;
 
         aimY = -1000;
         aimX = -1000;
@@ -399,6 +402,14 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     public void setTeam(Team team) {
         this.team = team;
         setColorIdentifierTeam();
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
     }
 
     public boolean isInMacro() {

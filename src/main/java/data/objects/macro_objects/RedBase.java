@@ -1,5 +1,6 @@
 package data.objects.macro_objects;
 
+import data.functional.forObjects.micro.enums.Level;
 import data.objects.micro_objects.Kamikaze;
 import data.objects.micro_objects.SSO;
 
@@ -8,8 +9,8 @@ import java.util.Random;
 
 import static data.functional.forObjects.MethodsOfMacro.*;
 import static data.functional.forObjects.micro.MethodsOfMicro.deleteWarrior;
-import static data.functional.forObjects.micro.Team.GREEN;
-import static data.functional.forObjects.micro.Team.RED;
+import static data.functional.forObjects.micro.enums.Team.GREEN;
+import static data.functional.forObjects.micro.enums.Team.RED;
 
 public class RedBase extends Base {
 
@@ -36,7 +37,7 @@ public class RedBase extends Base {
         boolean withoutSSO = true;
         if (getState().size() >= 3) {
             for (Kamikaze kamikaze : getState()) {
-                if (kamikaze instanceof SSO) {
+                if (kamikaze.getLevel().equals(Level.SSO)) {
                     withoutSSO = false;
                     break;
                 }
@@ -46,7 +47,7 @@ public class RedBase extends Base {
             }
         }
         for (Kamikaze e : getState()) {
-            if (e instanceof SSO && new Random().nextInt(0, 1000) == 228) {
+            if (e.getLevel().equals(Level.SSO) && new Random().nextInt(0, 1000) == 228) {
                 removeFromMacro(e, this);
                 break;
             }
@@ -57,7 +58,7 @@ public class RedBase extends Base {
         double health = 0;
         for (Kamikaze e : getState())
             health += e.getHealth();
-        SSO sso = new SSO("IMBA", health,getX(),getY());
+        SSO sso = new SSO("IMBA", health, getX(), getY());
         sso.setTeam(RED);
         addToMacro(sso, this);
         deleteWarrior(toRemove());
@@ -66,7 +67,7 @@ public class RedBase extends Base {
     private ArrayList<Kamikaze> toRemove() {
         ArrayList<Kamikaze> arrayList = new ArrayList<>();
         getState().forEach(e -> {
-            if (!(e instanceof SSO))
+            if (!e.getLevel().equals(Level.SSO))
                 arrayList.add(e);
         });
         return arrayList;

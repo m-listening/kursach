@@ -4,7 +4,7 @@ import app.Play;
 import data.objects.micro_objects.Kamikaze;
 import data.objects.micro_objects.SSO;
 import data.objects.micro_objects.SimpleSoldier;
-import data.functional.forObjects.micro.Team;
+import data.functional.forObjects.micro.enums.Team;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;

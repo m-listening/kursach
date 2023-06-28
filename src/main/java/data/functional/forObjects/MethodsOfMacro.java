@@ -1,12 +1,12 @@
 package data.functional.forObjects;
 
+import data.functional.forObjects.micro.enums.Level;
+import data.functional.forObjects.micro.enums.Team;
 import data.objects.macro_objects.Base;
 import data.objects.macro_objects.Bunker;
 import data.objects.macro_objects.GreenBase;
 import data.objects.macro_objects.RedBase;
 import data.objects.micro_objects.Kamikaze;
-import data.objects.micro_objects.SSO;
-import data.functional.forObjects.micro.Team;
 
 import java.util.List;
 import java.util.Random;
@@ -14,8 +14,8 @@ import java.util.Random;
 import static app.Play.world;
 import static data.functional.forObjects.micro.MethodsOfMicro.addToWorld;
 import static data.functional.forObjects.micro.MethodsOfMicro.removeFromWorld;
-import static data.functional.forObjects.micro.Team.GREEN;
-import static data.functional.forObjects.micro.Team.RED;
+import static data.functional.forObjects.micro.enums.Team.GREEN;
+import static data.functional.forObjects.micro.enums.Team.RED;
 
 public class MethodsOfMacro {
     public static void interactionWithMacro(Base base, Team teamBase) {
@@ -24,7 +24,8 @@ public class MethodsOfMacro {
             if (boundsIntersectBaseBounds(object, base) && !object.getTeam().equals(teamBase) && !(base instanceof Bunker))
                 base.inflictDamage(object);
             else if (boundsIntersectBaseBounds(object, base) && ((object.getTeam().equals(teamBase)
-                    && base.getState().size() < 3 && !(object instanceof SSO)) || (base instanceof Bunker && base.getState().size() < 10))) {
+                    && base.getState().size() < 3 && !object.getLevel().equals(Level.SSO))
+                    || (base instanceof Bunker && base.getState().size() < 10))) {
                 if (new Random().nextInt(0, 1000) == 3)
                     world.addToBase(object, base);
             }

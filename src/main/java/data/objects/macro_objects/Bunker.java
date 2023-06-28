@@ -26,7 +26,7 @@ public class Bunker extends Base {
     public void lifeCycle() {
         interactionWithMacro(this, getTeam());
         for (Kamikaze e : getState()) {
-            if (e instanceof SSO && new Random().nextInt(0, 300) == 228) {
+            if (new Random().nextInt(0, 200) == 100) {
                 removeFromMacro(e, this);
                 break;
             }

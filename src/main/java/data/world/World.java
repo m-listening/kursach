@@ -2,6 +2,8 @@ package data.world;
 
 import data.functional.PressedHandlers.KeyPressedHandler;
 import data.functional.PressedHandlers.MousePressedHandler;
+import data.functional.forObjects.micro.Generator;
+import data.functional.forObjects.micro.enums.Team;
 import data.objects.macro_objects.Base;
 import data.objects.macro_objects.Bunker;
 import data.objects.macro_objects.GreenBase;
@@ -30,7 +32,6 @@ import static app.Play.world;
 import static data.functional.Utilities.getImage;
 import static data.functional.forObjects.CONSTANTS.*;
 import static data.functional.forObjects.MethodsOfMacro.addToMacro;
-import static data.functional.forObjects.micro.MethodsOfMicro.createMicroObjects;
 import static data.functional.forObjects.micro.MethodsOfMicro.deleteWarrior;
 
 public class World {
@@ -78,11 +79,11 @@ public class World {
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
     }
 
     private void lifeCycle() {
         checkWarriorsForDelete();
+        generateMicro();
 
         for (Base base : baseSet) {
             try {
@@ -94,6 +95,20 @@ public class World {
 
         for (Kamikaze obj : allWarriors)
             obj.lifeCycle();
+    }
+
+    private void generateMicro() {
+        for (Base base : baseSet)
+            if (countMicroInTeam(base.getTeam()) < 20 && !(base instanceof Bunker))
+                Generator.generateMicro(20, base.getTeam());
+    }
+
+    private int countMicroInTeam(Team team) {
+        int result = 0;
+        for (Kamikaze obj : allWarriors)
+            if (obj.getTeam().equals(team))
+                result++;
+        return result;
     }
 
     public Camera getCamera() {
@@ -115,7 +130,8 @@ public class World {
 
     public void initializeWithMicroObjects(int count) {
         initializeWithoutMicroObjects();
-        createMicroObjects(count);
+        Generator.generateMicro(count / 2, Team.GREEN);
+        Generator.generateMicro(count / 2, Team.RED);
     }
 
     public void initializeWithoutMicroObjects() {

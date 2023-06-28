@@ -23,4 +23,8 @@ module app {
     opens data.functional.PressedHandlers;
     exports data.functional.forObjects.micro;
     opens data.functional.forObjects.micro;
+    exports data.functional.forObjects.micro.comparators;
+    opens data.functional.forObjects.micro.comparators;
+    exports data.functional.forObjects.micro.enums;
+    opens data.functional.forObjects.micro.enums;
 }
