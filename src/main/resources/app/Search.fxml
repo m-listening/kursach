@@ -110,51 +110,51 @@
          </Button>
       </VBox>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #74CB3A;">
-         <children>
-            <Label text="Show">
-               <font>
-                  <Font name="Corbel Bold Italic" size="16.0" />
-               </font>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Label>
-            <RadioButton fx:id="rb_leftPart" mnemonicParsing="false" prefWidth="100.0" text="Left part">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Corbel Bold Italic" size="12.0" />
-               </font>
-               <toggleGroup>
-                  <ToggleGroup fx:id="choice1" />
-               </toggleGroup>
-            </RadioButton>
-            <RadioButton fx:id="rb_rightPart" mnemonicParsing="false" prefWidth="100.0" text="Right part" toggleGroup="$choice1">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Corbel Bold Italic" size="12.0" />
-               </font>
-            </RadioButton>
-            <RadioButton fx:id="rb_hpMoreThan" mnemonicParsing="false" prefHeight="18.0" prefWidth="100.0" text="HP &gt; 50" toggleGroup="$choice1">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Corbel Bold Italic" size="12.0" />
-               </font>
-            </RadioButton>
-            <Button mnemonicParsing="false" onAction="#showChoice1" text="Show">
-               <font>
-                  <Font name="Corbel Bold Italic" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Button>
-         </children>
+         <Label text="Show">
+            <font>
+               <Font name="Corbel Bold Italic" size="16.0"/>
+            </font>
+            <VBox.margin>
+               <Insets/>
+            </VBox.margin>
+         </Label>
+         <RadioButton fx:id="rb_leftPart" mnemonicParsing="false" prefWidth="100.0" text="Left part">
+            <VBox.margin>
+               <Insets top="5.0"/>
+            </VBox.margin>
+            <font>
+               <Font name="Corbel Bold Italic" size="12.0"/>
+            </font>
+            <toggleGroup>
+               <ToggleGroup fx:id="choice1"/>
+            </toggleGroup>
+         </RadioButton>
+         <RadioButton fx:id="rb_rightPart" mnemonicParsing="false" prefWidth="100.0" text="Right part"
+                      toggleGroup="$choice1">
+            <VBox.margin>
+               <Insets top="5.0"/>
+            </VBox.margin>
+            <font>
+               <Font name="Corbel Bold Italic" size="12.0"/>
+            </font>
+         </RadioButton>
+         <RadioButton fx:id="rb_hpMoreThan" mnemonicParsing="false" prefHeight="18.0" prefWidth="100.0"
+                      text="HP &gt; 50" toggleGroup="$choice1">
+            <VBox.margin>
+               <Insets top="5.0"/>
+            </VBox.margin>
+            <font>
+               <Font name="Corbel Bold Italic" size="12.0"/>
+            </font>
+         </RadioButton>
+         <Button mnemonicParsing="false" onAction="#showChoice1" text="Show">
+            <font>
+               <Font name="Corbel Bold Italic" size="14.0"/>
+            </font>
+            <VBox.margin>
+               <Insets top="10.0"/>
+            </VBox.margin>
+         </Button>
       </VBox>
    </HBox>
    <ListView fx:id="listView" prefHeight="358.0" prefWidth="835.0" />

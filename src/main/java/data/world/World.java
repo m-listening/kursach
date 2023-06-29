@@ -43,6 +43,9 @@ public class World {
     private final MiniMap miniMap;
     private final Camera camera;
     private final Scene scene;
+    private int initial;
+    private int generate;
+    private int less;
 
     public World() {
         electedWarriors = new HashSet<>();
@@ -98,9 +101,14 @@ public class World {
     }
 
     private void generateMicro() {
-        for (Base base : baseSet)
-            if (countMicroInTeam(base.getTeam()) < 20 && !(base instanceof Bunker))
-                Generator.generateMicro(20, base.getTeam());
+        for (Base base : baseSet) {
+            if (countMicroInTeam(base.getTeam()) < calculateLess() && !(base instanceof Bunker))
+                Generator.generateMicro(generate, base.getTeam());
+        }
+    }
+
+    private int calculateLess() {
+        return (int) (((double) initial / 2) * ((double) less / 100));
     }
 
     private int countMicroInTeam(Team team) {
@@ -128,14 +136,23 @@ public class World {
         addToMacro(object, base);
     }
 
-    public void initializeWithMicroObjects(int count) {
-        initializeWithoutMicroObjects();
-        Generator.generateMicro(count / 2, Team.GREEN);
-        Generator.generateMicro(count / 2, Team.RED);
+    /**
+     * @param initial  number of soldiers in each team
+     * @param generate amount to generate
+     * @param less     generation of new ones if less
+     */
+    public void initializeConfig(int initial, int generate, int less) {
+        System.out.println(less);
+        this.initial = initial;
+        this.generate = generate;
+        this.less = less;
+        initializeWorld(initial);
     }
 
-    public void initializeWithoutMicroObjects() {
+    private void initializeWorld(int count) {
         createStartWorld();
+        Generator.generateMicro(count / 2, Team.GREEN);
+        Generator.generateMicro(count / 2, Team.RED);
     }
 
     private static void createStartWorld() {

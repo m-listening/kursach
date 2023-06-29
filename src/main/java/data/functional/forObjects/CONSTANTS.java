@@ -4,8 +4,8 @@ import javafx.stage.Screen;
 
 public class CONSTANTS {
     //Scene
-    public static final double START_SCENE_WIDTH_X = 720;
-    public static final double START_SCENE_HEIGHT_Y = 480;
+    public static final double START_SCENE_WIDTH_X = Screen.getPrimary().getBounds().getWidth() - 100;
+    public static final double START_SCENE_HEIGHT_Y = Screen.getPrimary().getBounds().getHeight() - 100;
     public static final double SCREEN_WIDTH = Screen.getPrimary().getBounds().getWidth();
     public static final double SCREEN_HEIGHT = Screen.getPrimary().getBounds().getHeight();
 

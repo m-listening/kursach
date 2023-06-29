@@ -1,6 +1,5 @@
 package data.functional.forObjects.micro;
 
-import data.functional.forObjects.CONSTANTS;
 import data.functional.forObjects.micro.enums.Team;
 import data.objects.micro_objects.Kamikaze;
 import data.objects.micro_objects.SimpleSoldier;
