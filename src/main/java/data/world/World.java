@@ -13,10 +13,12 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -38,10 +40,12 @@ public class World {
     private final List<Kamikaze> allWarriors;
     private final List<Kamikaze> warriorsActive;
     private final Set<Kamikaze> electedWarriors;
+    private final List<Kamikaze> eaten;
     private final Set<Base> baseSet;
     private final Pane worldPane;
     private final MiniMap miniMap;
     private final Camera camera;
+    private final FlowPane flowPane;
     private final Scene scene;
     private int initial;
     private int generate;
@@ -52,13 +56,15 @@ public class World {
         baseSet = new HashSet<>();
         allWarriors = new ArrayList<>();
         warriorsActive = new ArrayList<>();
+        eaten = new ArrayList<>();
 
         ImageView view = new ImageView(getImage("Map"));
         worldPane = new Pane(view);
         miniMap = new MiniMap();
         camera = new Camera();
+        flowPane = new FlowPane();
+        worldPane.getChildren().add(flowPane);
         StackPane game = new StackPane(worldPane, miniMap.getMap());
-
         scene = new Scene(game, START_SCENE_WIDTH_X, START_SCENE_HEIGHT_Y);
 
         AnimationTimer activeWorld = new AnimationTimer() {
@@ -87,7 +93,12 @@ public class World {
     private void lifeCycle() {
         checkWarriorsForDelete();
         generateMicro();
-
+        for (Kamikaze e : eaten) {
+            Group group = new Group(e.getName(), e.getRectangle(), e.getLife(), e.getImageView());
+            if (!flowPane.getChildren().contains(group))
+                flowPane.getChildren().add(group);
+            e.setHealth(e.getMaxHealth());
+        }
         for (Base base : baseSet) {
             try {
                 base.lifeCycle();
@@ -167,6 +178,10 @@ public class World {
 
     public Scene getScene() {
         return scene;
+    }
+
+    public List<Kamikaze> getEaten() {
+        return eaten;
     }
 
     public MiniMap getMiniMap() {

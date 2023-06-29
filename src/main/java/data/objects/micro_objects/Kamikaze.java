@@ -13,12 +13,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static app.Play.world;
 import static data.functional.forObjects.CONSTANTS.*;
-import static data.functional.forObjects.micro.MethodsOfMicro.addToWorld;
-import static data.functional.forObjects.micro.MethodsOfMicro.whatToDo;
+import static data.functional.forObjects.micro.MethodsOfMicro.*;
 
 public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     private double x;
@@ -35,6 +35,7 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
     private boolean active;
     private boolean inMacro;
     private boolean offering;
+    private boolean monster;
     private Image image;
     private Image inFightImage;
     private ImageView imageView;
@@ -135,9 +136,20 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         boolean inFight = false;
         if (offering) return;
         for (Kamikaze e : world.getAllWarriors()) {
-            if (!e.equals(this) && e.getTeam() != this.getTeam() && !this.isInMacro() && !e.isInMacro()) {
+            if (!e.equals(this) && (e.getTeam() != this.getTeam() || this.isMonster()) && !this.isInMacro() && !e.isInMacro()) {
                 if (e.getImageView().getBoundsInParent().intersects(this.getCircle().getBoundsInParent())) {
                     inFight = true;
+                    if (e.isMonster()) {
+                        break;
+                    } else if (this.isMonster()) {
+                        world.getEaten().add(e);
+                        ArrayList<Kamikaze> kamikazes = new ArrayList<>();
+                        kamikazes.add(e);
+                        deleteWarrior(kamikazes);
+                        this.getImageView().setScaleX(this.getImageView().getScaleX() + 0.025);
+                        this.getImageView().setScaleY(this.getImageView().getScaleY() + 0.025);
+                        break;
+                    }
                     this.inflictDamage(e);
                     if (e.getHealth() <= 0) this.getMurders().implementCount();
                 }
@@ -463,6 +475,14 @@ public class Kamikaze implements Cloneable, Comparable<Kamikaze>, LifeCycle {
         this.life.setLayoutX(x + MICRO_LIFE_LAYOUT_START_X);
         this.identifierTeam.setLayoutX(x + MICRO_IDENTIFIER_TEAM_LAYOUT_X);
         this.fightView.setLayoutX(x + MICRO_FIGHT_VIEW_LAYOUT_X);
+    }
+
+    public boolean isMonster() {
+        return monster;
+    }
+
+    public void setMonster(boolean monster) {
+        this.monster = monster;
     }
 
     public double getY() {
