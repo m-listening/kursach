@@ -67,7 +67,7 @@ public class GenerateConfig {
         int generate = generate20.isSelected() ? 20
                 : generate50.isSelected() ? 50
                 : generate100.isSelected() ? 100 : 0;
-        Play.world.initializeConfig(initial, generate, less);
+        Play.world.initializeConfig(initial * 2, generate, less);
         Play.globalStage.close();
     }
 }
