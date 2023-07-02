@@ -61,6 +61,9 @@ public class Utilities {
             case "Fight" -> {
                 return new Image("Fight.png", MICRO_FIGHT_IMAGE_WIDTH, MICRO_FIGHT_IMAGE_HEIGHT, false, false);
             }
+            case "Monster" -> {
+                return new Image("monster.png", MICRO_FIGHT_IMAGE_WIDTH * 5, MICRO_FIGHT_IMAGE_HEIGHT * 5, false, false);
+            }
         }
         return null;
     }

@@ -47,8 +47,11 @@ public class MethodsOfMicro {
         if (rand == 1) whatToDo((Kamikaze) sso);
         else {
             for (Kamikaze obj : world.getAllWarriors())
-                if (sso.getTeam() != obj.getTeam() && new Random().nextBoolean())
+                if (sso.getTeam() != obj.getTeam() && new Random().nextBoolean() && !obj.isMonster()) {
                     sso.setAim(obj);
+                    if (sso.isMonster())
+                        sso.setMove(obj.getMove() * 1.9);
+                }
         }
     }
 
@@ -56,20 +59,22 @@ public class MethodsOfMicro {
         int rand = new Random().nextInt(0, 5);
         if (rand == 1)
             for (Kamikaze e : world.getAllWarriors()) {
-                if (kamikaze.getTeam() != e.getTeam()) {
+                if (kamikaze.getTeam() != e.getTeam() && !e.isMonster()) {
                     kamikaze.setAimX(e.getX());
                     kamikaze.setAimY(e.getY());
+                    if (kamikaze.isMonster())
+                        kamikaze.setMove(e.getMove() * 1.9);
                     return;
                 }
             }
         else if (rand == 2) {
             for (Base base : world.getBaseSet()) {
-                if (base instanceof GreenBase && kamikaze.getTeam().equals(GREEN)) {
+                if (base instanceof GreenBase && kamikaze.getTeam().equals(GREEN) && !kamikaze.isMonster()) {
                     kamikaze.setAimX(base.getX());
                     kamikaze.setAimY(base.getY());
                     return;
                 }
-                if (base instanceof RedBase && kamikaze.getTeam().equals(RED)) {
+                if (base instanceof RedBase && kamikaze.getTeam().equals(RED) && !kamikaze.isMonster()) {
                     kamikaze.setAimX(base.getX());
                     kamikaze.setAimY(base.getY());
                     return;

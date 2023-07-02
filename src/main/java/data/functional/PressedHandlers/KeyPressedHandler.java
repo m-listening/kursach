@@ -2,6 +2,7 @@ package data.functional.PressedHandlers;
 
 import data.functional.JSON;
 import data.objects.micro_objects.Kamikaze;
+import data.windows.Monster;
 import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
@@ -42,6 +43,9 @@ public class KeyPressedHandler {
                 e.setAimX(MACRO_BUNKER_LAYOUT_X);
                 e.setAimY(MACRO_BUNKER_LAYOUT_Y);
             });
+            case DIGIT2 -> {
+                showWindow("Monster", "Choose monster");
+            }
             case DIGIT0 -> world.getAllWarriors().forEach(e -> {
                 e.setHealth(e.getMaxHealth());
                 e.setElect(false);
